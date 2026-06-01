@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRAILHUB — Navegación Avanzada. Integrado en tu Bici.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#22c55e;--gd:#16a34a;--gg:rgba(34,197,94,.14);--gb:rgba(34,197,94,.28);
+  --bg:#070707;--bg2:#0f0f0f;--bg3:#141414;
+  --t:#f4f4f5;--td:#a1a1aa;--tdd:#52525b;
+  --bdr:rgba(255,255,255,.07);--bdrg:rgba(34,197,94,.25);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── TYPOGRAPHY ── */
+.d1{font-size:clamp(3.2rem,8.5vw,7.5rem);font-weight:900;line-height:1.02;letter-spacing:-.04em}
+.d2{font-size:clamp(2rem,5vw,4rem);font-weight:800;line-height:1.08;letter-spacing:-.025em}
+.d3{font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;line-height:1.2;letter-spacing:-.015em}
+.lbl{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g)}
+.sub{font-size:clamp(.95rem,1.6vw,1.15rem);line-height:1.75;color:var(--td)}
+.g{color:var(--g)}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+section{padding:130px 0}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:22px 40px;display:flex;align-items:center;justify-content:space-between;
+  transition:all .35s ease;
+}
+nav.s{
+  background:rgba(7,7,7,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--bdr);padding:14px 40px;
+}
+.nlogo{display:flex;align-items:center;text-decoration:none}
+.nlogo-img{height:28px;width:auto;mix-blend-mode:screen;display:block}
+.nli{width:34px;height:34px;background:var(--g);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nlinks{display:flex;gap:30px;list-style:none}
+.nlinks a{color:var(--td);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}
+.nlinks a:hover{color:var(--t)}
+.nbtn{background:var(--g);color:#000;padding:10px 22px;border-radius:100px;font-weight:700;font-size:.85rem;text-decoration:none;transition:all .25s;white-space:nowrap}
+.nbtn:hover{background:var(--gd);transform:translateY(-1px)}
+@media(max-width:768px){nav{padding:16px 20px}.nlinks,.nbtn{display:none}}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:17px 38px;border-radius:100px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .28s;cursor:pointer;border:none}
+.btn-p{background:var(--g);color:#000;box-shadow:0 0 48px rgba(34,197,94,.28)}
+.btn-p:hover{background:var(--gd);transform:translateY(-2px);box-shadow:0 0 72px rgba(34,197,94,.42)}
+.btn-o{background:transparent;color:var(--t);border:1px solid var(--bdr)}
+.btn-o:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
+.btn-xl{padding:20px 52px;font-size:1.1rem}
+
+/* ── REVEAL ANIMATIONS ── */
+/* visibility:hidden = truly no render (no ghost), opacity fade once visible */
+@keyframes rv-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.rv{visibility:hidden}
+.rv.in{
+  visibility:visible;
+  animation:rv-in .6s cubic-bezier(.22,1,.36,1) both;
+}
+.rv.d1.in{animation-delay:.07s}
+.rv.d2.in{animation-delay:.15s}
+.rv.d3.in{animation-delay:.24s}
+.rv.d4.in{animation-delay:.34s}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:140px 28px 80px;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%,rgba(34,197,94,.09) 0%,transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 110%,rgba(34,197,94,.04) 0%,transparent 55%);
+}
+.hero-grid{
+  position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 0%,transparent 100%);
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 0%,transparent 100%);
+}
+.hero-z{position:relative;z-index:1}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(34,197,94,.08);border:1px solid var(--bdrg);
+  padding:7px 18px;border-radius:100px;font-size:.75rem;font-weight:700;
+  color:var(--g);margin-bottom:36px;letter-spacing:.06em;
+}
+.hero-pill::before{content:'';width:6px;height:6px;background:var(--g);border-radius:50%;animation:pd 2s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{margin-bottom:26px}
+.hero-sub{max-width:540px;margin:0 auto 52px}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* Device floating */
+.hero-dev{margin-top:80px;position:relative;z-index:1;display:flex;justify-content:center}
+.hero-dev-wrap{position:relative;display:inline-block;animation:fl 4.5s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.hero-dev-glow{
+  position:absolute;inset:-60px;z-index:0;
+  background:radial-gradient(ellipse 65% 50% at 50% 75%,rgba(34,197,94,.22) 0%,transparent 65%);
+  filter:blur(16px);pointer-events:none;
+}
+.hero-dev-img{
+  width:min(420px,85vw);position:relative;z-index:1;
+  border-radius:28px;
+  box-shadow:0 60px 120px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.06);
+}
+/* Product handlebar shot (hero) */
+.hero-product{
+  display:block;width:min(880px,92vw);height:auto;position:relative;z-index:1;
+  border-radius:32px;
+  box-shadow:0 80px 140px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05);
+  background:#0a0a0a;
+}
+/* Inset live UI mockup floating over product image */
+.hero-inset{
+  position:absolute;
+  left:50%;bottom:-60px;
+  width:min(240px,34vw);
+  z-index:3;
+  transform:translateX(-50%);
+  box-shadow:0 40px 90px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.08),0 0 56px rgba(34,197,94,.22);
+}
+@media(max-width:720px){
+  .hero-inset{position:relative;left:auto;bottom:auto;margin:-60px auto 0;transform:none}
+}
+
+/* ── CSS Device Mockup (fallback visual) ── */
+.device-mockup{
+  width:min(280px,72vw);position:relative;z-index:1;
+  background:linear-gradient(145deg,#1a1a1a,#0d0d0d);
+  border-radius:28px;border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 60px 120px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.dm-bar{
+  background:rgba(0,0,0,.6);padding:14px 18px 10px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.dm-time{font-size:.8rem;font-weight:700;letter-spacing:.05em}
+.dm-batt{font-size:.7rem;color:var(--g);font-weight:600}
+.dm-body{padding:16px 18px}
+.dm-rlbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--g);font-weight:700;margin-bottom:3px}
+.dm-rname{font-size:1rem;font-weight:800;margin-bottom:16px;line-height:1.2}
+.dm-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px}
+.dm-stat{text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:8px 4px}
+.dm-sv{font-size:1rem;font-weight:800;color:var(--t);line-height:1}
+.dm-su{font-size:.55rem;color:var(--td);text-transform:uppercase;font-weight:600;margin-top:3px;letter-spacing:.06em}
+.dm-map{width:100%;aspect-ratio:1.4;background:#0d1a0d;border-radius:12px;overflow:hidden;margin-bottom:14px;position:relative}
+.dm-elv{background:#0a140a;border-radius:12px;overflow:hidden;padding:10px 12px}
+.dm-elvlbl{font-size:.55rem;text-transform:uppercase;letter-spacing:.12em;color:var(--g);font-weight:700;margin-bottom:6px}
+.dm-name-tag{
+  position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+  background:var(--g);color:#000;font-size:.65rem;font-weight:800;
+  letter-spacing:.12em;padding:5px 16px;border-radius:100px;white-space:nowrap;
+  box-shadow:0 4px 20px rgba(34,197,94,.4);
+}
+
+/* ══════════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════════ */
+.sbar{border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);background:rgba(255,255,255,.01);padding:44px 0}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr)}
+.si{text-align:center;padding:0 20px;border-right:1px solid var(--bdr)}
+.si:last-child{border-right:none}
+.sn{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-.025em;line-height:1}
+.sn span{color:var(--g)}
+.sl{font-size:.72rem;color:var(--tdd);margin-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:600px){.sgrid{grid-template-columns:repeat(2,1fr);gap:1px;background:var(--bdr)}.si{background:var(--bg);border-right:none;padding:22px}}
+
+/* ══════════════════════════════════════════════
+   FEATURES BENTO
+══════════════════════════════════════════════ */
+.feat{background:var(--bg);padding-bottom:60px}
+.sec-hd{text-align:center;margin-bottom:80px}
+.sec-hd .lbl{margin-bottom:14px}
+.sec-hd h2{margin-bottom:18px}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bc{
+  background:var(--bg2);border:1px solid var(--bdr);border-radius:24px;
+  padding:36px;transition:all .32s ease;overflow:hidden;position:relative;
+}
+.bc::before{
+  content:'';position:absolute;inset:0;border-radius:24px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(34,197,94,.06),transparent 60%);
+  opacity:0;transition:opacity .32s;
+}
+.bc:hover{border-color:var(--bdrg);transform:translateY(-4px)}
+.bc:hover::before{opacity:1}
+.bc.s2{grid-column:span 2}
+.bc.s3{grid-column:span 3}
+.bico{width:48px;height:48px;background:rgba(34,197,94,.1);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.bico svg{width:22px;height:22px;stroke:#22c55e;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bc h3{font-size:1.15rem;font-weight:700;margin-bottom:10px}
+.bc p{color:var(--td);line-height:1.65;font-size:.92rem}
+.bvis{margin-top:28px;border-radius:16px;overflow:hidden;background:#0a0a0a;border:1px solid var(--bdr)}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.bc.s2,.bc.s3{grid-column:span 2}}
+@media(max-width:580px){.bento{grid-template-columns:1fr}.bc.s2,.bc.s3{grid-column:span 1}}
+
+/* Battery visual */
+.batt-vis{padding:22px}
+.batt-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.8rem}
+.batt-val{font-weight:700;color:var(--g)}
+.batt-track{height:10px;background:rgba(255,255,255,.05);border-radius:100px;overflow:hidden}
+.batt-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--g),#86efac);border-radius:100px;transition:width 2.2s cubic-bezier(.16,1,.3,1)}
+.batt-scale{display:flex;justify-content:space-between;margin-top:8px;font-size:.7rem;color:var(--tdd)}
+
+/* ══════════════════════════════════════════════
+   WIKILOC
+══════════════════════════════════════════════ */
+.wk-sect{background:linear-gradient(180deg,var(--bg) 0%,#0b0f0b 50%,var(--bg) 100%);padding:80px 0 120px}
+.wk-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.wk-badge{display:inline-flex;align-items:center;gap:14px;background:rgba(34,197,94,.05);border:1px solid var(--bdrg);padding:16px 24px;border-radius:18px;margin-bottom:28px}
+.wk-badge span{font-size:1rem;font-weight:700}
+.wk-inner h2{margin-bottom:22px}
+.wk-routes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
+.rc{background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;padding:14px 18px;transition:all .22s;cursor:default}
+.rc:hover{border-color:var(--bdrg);background:var(--bg3)}
+.rcn{font-weight:700;font-size:.88rem;margin-bottom:7px}
+.rcs{display:flex;gap:10px}
+.rst{font-size:.75rem;color:var(--td)}
+.rst strong{color:var(--g)}
+.wk-map{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:.85;background:#0b160b;border:1px solid var(--bdr)}
+@media(max-width:900px){.wk-inner{grid-template-columns:1fr;gap:48px}.wk-map{aspect-ratio:16/9}}
+
+/* ══════════════════════════════════════════════
+   INTEGRATIONS
+══════════════════════════════════════════════ */
+.int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
+.ic{
+  background:var(--bg2);border:1px solid var(--bdr);border-radius:24px;
+  padding:44px 28px;text-align:center;transition:all .32s;
+}
+.ic:hover{border-color:var(--bdrg);transform:translateY(-6px)}
+.ic-icon{width:72px;height:72px;border-radius:20px;margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
+.ic h3{font-size:1.15rem;font-weight:700;margin-bottom:10px}
+.ic p{color:var(--td);font-size:.9rem;line-height:1.65}
+@media(max-width:760px){.int-grid{grid-template-columns:1fr;max-width:380px;margin:56px auto 0}}
+
+/* ══════════════════════════════════════════════
+   SPECS
+══════════════════════════════════════════════ */
+.specs-s{background:var(--bg2);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.specs-in{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.spl{list-style:none}
+.spl li{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-bottom:1px solid var(--bdr);font-size:.93rem}
+.spl li:last-child{border-bottom:none}
+.spn{color:var(--td)}
+.spv{font-weight:600}
+.spv.g{color:var(--g)}
+@media(max-width:860px){.specs-in{grid-template-columns:1fr;gap:0}}
+
+/* ══════════════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════════════ */
+.testi-s{background:var(--bg);overflow:hidden}
+.testi-mask{position:relative;overflow:hidden;padding:8px 0 16px}
+.testi-mask::before,.testi-mask::after{content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
+.testi-mask::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.testi-mask::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
+.ttrack{display:flex;gap:20px;animation:slide 50s linear infinite;width:max-content}
+.ttrack:hover{animation-play-state:paused}
+@keyframes slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tcard{
+  background:var(--bg2);border:1px solid var(--bdr);border-radius:20px;
+  padding:28px;width:320px;flex-shrink:0;transition:border-color .2s;
+}
+.tcard:hover{border-color:var(--bdrg)}
+.tstars{color:#fbbf24;font-size:.85rem;letter-spacing:3px;margin-bottom:14px}
+.ttxt{color:var(--td);line-height:1.7;font-size:.9rem;margin-bottom:22px}
+.tau{display:flex;align-items:center;gap:12px}
+.tav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g),#166534);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#000;flex-shrink:0}
+.tan{font-weight:700;font-size:.88rem}
+.tar{font-size:.77rem;color:var(--tdd);margin-top:2px}
+
+/* ══════════════════════════════════════════════
+   CTA
+══════════════════════════════════════════════ */
+.cta-s{padding:170px 0;text-align:center;position:relative;overflow:hidden}
+.cta-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(34,197,94,.07) 0%,transparent 65%);
+}
+.cta-img-wrap{
+  position:absolute;right:0;top:0;bottom:0;width:40%;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.5) 0%,transparent 100%);
+  mask-image:linear-gradient(to left,rgba(0,0,0,.5) 0%,transparent 100%);
+}
+.cta-prod-img{width:100%;height:100%;object-fit:cover;object-position:center top}
+@media(max-width:768px){.cta-img-wrap{display:none}}
+.cta-z{position:relative;z-index:1}
+.price{
+  font-size:clamp(4.5rem,14vw,9rem);font-weight:900;line-height:.95;
+  letter-spacing:-.05em;color:var(--g);margin:40px 0 12px;
+}
+.pnote{color:var(--td);font-size:.88rem;margin-bottom:52px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.trust{display:flex;gap:28px;justify-content:center;margin-top:54px;flex-wrap:wrap}
+.tbadge{display:flex;align-items:center;gap:7px;color:var(--td);font-size:.83rem;font-weight:500}
+.tbico{display:flex;align-items:center}.tbico svg{width:16px;height:16px;stroke:#22c55e;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+footer{border-top:1px solid var(--bdr);padding:64px 0 44px}
+.fi{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:48px}
+.fb p{color:var(--td);font-size:.86rem;line-height:1.7;margin-top:16px;max-width:270px}
+.fc h4{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tdd);margin-bottom:18px}
+.fc ul{list-style:none}
+.fc li{margin-bottom:11px}
+.fc a{color:var(--td);text-decoration:none;font-size:.86rem;transition:color .2s}
+.fc a:hover{color:var(--t)}
+.fbot{border-top:1px solid var(--bdr);padding-top:30px;display:flex;justify-content:space-between;align-items:center;color:var(--tdd);font-size:.78rem;flex-wrap:wrap;gap:12px}
+.fbl{display:flex;gap:22px}
+.fbl a{color:var(--tdd);text-decoration:none;transition:color .2s}
+.fbl a:hover{color:var(--td)}
+@media(max-width:860px){.fi{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.fi{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="nav">
+  <a href="#" class="nlogo">
+    <img src="img/Logo.png" alt="TRAILHUB" class="nlogo-img">
+  </a>
+  <ul class="nlinks">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#rutas">Rutas</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#opiniones">Opiniones</a></li>
+  </ul>
+  <a href="#comprar" class="nbtn">Comprar — 299€</a>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-z">
+    <div class="hero-pill rv">NUEVO · DISPOSITIVO MTB 2025</div>
+    <h1 class="d1 rv d1">Navegación<br><span class="g">sin límites.</span><br>En tu bici.</h1>
+    <p class="sub hero-sub rv d2">Potencia de Garmin. Visualización de Wikiloc.<br>El copiloto definitivo para mountain bikers exigentes.</p>
+    <div class="hero-ctas rv d3">
+      <a href="#comprar" class="btn btn-p">Comprar ahora — 299€</a>
+      <a href="#features" class="btn btn-o">Ver características</a>
+    </div>
+  </div>
+
+  <div class="hero-dev rv d4">
+    <div class="hero-dev-wrap">
+      <div class="hero-dev-glow"></div>
+      <img class="hero-product" src="img/hero.png" alt="TRAILHUB montado en el manillar de una mountain bike" loading="eager">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<div class="sbar">
+  <div class="wrap">
+    <div class="sgrid">
+      <div class="si rv"><div class="sn"><span>20</span>h</div><div class="sl">Batería</div></div>
+      <div class="si rv"><div class="sn">IP<span>67</span></div><div class="sl">Resistencia</div></div>
+      <div class="si rv"><div class="sn"><span>+</span>50K</div><div class="sl">Rutas Wikiloc</div></div>
+      <div class="si rv"><div class="sn"><span>3</span></div><div class="sl">Ecosistemas</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section class="feat" id="features">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div class="lbl rv">Características</div>
+      <h2 class="d2 rv d1">Diseñado para el trail.<br><span class="g">Creado para durar.</span></h2>
+      <p class="sub rv d2">Cada detalle pensado para que tu única preocupación sea disfrutar del camino.</p>
+    </div>
+
+    <div class="bento">
+      <!-- Maps -->
+      <div class="bc s2 rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4m11.4-11.4a8 8 0 0 1 0 11.4M3.5 3.5a14 14 0 0 0 0 17m17-17a14 14 0 0 1 0 17"/></svg></div>
+        <h3>Mapas satelitales de alta resolución</h3>
+        <p>Imágenes satelitales actualizadas con topografía, puntos de interés MTB y condiciones del terreno.</p>
+        <div class="bvis"><img src="img/Mapas satelite de alta resolicion.png" alt="Mapa satelital TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- Battery -->
+      <div class="bc rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M22 11v3"/><path d="M6 11h6"/></svg></div>
+        <h3>20 horas de autonomía</h3>
+        <p>Una carga te lleva a través de las rutas más largas. Gestión inteligente de energía.</p>
+        <div class="bvis"><img src="img/bateria.png" alt="20 horas de batería TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="bc rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg></div>
+        <h3>Navegación paso a paso</h3>
+        <p>Indicaciones visuales y vibración háptica en cada giro. Nunca más te pierdas en el monte.</p>
+        <div class="bvis"><img src="img/navegacion paso a paso.png" alt="Navegación turn-by-turn TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- Screen -->
+      <div class="bc rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div>
+        <h3>Pantalla antirreflejo</h3>
+        <p>Visible bajo la luz solar directa. Táctil optimizada para uso con guantes en cualquier condición.</p>
+        <div class="bvis"><img src="img/pantalla antireflejo.png" alt="Pantalla antirreflejo TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- IP67 -->
+      <div class="bc rv d2">
+        <div class="bico"><svg viewBox="0 0 24 24"><path d="M12 2 L19 12 A7 7 0 1 1 5 12 Z"/></svg></div>
+        <h3>IP67 — Protección total</h3>
+        <p>Lluvia, barro, polvo. Construido para aguantar cualquier condición en cualquier ruta del planeta.</p>
+        <div class="bvis"><img src="img/IP67.png" alt="IP67 resistencia al agua y barro TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- Stats showcase -->
+      <div class="bc s3 rv" style="background:linear-gradient(135deg,#0d140d,#111911)">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;flex-wrap:wrap">
+          <div>
+            <div class="bico"><svg viewBox="0 0 24 24"><path d="M18 20V10m-6 10V4M6 20v-6"/></svg></div>
+            <h3>Estadísticas completas en tiempo real</h3>
+            <p style="max-width:440px">Distancia, desnivel, velocidad, tiempo y perfil de pendiente visible de un vistazo. Compatible con sensores de frecuencia cardiaca.</p>
+            <div style="display:flex;gap:20px;margin-top:24px;flex-wrap:wrap">
+              <div><div style="font-size:1.6rem;font-weight:900;color:var(--g)">620<span style="font-size:1rem">m</span></div><div style="font-size:.7rem;color:var(--tdd);text-transform:uppercase;letter-spacing:.08em;margin-top:2px">Desnivel+</div></div>
+              <div><div style="font-size:1.6rem;font-weight:900;color:var(--t)">−410<span style="font-size:1rem">m</span></div><div style="font-size:.7rem;color:var(--tdd);text-transform:uppercase;letter-spacing:.08em;margin-top:2px">Desnivel−</div></div>
+              <div><div style="font-size:1.6rem;font-weight:900;color:var(--t)">24,6<span style="font-size:1rem">km/h</span></div><div style="font-size:.7rem;color:var(--tdd);text-transform:uppercase;letter-spacing:.08em;margin-top:2px">Velocidad máx</div></div>
+            </div>
+          </div>
+          <canvas id="c-elv2" width="220" height="140" style="width:min(220px,100%);height:140px;display:block;border-radius:14px;background:#0a120a"></canvas>
+        </div>
+      </div>
+
+      <!-- Wireless updates -->
+      <div class="bc rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><path d="M12 20h.01M2 8.82a15 15 0 0 1 20 0M5 12.86a10 10 0 0 1 14 0M8.53 16.11a5 5 0 0 1 6.95 0"/></svg></div>
+        <h3>Actualizaciones OTA</h3>
+        <p>Mejoras de software directamente a tu dispositivo. Sin cables, sin ordenador, siempre al día.</p>
+        <div class="bvis"><img src="img/actualizaciones OTA.png" alt="Actualizaciones inalámbricas TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+
+      <!-- Mount -->
+      <div class="bc rv">
+        <div class="bico"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <h3>Montaje universal</h3>
+        <p>Compatible con el estándar Garmin. Instala en segundos en cualquier bicicleta. Traslado inmediato entre bicis.</p>
+        <div class="bvis"><img src="img/montaje universal.png" alt="Montaje universal TRAILHUB" style="width:100%;display:block;border-radius:12px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WIKILOC ═══════════════ -->
+<section class="wk-sect" id="rutas">
+  <div class="wrap">
+    <div class="wk-inner">
+      <div>
+        <div class="lbl rv">Integración exclusiva</div>
+        <div class="wk-badge rv">
+          <img src="img/wikiloc logo.png" alt="Wikiloc" style="width:40px;height:40px;object-fit:contain;border-radius:10px">
+          <span>Compatible con Wikiloc</span>
+        </div>
+        <h2 class="d2 rv d2">Accede a<br><span class="g">millones de rutas</span><br>al instante.</h2>
+        <p class="sub rv d3" style="margin-bottom:0">Sincroniza con tu cuenta Wikiloc y accede al mayor banco de rutas GPS del mundo. Descarga las rutas de tu zona antes de salir — sin señal, sin problemas.</p>
+        <div class="wk-routes rv d4">
+          <div class="rc"><div class="rcn">Integral del Gallinero</div><div class="rcs"><span class="rst"><strong>12,4km</strong></span><span class="rst"><strong>620m</strong> desn.</span></div></div>
+          <div class="rc"><div class="rcn">Sierra Norte Loop</div><div class="rcs"><span class="rst"><strong>28,1km</strong></span><span class="rst"><strong>1.240m</strong> desn.</span></div></div>
+          <div class="rc"><div class="rcn">Enduro Guadarrama</div><div class="rcs"><span class="rst"><strong>18,7km</strong></span><span class="rst"><strong>890m</strong> desn.</span></div></div>
+          <div class="rc"><div class="rcn">Picos Tech Trail</div><div class="rcs"><span class="rst"><strong>34,2km</strong></span><span class="rst"><strong>1.580m</strong> desn.</span></div></div>
+        </div>
+      </div>
+      <div class="wk-map rv">
+        <img src="img/Accede a millones de rutas al instante.png" alt="Millones de rutas Wikiloc" style="width:100%;height:100%;object-fit:cover;display:block">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ INTEGRATIONS ═══════════════ -->
+<section id="integraciones">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div class="lbl rv">Ecosistema</div>
+      <h2 class="d2 rv d1">Funciona con todo<br><span class="g">lo que ya usas.</span></h2>
+      <p class="sub rv d2">Sincronización bidireccional automática. Tus datos, en todas partes.</p>
+    </div>
+    <div class="int-grid">
+      <div class="ic rv">
+        <div class="ic-icon" style="background:rgba(255,255,255,.06)">
+          <img src="img/garmin conect logo.webp" alt="Garmin Connect" style="width:52px;height:52px;object-fit:contain">
+        </div>
+        <h3>Garmin Connect</h3>
+        <p>Sincroniza actividades, estadísticas y récords personales con el ecosistema Garmin automáticamente.</p>
+      </div>
+      <div class="ic rv">
+        <div class="ic-icon" style="background:rgba(255,255,255,.06)">
+          <img src="img/apple health logo.png" alt="Apple Health" style="width:52px;height:52px;object-fit:contain">
+        </div>
+        <h3>Apple Health</h3>
+        <p>Métricas de ciclismo integradas con tu historial de salud. Calorías, frecuencia cardiaca y mucho más.</p>
+      </div>
+      <div class="ic rv">
+        <div class="ic-icon" style="background:rgba(255,255,255,.06)">
+          <img src="img/strava logo.webp" alt="Strava" style="width:52px;height:52px;object-fit:contain">
+        </div>
+        <h3>Strava</h3>
+        <p>Comparte rutas, supera segmentos y compite con tu comunidad. Subida automática al finalizar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SPECS ═══════════════ -->
+<section class="specs-s" id="specs">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div class="lbl rv">Especificaciones</div>
+      <h2 class="d2 rv d1">Ingeniería<br><span class="g">de precisión.</span></h2>
+    </div>
+    <div class="specs-in">
+      <ul class="spl rv">
+        <li><span class="spn">Pantalla</span><span class="spv">Táctil AMOLED 4"</span></li>
+        <li><span class="spn">Resolución</span><span class="spv">480 × 800 px</span></li>
+        <li><span class="spn">GPS</span><span class="spv g">Multi-band GPS/GLONASS/Galileo</span></li>
+        <li><span class="spn">Batería</span><span class="spv g">20h uso intensivo</span></li>
+        <li><span class="spn">Carga</span><span class="spv">USB-C · 2h carga completa</span></li>
+        <li><span class="spn">Resistencia</span><span class="spv g">IP67</span></li>
+        <li><span class="spn">Temperatura</span><span class="spv">−20°C a +60°C</span></li>
+      </ul>
+      <ul class="spl rv">
+        <li><span class="spn">Procesador</span><span class="spv">Garmin Chip Gen 3</span></li>
+        <li><span class="spn">Memoria</span><span class="spv">32 GB mapas + actividades</span></li>
+        <li><span class="spn">Conectividad</span><span class="spv">WiFi 6 + Bluetooth 5.3</span></li>
+        <li><span class="spn">Montaje</span><span class="spv g">Universal (std. Garmin)</span></li>
+        <li><span class="spn">Actualizaciones</span><span class="spv g">OTA inalámbricas</span></li>
+        <li><span class="spn">Peso</span><span class="spv">98 g</span></li>
+        <li><span class="spn">Garantía</span><span class="spv">2 años</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section class="testi-s" id="opiniones">
+  <div class="wrap">
+    <div class="sec-hd" style="margin-bottom:56px">
+      <div class="lbl rv">Testimonios</div>
+      <h2 class="d2 rv d1">Riders que ya<br><span class="g">confían en TRAILHUB.</span></h2>
+    </div>
+  </div>
+  <div class="testi-mask">
+    <div class="ttrack" id="ttrack">
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"La integración con Wikiloc es brutal — descargo la ruta desde el móvil y en segundos está en el dispositivo. Pantalla perfecta bajo el sol."</p><div class="tau"><div class="tav">AC</div><div><div class="tan">Alejandro C.</div><div class="tar">Enduro rider · Madrid</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Las 20h de batería son reales. Hice una ruta de 18 horas y llegué al 12%. La pantalla táctil con guantes funciona de verdad — no como otros."</p><div class="tau"><div class="tav">MT</div><div><div class="tan">Marina T.</div><div class="tar">XC racer · Barcelona</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"En senderos técnicos donde otros dispositivos perdían señal, el TRAILHUB mantiene el track perfecto. GPS multi-banda marca la diferencia."</p><div class="tau"><div class="tav">JR</div><div><div class="tan">Javier R.</div><div class="tar">Trail guide · Pirineos</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"La sincronización con Strava al finalizar es automática. Las actualizaciones OTA han mejorado el dispositivo dos veces. Soporte excepcional."</p><div class="tau"><div class="tav">SR</div><div><div class="tan">Sara R.</div><div class="tar">Amateur MTB · Valencia</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Lo comparé contra el Garmin Edge 840. TRAILHUB gana en integración Wikiloc, autonomía y precio. Mi recomendación número uno en 2025."</p><div class="tau"><div class="tav">PG</div><div><div class="tan">Pablo G.</div><div class="tar">YouTuber MTB · 120k subs</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Lo llevo en cada travesía de montaña. La resistencia IP67 se ha comprobado en múltiples tormentas. Robusto, preciso, confiable."</p><div class="tau"><div class="tav">LM</div><div><div class="tan">Lucía M.</div><div class="tar">BTT touring · Asturias</div></div></div></div>
+      <!-- Duplicate for loop -->
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"La integración con Wikiloc es brutal — descargo la ruta desde el móvil y en segundos está en el dispositivo. Pantalla perfecta bajo el sol."</p><div class="tau"><div class="tav">AC</div><div><div class="tan">Alejandro C.</div><div class="tar">Enduro rider · Madrid</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Las 20h de batería son reales. Hice una ruta de 18 horas y llegué al 12%. La pantalla táctil con guantes funciona de verdad — no como otros."</p><div class="tau"><div class="tav">MT</div><div><div class="tan">Marina T.</div><div class="tar">XC racer · Barcelona</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"En senderos técnicos donde otros dispositivos perdían señal, el TRAILHUB mantiene el track perfecto. GPS multi-banda marca la diferencia."</p><div class="tau"><div class="tav">JR</div><div><div class="tan">Javier R.</div><div class="tar">Trail guide · Pirineos</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"La sincronización con Strava al finalizar es automática. Las actualizaciones OTA han mejorado el dispositivo dos veces. Soporte excepcional."</p><div class="tau"><div class="tav">SR</div><div><div class="tan">Sara R.</div><div class="tar">Amateur MTB · Valencia</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Lo comparé contra el Garmin Edge 840. TRAILHUB gana en integración Wikiloc, autonomía y precio. Mi recomendación número uno en 2025."</p><div class="tau"><div class="tav">PG</div><div><div class="tan">Pablo G.</div><div class="tar">YouTuber MTB · 120k subs</div></div></div></div>
+      <div class="tcard"><div class="tstars">★★★★★</div><p class="ttxt">"Lo llevo en cada travesía de montaña. La resistencia IP67 se ha comprobado en múltiples tormentas. Robusto, preciso, confiable."</p><div class="tau"><div class="tav">LM</div><div><div class="tan">Lucía M.</div><div class="tar">BTT touring · Asturias</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA FINAL ═══════════════ -->
+<section class="cta-s" id="comprar">
+  <div class="cta-bg"></div>
+  <div class="cta-img-wrap rv">
+    <img src="img/tu proxima ruta empieza aqui.png" alt="TRAILHUB en acción" class="cta-prod-img">
+  </div>
+  <div class="wrap cta-z">
+    <div class="lbl rv">Disponible ahora</div>
+    <h2 class="d2 rv d1">Tu próxima ruta<br>empieza <span class="g">aquí.</span></h2>
+    <div class="price rv d2">299€</div>
+    <p class="pnote rv d2">PVP recomendado · IVA incluido · Envío gratuito en España</p>
+    <div class="cta-btns rv d3">
+      <a href="#" class="btn btn-p btn-xl">Comprar TRAILHUB</a>
+      <a href="#specs" class="btn btn-o btn-xl">Ver especificaciones</a>
+    </div>
+    <div class="trust rv d4">
+      <div class="tbadge"><span class="tbico"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span>Envío en 24–48h</div>
+      <div class="tbadge"><span class="tbico"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span>Devolución 30 días</div>
+      <div class="tbadge"><span class="tbico"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span>Garantía 2 años</div>
+      <div class="tbadge"><span class="tbico"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span>Soporte en español</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="fi">
+      <div class="fb">
+        <a href="#" class="nlogo">
+          <img src="img/Logo.png" alt="TRAILHUB" class="nlogo-img">
+        </a>
+        <p>El dispositivo de navegación definitivo para mountain bikers. Potencia de Garmin. Visualización de Wikiloc. Integrado en tu manillar.</p>
+      </div>
+      <div class="fc"><h4>Producto</h4><ul><li><a href="#">Características</a></li><li><a href="#">Especificaciones</a></li><li><a href="#">Integraciones</a></li><li><a href="#">Actualizaciones</a></li></ul></div>
+      <div class="fc"><h4>Soporte</h4><ul><li><a href="#">Configuración</a></li><li><a href="#">Manual</a></li><li><a href="#">Garantía</a></li><li><a href="#">Contacto</a></li></ul></div>
+      <div class="fc"><h4>Empresa</h4><ul><li><a href="#">Sobre nosotros</a></li><li><a href="#">Blog</a></li><li><a href="#">Prensa</a></li><li><a href="#">Distribuidores</a></li></ul></div>
+    </div>
+    <div class="fbot">
+      <span>© 2025 TRAILHUB Technologies. Todos los derechos reservados.</span>
+      <div class="fbl"><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══ NAV SCROLL ═══
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>60),{passive:true});
+
+// ═══ REVEAL OBSERVER ═══
+const obs=new IntersectionObserver(els=>{
+  els.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');if(e.target.querySelector('#bfill'))trigBatt()}});
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ═══ BATTERY ANIMATION ═══
+let battDone=false;
+function trigBatt(){
+  if(battDone)return;battDone=true;
+  const fill=document.getElementById('bfill'),pct=document.getElementById('bpct');
+  if(!fill||!pct)return;
+  let n=0;
+  const t=()=>{n=Math.min(n+1,87);fill.style.width=n+'%';pct.textContent=n+'%';if(n<87)requestAnimationFrame(t)};
+  setTimeout(()=>requestAnimationFrame(t),400);
+}
+const battObs=new IntersectionObserver(e=>{if(e[0].isIntersecting)trigBatt()},{threshold:.5});
+const bf=document.getElementById('bfill');if(bf)battObs.observe(bf);
+
+// ═══ PARALLAX ═══
+const devWrap=document.querySelector('.hero-dev-wrap');
+window.addEventListener('scroll',()=>{
+  if(devWrap)devWrap.style.transform=`translateY(${-scrollY*.04}px)`;
+},{passive:true});
+
+// ═══ CANVAS UTILITIES ═══
+function rnd(seed,n){
+  // deterministic pseudo-random based on sin
+  return Math.abs(Math.sin(seed*9301+49297)*233280)%n;
+}
+
+function drawPath(ctx,pts){
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+}
+
+// realistic MTB-route generator: organic meandering via layered noise + Catmull-Rom smoothing
+function gpxTrack(w,h,s=0){
+  const mx=Math.max(14,Math.min(w,h)*.07);
+  const my=Math.max(14,Math.min(w,h)*.09);
+  const ww=w-mx*2, hh=h-my*2;
+  const n=9; // control nodes
+  const cps=[];
+  for(let i=0;i<=n;i++){
+    const t=i/n;
+    // x: monotonically increases with subtle wobble (real routes drift, not perfectly straight)
+    const x=mx+t*ww+Math.sin(t*Math.PI*3+s*.7)*ww*.04;
+    // y: layered harmonics → switchbacks + gentle drift
+    const y=my+hh*(.5
+      +.28*Math.sin(t*Math.PI*1.7+s*1.1)
+      +.16*Math.sin(t*Math.PI*3.3+s*.6+1.4)
+      +.08*Math.sin(t*Math.PI*5.9+s*.3));
+    cps.push([
+      Math.max(mx*.5,Math.min(w-mx*.5,x)),
+      Math.max(my*.5,Math.min(h-my*.5,y))
+    ]);
+  }
+  // Catmull-Rom interpolation → smooth trail-like curve
+  const pts=[];
+  for(let i=0;i<cps.length-1;i++){
+    const p0=cps[Math.max(0,i-1)], p1=cps[i], p2=cps[i+1], p3=cps[Math.min(cps.length-1,i+2)];
+    const steps=14;
+    for(let k=0;k<steps;k++){
+      const t=k/steps, t2=t*t, t3=t2*t;
+      const x=.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3);
+      const y=.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3);
+      pts.push([x,y]);
+    }
+  }
+  pts.push(cps[cps.length-1]);
+  return pts;
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+// ═══ MAP CANVAS ═══
+function drawMap(id,w,h){
+  const cv=document.getElementById(id);if(!cv)return;
+  const ctx=cv.getContext('2d');cv.width=w;cv.height=h;
+
+  // base
+  ctx.fillStyle='#0c1a0c';ctx.fillRect(0,0,w,h);
+
+  // terrain patches
+  for(let i=0;i<10;i++){
+    const x=(Math.sin(i*2.1+1)*0.4+0.5)*w;
+    const y=(Math.cos(i*1.8+0.5)*0.4+0.5)*h;
+    const r=(Math.sin(i*0.7)*0.12+0.22)*Math.max(w,h);
+    const gr=ctx.createRadialGradient(x,y,0,x,y,r);
+    const c=`rgba(${14+i%3},${20+i%5+i*2},${14+i%3},`;
+    gr.addColorStop(0,c+'0.9)');gr.addColorStop(1,'transparent');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,w,h);
+  }
+
+  // grid
+  ctx.strokeStyle='rgba(34,197,94,.05)';ctx.lineWidth=.6;
+  for(let x=0;x<w;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=0;y<h;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+
+  // track glow
+  const pts=gpxTrack(w,h);
+  ctx.strokeStyle='rgba(34,197,94,.18)';ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';
+  drawPath(ctx,pts);
+  // track
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=2.5;drawPath(ctx,pts);
+
+  // markers
+  const mk=(x,y,c,t)=>{
+    ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle=c;ctx.fill();
+    ctx.fillStyle='#000';ctx.font='bold 7px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(t,x,y);
+  };
+  mk(pts[0][0],pts[0][1],'#22c55e','S');
+  mk(pts[pts.length-1][0],pts[pts.length-1][1],'#f59e0b','F');
+
+  // position dot
+  const mid=pts[Math.floor(pts.length*.45)];
+  ctx.beginPath();ctx.arc(mid[0],mid[1],5,0,Math.PI*2);ctx.fillStyle='#60a5fa';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+}
+
+// ═══ ELEVATION CANVAS ═══
+function drawElv(id,w,h,animated=false){
+  const cv=document.getElementById(id);if(!cv)return;
+  const ctx=cv.getContext('2d');cv.width=w;cv.height=h;
+  ctx.clearRect(0,0,w,h);
+
+  const pts=[];
+  for(let i=0;i<=50;i++){
+    const t=i/50;
+    const y=h-(Math.sin(t*Math.PI*2.2)*.28+Math.sin(t*Math.PI*6)*.12+Math.sin(t*Math.PI*1.3)*.2+.5)*h*.82;
+    pts.push([t*w,Math.max(3,Math.min(h-3,y))]);
+  }
+
+  // fill
+  const gr=ctx.createLinearGradient(0,0,0,h);
+  gr.addColorStop(0,'rgba(34,197,94,.45)');gr.addColorStop(1,'rgba(34,197,94,.02)');
+  ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(0,h);
+  pts.forEach(p=>ctx.lineTo(p[0],p[1]));
+  ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+
+  // line
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=1.8;ctx.lineCap='round';
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+
+  // progress dot
+  const pi=Math.floor(.44*pts.length);
+  ctx.beginPath();ctx.arc(pts[pi][0],pts[pi][1],3.5,0,Math.PI*2);
+  ctx.fillStyle='#22c55e';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.2;ctx.stroke();
+}
+
+// ═══ TERRAIN FEATURE CANVAS ═══
+function drawTerrain(id,w,h){
+  const cv=document.getElementById(id);if(!cv)return;
+  const ctx=cv.getContext('2d');cv.width=w;cv.height=h;
+
+  ctx.fillStyle='#0b180b';ctx.fillRect(0,0,w,h);
+
+  // contours
+  for(let i=0;i<7;i++){
+    ctx.strokeStyle=`rgba(34,197,94,${.04+i*.008})`;ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let a=0;a<=Math.PI*2;a+=.05){
+      const r=(0.12+i*.06)*h+Math.sin(a*4+i)*22;
+      const x=w*.38+Math.cos(a)*r*1.6;const y=h*.5+Math.sin(a)*r;
+      a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.stroke();
+  }
+
+  // contours right side
+  for(let i=0;i<5;i++){
+    ctx.strokeStyle=`rgba(34,197,94,${.03+i*.007})`;ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let a=0;a<=Math.PI*2;a+=.05){
+      const r=(0.1+i*.055)*h+Math.sin(a*3+i*1.2)*18;
+      const x=w*.72+Math.cos(a)*r*1.4;const y=h*.5+Math.sin(a)*r;
+      a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.stroke();
+  }
+
+  // grid
+  ctx.strokeStyle='rgba(34,197,94,.04)';ctx.lineWidth=.5;
+  for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+
+  // main track
+  const pts=gpxTrack(w,h);
+  ctx.strokeStyle='rgba(34,197,94,.2)';ctx.lineWidth=12;ctx.lineCap='round';ctx.lineJoin='round';drawPath(ctx,pts);
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=3;drawPath(ctx,pts);
+
+  // secondary track
+  const pts2=gpxTrack(w,h,15);
+  ctx.strokeStyle='rgba(251,191,36,.12)';ctx.lineWidth=8;drawPath(ctx,pts2);
+  ctx.strokeStyle='rgba(251,191,36,.5)';ctx.lineWidth=1.8;drawPath(ctx,pts2);
+
+  // HUD overlay
+  const hud=(x,y,txt,sub)=>{
+    ctx.fillStyle='rgba(0,0,0,.72)';
+    roundRect(ctx,x,y,82,36,8);ctx.fill();
+    ctx.fillStyle='#22c55e';ctx.font='bold 12px Inter,sans-serif';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(txt,x+8,y+6);
+    ctx.fillStyle='rgba(161,161,170,.8)';ctx.font='10px Inter,sans-serif';ctx.fillText(sub,x+8,y+20);
+  };
+  hud(20,12,'12,4 km','Distancia');hud(120,12,'620 m','Desnivel+');hud(w-104,12,'2:15:36','Tiempo');
+}
+
+// ═══ WIKILOC MAP ═══
+function drawWikiloc(id){
+  const cv=document.getElementById(id);if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const w=cv.width,h=cv.height;
+
+  ctx.fillStyle='#0b160b';ctx.fillRect(0,0,w,h);
+
+  // terrain base
+  for(let i=0;i<14;i++){
+    const x=(Math.sin(i*2.3+.4)*0.38+0.5)*w;
+    const y=(Math.cos(i*1.9+.7)*0.38+0.5)*h;
+    const r=(Math.sin(i*.6)*0.1+0.18)*Math.max(w,h);
+    const gr=ctx.createRadialGradient(x,y,0,x,y,r);
+    gr.addColorStop(0,`rgba(${12+i%4},${18+i%6+i},${12+i%4},.85)`);
+    gr.addColorStop(1,'transparent');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,w,h);
+  }
+
+  // contour lines
+  for(let i=0;i<9;i++){
+    ctx.strokeStyle=`rgba(34,197,94,${.05+i*.005})`;ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let a=0;a<=Math.PI*2;a+=.04){
+      const r=(0.09+i*.055)*Math.min(w,h)+Math.sin(a*5+i*1.1)*24;
+      const x=w*.46+Math.cos(a)*r*1.3;const y=h*.42+Math.sin(a)*r;
+      a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.stroke();
+  }
+
+  // grid
+  ctx.strokeStyle='rgba(34,197,94,.04)';ctx.lineWidth=.6;
+  for(let x=0;x<w;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=0;y<h;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+
+  // routes
+  const routes=[
+    {c:'#22c55e',w:3.5,s:0,a:1},
+    {c:'#f59e0b',w:2,s:8,a:.65},
+    {c:'#3b82f6',w:2,s:18,a:.55},
+    {c:'#a855f7',w:1.8,s:26,a:.45},
+  ];
+  routes.forEach(r=>{
+    const pts=gpxTrack(w,h,r.s);
+    ctx.globalAlpha=r.a*.2;ctx.strokeStyle=r.c;ctx.lineWidth=r.w+8;ctx.lineCap='round';ctx.lineJoin='round';drawPath(ctx,pts);
+    ctx.globalAlpha=r.a;ctx.lineWidth=r.w;drawPath(ctx,pts);
+    // start dot
+    ctx.globalAlpha=r.a;
+    ctx.beginPath();ctx.arc(pts[0][0],pts[0][1],5,0,Math.PI*2);ctx.fillStyle=r.c;ctx.fill();
+  });
+  ctx.globalAlpha=1;
+
+  // waypoint labels
+  const wps=[
+    {x:w*.3,y:h*.22,t:'▲ 1.240m'},{x:w*.62,y:h*.48,t:'⬡ Mirador'},{x:w*.18,y:h*.68,t:'↺ Inicio'},
+  ];
+  wps.forEach(wp=>{
+    ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='center';
+    const tw=ctx.measureText(wp.t).width;
+    ctx.fillStyle='rgba(0,0,0,.75)';roundRect(ctx,wp.x-tw/2-8,wp.y-10,tw+16,22,6);ctx.fill();
+    ctx.fillStyle='#22c55e';ctx.textBaseline='middle';ctx.fillText(wp.t,wp.x,wp.y);
+  });
+
+  // compass
+  ctx.fillStyle='rgba(0,0,0,.65)';roundRect(ctx,w-50,14,36,36,9);ctx.fill();
+  ctx.fillStyle='#f4f4f5';ctx.font='bold 13px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('N',w-32,32);
+
+  // scale
+  ctx.fillStyle='rgba(0,0,0,.65)';roundRect(ctx,14,h-42,110,26,7);ctx.fill();
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=2;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(22,h-29);ctx.lineTo(116,h-29);ctx.stroke();
+  ctx.fillStyle='rgba(161,161,170,.85)';ctx.font='10px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('2 km',69,h-24);
+
+  // elevation mini-preview
+  const ph=h-160,py=h*.05;
+  ctx.fillStyle='rgba(0,0,0,.7)';roundRect(ctx,w-140,py,130,80,12);ctx.fill();
+  ctx.strokeStyle='rgba(34,197,94,.3)';ctx.lineWidth=1;roundRect(ctx,w-140,py,130,80,12);ctx.stroke();
+  ctx.fillStyle='rgba(34,197,94,.9)';ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('PERFIL',w-132,py+8);
+  // mini elv
+  const eps=[];
+  for(let i=0;i<=30;i++){const t=i/30;const ey=py+70-(Math.sin(t*Math.PI*2.2)*.3+Math.sin(t*Math.PI*5)*.12+.5)*50;eps.push([w-135+t*120,ey]);}
+  const eg=ctx.createLinearGradient(0,py,0,py+70);eg.addColorStop(0,'rgba(34,197,94,.4)');eg.addColorStop(1,'transparent');
+  ctx.fillStyle=eg;ctx.beginPath();ctx.moveTo(eps[0][0],py+70);eps.forEach(p=>ctx.lineTo(p[0],p[1]));ctx.lineTo(eps[eps.length-1][0],py+70);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=1.5;ctx.beginPath();eps.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+}
+
+// ═══ ELEVATION PROFILE (large) ═══
+function drawElvLarge(id,w,h){
+  const cv=document.getElementById(id);if(!cv)return;
+  const ctx=cv.getContext('2d');cv.width=w;cv.height=h;
+  ctx.clearRect(0,0,w,h);
+
+  const pts=[];
+  for(let i=0;i<=60;i++){
+    const t=i/60;
+    const y=h-(Math.sin(t*Math.PI*2.4)*.3+Math.sin(t*Math.PI*7)*.1+Math.sin(t*Math.PI*1.2)*.25+.52)*h*.85;
+    pts.push([t*w,Math.max(4,Math.min(h-4,y))]);
+  }
+
+  // fill
+  const gr=ctx.createLinearGradient(0,0,0,h);
+  gr.addColorStop(0,'rgba(34,197,94,.5)');gr.addColorStop(1,'rgba(34,197,94,.02)');
+  ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(0,h);
+  pts.forEach(p=>ctx.lineTo(p[0],p[1]));ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+
+  // grid lines horizontal
+  ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;
+  for(let i=1;i<4;i++){const y=h*i*.25;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+
+  ctx.strokeStyle='#22c55e';ctx.lineWidth=2;ctx.lineCap='round';
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+
+  // labels
+  ctx.fillStyle='rgba(161,161,170,.7)';ctx.font='10px Inter,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+  ['0km','4km','8km','12km'].forEach((t,i)=>ctx.fillText(t,(w/3)*i+(i===3?w:0),h-2));
+
+  // progress marker
+  const pi=Math.floor(.44*pts.length);
+  ctx.beginPath();ctx.arc(pts[pi][0],pts[pi][1],5,0,Math.PI*2);ctx.fillStyle='#22c55e';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+
+  // desnivel labels
+  ctx.fillStyle='#22c55e';ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='right';ctx.textBaseline='top';ctx.fillText('620m',w-4,4);
+  ctx.fillStyle='rgba(161,161,170,.6)';ctx.font='9px Inter,sans-serif';ctx.fillText('Desnivel+',w-4,18);
+}
+
+// ═══ INIT ═══
+drawMap('c-map',280,160);
+drawElv('c-elv',280,52);
+drawTerrain('c-terrain',700,190);
+drawElvLarge('c-elv2',220,140);
+drawWikiloc('c-wk');
+</script>
+</body>
+</html>
