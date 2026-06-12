@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "trailhub",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3002", "."],
+      "port": 3002
+    },
+    {
+      "name": "CashPilot Dev",
+      "runtimeExecutable": "/Users/marc/Library/pnpm/pnpm",
+      "runtimeArgs": ["--dir", "cashpilot", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "fep-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "formacion-ecom-philosophy", "run", "dev", "--", "--port", "3001"],
+      "port": 3001
+    },
+    {
+      "name": "creativeos",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "creativeos", "run", "dev", "--", "--port", "5173"],
+      "port": 5173
+    }
+  ]
+}
