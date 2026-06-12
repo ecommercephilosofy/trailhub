@@ -44,6 +44,9 @@ export async function syncMetaAds({ dateStart, dateEnd } = {}) {
   }
 
   await buildAdsPerformanceAggFromDaily('LAST_7D')
+  // La memoria creativa evoluciona con cada sync: veredictos PROVEN/FAILED/FATIGUED por hook/formato/país
+  const { rebuildLearningsFromMetrics } = await import('./creativeAgent')
+  await rebuildLearningsFromMetrics()
   const detail = `${byAd.size} ads · ${REAL_DAILY_ROWS.length} filas · ${REAL_SYNC_META.date_range.since} → ${REAL_SYNC_META.date_range.until} · Isabella Fontana ES+MX (blended)`
   await SyncRuns.create({ run_type: 'META_SYNC', status: 'SUCCESS', detail, duration_ms: Date.now() - t0 })
   return { ok: true, ads: byAd.size, rows: REAL_DAILY_ROWS.length, source: 'meta_real' }

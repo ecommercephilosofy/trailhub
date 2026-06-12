@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { PenLine, Search, Sparkles, Star, Wand2, FileEdit } from 'lucide-react'
+import { Bot, PenLine, Search, Sparkles, Star, Wand2, FileEdit } from 'lucide-react'
 import { GeneratedScripts, ScriptBuilderDrafts } from '@/api/entities'
 import { useEntityList } from '@/hooks/useData'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import GenerateDialog from '@/features/scripts/GenerateDialog'
 import ManualDialog from '@/features/scripts/ManualDialog'
 import ScriptViewDialog from '@/features/scripts/ScriptViewDialog'
 import DraftEditorDialog from '@/features/scripts/DraftEditorDialog'
+import IdeasAgentDialog from '@/features/scripts/IdeasAgentDialog'
 import { fmtDate, fmtSec } from '@/lib/format'
 
 const STATUSES = ['DRAFT', 'READY', 'SENT', 'APPROVED', 'NEEDS_EDIT', 'REJECTED']
@@ -20,6 +21,7 @@ export default function ScriptBuilder() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [genOpen, setGenOpen] = useState(false)
+  const [agentOpen, setAgentOpen] = useState(false)
   const [manualOpen, setManualOpen] = useState(false)
   const [viewId, setViewId] = useState(null)
   const [draftOpen, setDraftOpen] = useState(null)
@@ -54,6 +56,7 @@ export default function ScriptBuilder() {
           </SelectContent>
         </Select>
         <div className="ml-auto flex gap-2">
+          <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50" onClick={() => setAgentOpen(true)}><Bot /> Ideas Nuevas (Agente)</Button>
           <Button variant="outline" className="border-indigo-300 text-indigo-600 hover:bg-indigo-50" onClick={() => setManualOpen(true)}><PenLine /> Create Manual</Button>
           <Button onClick={() => setGenOpen(true)}><Sparkles /> Generate Scripts</Button>
         </div>
@@ -106,6 +109,7 @@ export default function ScriptBuilder() {
       )}
 
       <GenerateDialog open={genOpen} onOpenChange={setGenOpen} />
+      <IdeasAgentDialog open={agentOpen} onOpenChange={setAgentOpen} />
       <ManualDialog open={manualOpen} onOpenChange={setManualOpen} />
       {viewId && <ScriptViewDialog scriptId={viewId} onClose={() => setViewId(null)} />}
       {draftOpen && <DraftEditorDialog draft={draftOpen} onClose={() => setDraftOpen(null)} />}
