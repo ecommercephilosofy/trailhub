@@ -1,303 +1,229 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as ReTooltip } from 'recharts'
-import { FileUp, TrendingUp, Wand2, Clapperboard, Target, ArrowRight, Loader2, Trophy, Flame, Clock } from 'lucide-react'
-import { toast } from 'sonner'
-import { AdsPerformanceAgg, GeneratedScripts, VideoAssets, SyncRuns } from '@/api/entities'
-import { analyzeResearchPDF, importSelectedElements } from '@/api/functions'
+// Dashboard dirección: semáforo CMO + KPIs WoW + hallazgos + tendencia ROAS.
+// Todo viene publicado por el pipeline (lunes) — aquí no se calcula nada.
+import { useAuth } from '@/context/AuthContext'
 import { useEntityList } from '@/hooks/useData'
+import { WeeklyReports, MetricsSnapshots, CmoVerdicts, RunRequests, LearnedPatterns } from '@/api/entities'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { StatusBadge, FormatBadge, FatigueIndicator } from '@/components/shared/badges'
-import { LoadingSpinner, EmptyState } from '@/components/shared/misc'
-import PageGuide from '@/components/shared/PageGuide'
-import { fmtEur, fmtRoas } from '@/lib/format'
-import { timeAgo } from '@/lib/utils'
+import { EmptyState, ErrorState } from '@/components/shared/misc'
+import { LayoutDashboard, Play, Loader2, Brain, FileDown } from 'lucide-react'
+import { supabase } from '@/api/supabaseClient'
+import { fmtRoas } from '@/lib/format'
+import { CMO_STATUS_STYLE } from '@/lib/constants'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { cn, timeAgo } from '@/lib/utils'
+import { toast } from 'sonner'
 
-const PIE_COLORS = { Winners: '#10b981', Regular: '#f59e0b', Losers: '#ef4444', Pending: '#6366f1' }
+// PDFs del run (los mismos que llegan a Telegram) — signed URLs por rol:
+// el CMO solo lo puede firmar dirección (RLS de storage).
+function PdfButtons({ report }) {
+  const open = async (bucket, path) => {
+    const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600)
+    if (error) return toast.error(error.message)
+    window.open(data.signedUrl, '_blank')
+  }
+  if (!report?.editor_pdf_path && !report?.cmo_pdf_path) return null
+  return (
+    <div className="flex gap-2">
+      {report.editor_pdf_path && (
+        <Button variant="outline" size="sm" onClick={() => open('reports', report.editor_pdf_path)}>
+          <FileDown className="h-3.5 w-3.5" /> PDF editores
+        </Button>
+      )}
+      {report.cmo_pdf_path && (
+        <Button variant="outline" size="sm" onClick={() => open('reports-cmo', report.cmo_pdf_path)}>
+          <FileDown className="h-3.5 w-3.5" /> PDF CMO 🔒
+        </Button>
+      )}
+    </div>
+  )
+}
 
-function StatCard({ icon: Icon, label, value, sub, accent }) {
+// Botón «Lanzar análisis ahora»: inserta en run_requests; el bot del Mac lo
+// recoge (~1 min) y ejecuta el pipeline completo (últimos 7d). Estado en vivo.
+function RunNowButton() {
+  const { user, effectiveRole } = useAuth()
+  const { data: reqs, refetch } = useEntityList(RunRequests, { sort: '-id', limit: 1, staleTime: 15_000 })
+  const last = reqs?.[0]
+  const busy = last && ['pending', 'running'].includes(last.status)
+  if (effectiveRole !== 'ADMIN') return null
+
+  const launch = async () => {
+    if (busy) return
+    try {
+      await RunRequests.create({ requested_by: user.id })
+      toast.success('Análisis solicitado — el sistema lo recoge en ~1 min')
+      refetch()
+    } catch (e) {
+      toast.error(e.message)
+    }
+  }
+  return (
+    <div className="flex items-center gap-3">
+      <Button onClick={launch} disabled={busy}
+              className="bg-gradient-to-r from-indigo-500 to-purple-500">
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+        {busy ? (last.status === 'pending' ? 'En cola…' : 'Analizando… (~1-2h)') : 'Lanzar análisis ahora'}
+      </Button>
+      {last && !busy && (
+        <span className="text-xs text-slate-400">
+          último: {last.status === 'done' ? '✓ completado' : `⚠ ${last.detail || last.status}`} · {timeAgo(last.finished_at || last.requested_at)}
+        </span>
+      )}
+    </div>
+  )
+}
+
+// Memoria del sistema: firmas de creativo aprendidas semana a semana (patterns
+// del pipeline). Tentativas hasta repetir ≥2 semanas.
+function SystemMemory() {
+  const { data: patterns } = useEntityList(LearnedPatterns, { limit: 100 })
+  if (!patterns?.length) return null
+  const sorted = [...patterns].sort((a, b) => (b.score || 0) - (a.score || 0))
+  const winners = sorted.filter((p) => (p.score || 0) > 0).slice(0, 5)
+  const losers = sorted.filter((p) => (p.score || 0) < 0).slice(-3)
   return (
     <Card>
-      <CardContent className="p-5 flex items-start gap-3">
-        <div className={`rounded-xl p-2.5 ${accent || 'bg-indigo-100 text-indigo-600'}`}><Icon className="h-5 w-5" /></div>
-        <div className="min-w-0">
-          <p className="text-xs text-slate-500">{label}</p>
-          <p className="text-2xl font-bold text-slate-900 leading-tight">{value}</p>
-          {sub && <p className="text-xs text-slate-500 mt-0.5">{sub}</p>}
+      <CardHeader>
+        <CardTitle className="text-base flex items-center gap-2">
+          <Brain className="h-4 w-4 text-purple-500" />
+          Memoria del sistema — firmas aprendidas ({patterns.length})
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="grid gap-4 sm:grid-cols-2 text-sm">
+        <div>
+          <p className="text-xs font-bold text-emerald-600 uppercase mb-1.5">Ganando</p>
+          {winners.map((p) => (
+            <p key={p.signature} className="text-xs text-slate-700 mb-1">
+              <span className={cn('mr-1 rounded px-1 text-[9px] font-bold',
+                p.confidence === 'confirmado' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500')}>
+                {p.confidence === 'confirmado' ? '✓' : '?'}
+              </span>
+              {p.signature.split('|').join(' · ')}
+            </p>
+          ))}
+          {!winners.length && <p className="text-xs text-slate-400">Aún acumulando señal.</p>}
         </div>
+        <div>
+          <p className="text-xs font-bold text-red-500 uppercase mb-1.5">Quemado</p>
+          {losers.map((p) => (
+            <p key={p.signature} className="text-xs text-slate-500 mb-1">{p.signature.split('|').join(' · ')}</p>
+          ))}
+          {!losers.length && <p className="text-xs text-slate-400">Nada confirmado como perdedor.</p>}
+        </div>
+        <p className="sm:col-span-2 text-[10px] text-slate-400">
+          Firma = estructura · duración · fase · awareness · deseo · hook · geo. «?» = tentativa (1 semana);
+          «✓» = confirmada (≥2 semanas repitiendo). Se afina cada lunes.
+        </p>
       </CardContent>
     </Card>
   )
 }
 
-function ImportPdfDialog({ open, onOpenChange }) {
-  const [step, setStep] = useState(1)
-  const [file, setFile] = useState(null)
-  const [analyzing, setAnalyzing] = useState(false)
-  const [results, setResults] = useState(null)
-  const [selected, setSelected] = useState({})
-  const [importing, setImporting] = useState(false)
-
-  const reset = () => { setStep(1); setFile(null); setResults(null); setSelected({}) }
-
-  const analyze = async () => {
-    setAnalyzing(true)
-    try {
-      const res = await analyzeResearchPDF({ fileName: file?.name })
-      setResults(res)
-      const sel = {}
-      for (const cat of ['avatars', 'angles', 'desires', 'problems']) res[cat].forEach((_, i) => (sel[`${cat}_${i}`] = true))
-      setSelected(sel)
-      setStep(2)
-    } finally { setAnalyzing(false) }
-  }
-
-  const doImport = async () => {
-    setImporting(true)
-    try {
-      const payload = {}
-      for (const cat of ['avatars', 'angles', 'desires', 'problems'])
-        payload[cat] = results[cat].filter((_, i) => selected[`${cat}_${i}`])
-      const res = await importSelectedElements(payload)
-      const c = res.counts
-      toast.success(`Importado! ${c.avatars} avatares, ${c.angles} ángulos, ${c.desires} deseos, ${c.problems} problemas`)
-      onOpenChange(false)
-      reset()
-    } finally { setImporting(false) }
-  }
-
-  const CATS = [
-    { key: 'avatars', title: 'Avatares', color: 'text-blue-600', name: (x) => x.nombre, desc: (x) => x.descripcion },
-    { key: 'angles', title: 'Ángulos', color: 'text-purple-600', name: (x) => x.nombre, desc: (x) => x.promise },
-    { key: 'desires', title: 'Deseos', color: 'text-pink-600', name: (x) => x.nombre, desc: (x) => x.core_desire },
-    { key: 'problems', title: 'Problemas', color: 'text-orange-600', name: (x) => x.nombre, desc: (x) => x.description },
-  ]
-
-  return (
-    <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) reset() }}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Importar Investigación PDF</DialogTitle>
-          <DialogDescription>La IA extrae avatares, ángulos, deseos y problemas del documento.</DialogDescription>
-        </DialogHeader>
-        {step === 1 && (
-          <div className="space-y-4">
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50/50 py-10 hover:border-indigo-400 hover:bg-indigo-50/40">
-              <FileUp className="h-8 w-8 text-indigo-400" />
-              <span className="text-sm font-medium text-slate-700">{file ? file.name : 'Selecciona un PDF de investigación'}</span>
-              <span className="text-xs text-slate-400">Click para elegir archivo</span>
-              <input type="file" accept=".pdf" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-            </label>
-            <DialogFooter>
-              <Button disabled={!file || analyzing} onClick={analyze}>
-                {analyzing && <Loader2 className="animate-spin" />} {analyzing ? 'Analizando con IA…' : 'Analizar PDF'}
-              </Button>
-            </DialogFooter>
-          </div>
-        )}
-        {step === 2 && results && (
-          <div className="space-y-4">
-            {CATS.map((cat) => (
-              <div key={cat.key}>
-                <h4 className={`mb-1.5 text-sm font-semibold ${cat.color}`}>{cat.title} ({results[cat.key].length})</h4>
-                <div className="space-y-1.5">
-                  {results[cat.key].map((item, i) => {
-                    const k = `${cat.key}_${i}`
-                    return (
-                      <label key={k} className="flex items-start gap-2.5 rounded-lg border border-slate-200 bg-white/70 p-2.5 cursor-pointer hover:border-indigo-300">
-                        <Checkbox checked={!!selected[k]} onCheckedChange={(v) => setSelected({ ...selected, [k]: !!v })} className="mt-0.5" />
-                        <span className="min-w-0">
-                          <span className="block text-sm font-medium text-slate-800">{cat.name(item)}</span>
-                          <span className="block text-xs text-slate-500 line-clamp-2">{cat.desc(item)}</span>
-                        </span>
-                      </label>
-                    )
-                  })}
-                </div>
-              </div>
-            ))}
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setStep(1)}>Atrás</Button>
-              <Button onClick={doImport} disabled={importing}>
-                {importing && <Loader2 className="animate-spin" />} Importar seleccionados
-              </Button>
-            </DialogFooter>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  )
-}
-
 export default function Dashboard() {
-  const [pdfOpen, setPdfOpen] = useState(false)
-  const { data: aggs, isLoading } = useEntityList(AdsPerformanceAgg, { filter: { window: 'LAST_7D' }, staleTime: 300_000 })
-  const { data: scripts } = useEntityList(GeneratedScripts, { sort: '-created_date', limit: 10 })
-  const { data: videos } = useEntityList(VideoAssets, { sort: '-created_date', limit: 100 })
-  const { data: syncs } = useEntityList(SyncRuns, { sort: '-created_date', limit: 5 })
+  const { data: reports, error } = useEntityList(WeeklyReports, { sort: '-week_date', limit: 1 })
+  const { data: snapshots } = useEntityList(MetricsSnapshots, { sort: 'week_date', limit: 12 })
+  const { data: verdicts } = useEntityList(CmoVerdicts, { sort: '-week_date', limit: 1 })
+  const report = reports?.[0]
+  const plan = verdicts?.[0]?.action_plan || {}
 
-  const stats = useMemo(() => {
-    const a = aggs || []
-    const winners = a.filter((x) => x.label === 'WINNER')
-    const losers = a.filter((x) => x.label === 'LOSER')
-    const regular = a.filter((x) => x.label === 'REGULAR')
-    const pending = a.filter((x) => x.label === 'UNSCORED')
-    const spend = a.reduce((s, x) => s + (x.spend || 0), 0)
-    const value = a.reduce((s, x) => s + (x.conversion_value || 0), 0)
-    const avgRoas = spend > 0 ? value / spend : 0
-    const inProgress = (videos || []).filter((v) => ['TODO', 'IN_PROGRESS', 'REVIEW'].includes(v.status))
-    const published = (videos || []).filter((v) => v.status === 'PUBLISHED')
-    // Creative velocity: median days created→published
-    const velDays = published
-      .map((v) => (new Date(v.updated_date) - new Date(v.created_date)) / 86400000)
-      .sort((x, y) => x - y)
-    const velocity = velDays.length ? velDays[Math.floor(velDays.length / 2)] : null
-    return {
-      winners, losers, regular, pending, avgRoas, total: a.length,
-      pendingScripts: (scripts || []).filter((s) => ['DRAFT', 'READY'].includes(s.status)).length,
-      inProgress: inProgress.length, published: published.length, velocity,
-      topWinners: [...a].sort((x, y) => (y.roas || 0) - (x.roas || 0)).slice(0, 5),
-      fatigued: a.filter((x) => x.fatigue_flag).slice(0, 5),
-    }
-  }, [aggs, scripts, videos])
-
-  const pieData = [
-    { name: 'Winners', value: stats.winners?.length || 0 },
-    { name: 'Regular', value: stats.regular?.length || 0 },
-    { name: 'Losers', value: stats.losers?.length || 0 },
-    { name: 'Pending', value: stats.pending?.length || 0 },
-  ].filter((d) => d.value > 0)
-
-  if (isLoading) return <LoadingSpinner size="lg" />
+  if (error) return <ErrorState error={error} />
+  if (!report) {
+    return (
+      <div className="space-y-4">
+        <RunNowButton />
+        <EmptyState icon={LayoutDashboard} title="Sin datos todavía"
+          description="El pipeline publica cada lunes — o lánzalo ahora con el botón." />
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-5 animate-fade-in">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <PageGuide pageName="Dashboard" />
-        <Button onClick={() => setPdfOpen(true)}><FileUp /> Importar Investigación PDF</Button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <RunNowButton />
+        <PdfButtons report={report} />
+      </div>
+      <Card className={cn('border-2', CMO_STATUS_STYLE[report.status_cmo] || '')}>
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-3">
+            <span className={cn('rounded-full px-3 py-1 text-xs font-bold uppercase border',
+              CMO_STATUS_STYLE[report.status_cmo] || 'bg-slate-100')}>
+              {report.status_cmo || 'sin estado'}
+            </span>
+            <span className="text-sm text-slate-500">{report.week_label}</span>
+          </div>
+          <p className="mt-3 text-lg font-semibold text-slate-900">{report.headline}</p>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {(report.kpis || []).slice(0, 8).map((k, i) => (
+          <Card key={i}>
+            <CardContent className="pt-5">
+              <p className="text-xs text-slate-500">{k.label}</p>
+              <p className="text-xl font-bold text-slate-900">{k.value}</p>
+              {k.wow && <p className="text-xs text-slate-400 mt-0.5">{k.wow} WoW</p>}
+              {k.note && <p className="text-[11px] text-slate-500 mt-1 leading-snug">{k.note}</p>}
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={Target} label="Total Ads Tracked (7d)" value={stats.total} sub={`${stats.winners.length} winners · ${stats.losers.length} losers`} />
-        <StatCard
-          icon={TrendingUp} label="ROAS agregado (7d)" value={fmtRoas(stats.avgRoas)}
-          sub={stats.avgRoas >= 2 ? '✅ Healthy' : '⚠️ Needs work'}
-          accent={stats.avgRoas >= 2 ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}
-        />
-        <StatCard icon={Wand2} label="Scripts generados" value={(scripts || []).length} sub={`${stats.pendingScripts} pendientes de aprobar`} accent="bg-purple-100 text-purple-600" />
-        <StatCard
-          icon={Clapperboard} label="Videos en producción" value={stats.inProgress}
-          sub={`${stats.published} publicados${stats.velocity != null ? ` · velocidad ${stats.velocity.toFixed(1)}d` : ''}`}
-          accent="bg-orange-100 text-orange-600"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader><CardTitle className="text-sm">Performance Distribution</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">ROAS blended — tendencia</CardTitle></CardHeader>
+          <CardContent className="h-56">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={snapshots || []}>
+                <XAxis dataKey="week_date" fontSize={11} />
+                <YAxis fontSize={11} domain={['auto', 'auto']} tickFormatter={(v) => `${v}x`} />
+                <Tooltip formatter={(v) => fmtRoas(v)} />
+                <Line type="monotone" dataKey="blended_roas" stroke="#6366f1" strokeWidth={2} dot />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-base">Hallazgos de la semana</CardTitle></CardHeader>
           <CardContent>
-            {pieData.length === 0 ? (
-              <EmptyState icon={Target} title="Sin datos" description="Sincroniza Meta para ver distribución" />
-            ) : (
-              <>
-                <div className="h-48">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={70} paddingAngle={3}>
-                        {pieData.map((d) => <Cell key={d.name} fill={PIE_COLORS[d.name]} />)}
-                      </Pie>
-                      <ReTooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="mt-2 flex flex-wrap justify-center gap-3">
-                  {pieData.map((d) => (
-                    <span key={d.name} className="flex items-center gap-1.5 text-xs text-slate-600">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: PIE_COLORS[d.name] }} /> {d.name} ({d.value})
-                    </span>
-                  ))}
-                </div>
-              </>
+            <ul className="space-y-2">
+              {(report.key_findings || []).map((f, i) => (
+                <li key={i} className="flex gap-2 text-sm text-slate-700">
+                  <span className="text-indigo-500 shrink-0">•</span>{f}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+      <SystemMemory />
+
+      {(plan.next_7d?.length || plan.next_30d?.length) ? (
+        <Card>
+          <CardHeader><CardTitle className="text-base">Plan de acción (CMO)</CardTitle></CardHeader>
+          <CardContent className="grid gap-4 sm:grid-cols-2">
+            {plan.next_7d?.length > 0 && (
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase mb-2">Próximos 7 días</p>
+                <ul className="space-y-1.5">{plan.next_7d.map((a, i) =>
+                  <li key={i} className="text-sm text-slate-700 flex gap-2"><span className="text-emerald-500">→</span>{a}</li>)}
+                </ul>
+              </div>
+            )}
+            {plan.next_30d?.length > 0 && (
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase mb-2">Próximos 30 días</p>
+                <ul className="space-y-1.5">{plan.next_30d.map((a, i) =>
+                  <li key={i} className="text-sm text-slate-700 flex gap-2"><span className="text-indigo-500">→</span>{a}</li>)}
+                </ul>
+              </div>
             )}
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm flex items-center gap-1.5"><Trophy className="h-4 w-4 text-emerald-500" /> Top Winners</CardTitle>
-            <Link to="/AdsPerformance" className="text-xs text-indigo-600 hover:underline flex items-center gap-0.5">View all <ArrowRight className="h-3 w-3" /></Link>
-          </CardHeader>
-          <CardContent className="space-y-2.5">
-            {stats.topWinners.length === 0 && <p className="text-sm text-slate-400 py-4 text-center">Sin ads aún</p>}
-            {stats.topWinners.map((ad) => (
-              <div key={ad.id} className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-700">{ad.ad_name}</p>
-                  <p className="text-xs text-slate-400">{fmtEur(ad.spend)} gastados</p>
-                </div>
-                <span className={`text-sm font-bold ${ad.roas >= 2.5 ? 'text-emerald-600' : ad.roas >= 1.5 ? 'text-amber-600' : 'text-red-500'}`}>{fmtRoas(ad.roas)}</span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-1.5"><Flame className="h-4 w-4 text-orange-500" /> Fatigue Alerts</CardTitle></CardHeader>
-          <CardContent className="space-y-2.5">
-            {stats.fatigued.length === 0 && <p className="text-sm text-slate-400 py-4 text-center">Sin fatiga detectada 🎉</p>}
-            {stats.fatigued.map((ad) => (
-              <div key={ad.id} className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-700">{ad.ad_name}</p>
-                  <p className="truncate text-xs text-slate-400">{(ad.fatigue_reasons || []).join(' · ')}</p>
-                </div>
-                <FatigueIndicator reasons={ad.fatigue_reasons} severity="HIGH" />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm">Scripts recientes</CardTitle>
-            <Link to="/ScriptBuilder" className="text-xs text-indigo-600 hover:underline flex items-center gap-0.5">View all <ArrowRight className="h-3 w-3" /></Link>
-          </CardHeader>
-          <CardContent className="space-y-2.5">
-            {(scripts || []).slice(0, 5).map((s) => (
-              <div key={s.id} className="flex items-center gap-2">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-700">{s.title}</p>
-                  <p className="text-xs text-slate-400">{timeAgo(s.created_date)}</p>
-                </div>
-                <FormatBadge format={s.format} size="sm" />
-                <StatusBadge status={s.status} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-1.5"><Clock className="h-4 w-4 text-slate-400" /> Recent Syncs</CardTitle></CardHeader>
-          <CardContent className="space-y-2.5">
-            {(syncs || []).map((s) => (
-              <div key={s.id} className="flex items-center gap-2">
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-slate-700">{s.run_type}</p>
-                  <p className="truncate text-xs text-slate-400">{s.detail} · {timeAgo(s.created_date)}</p>
-                </div>
-                <StatusBadge status={s.status} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      <ImportPdfDialog open={pdfOpen} onOpenChange={setPdfOpen} />
+      ) : null}
     </div>
   )
 }

@@ -1,52 +1,44 @@
+import { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { useStoreSync } from '@/hooks/useData'
+import { arrivedFromAuthLink } from '@/api/supabaseClient'
 import Layout, { NAV_ITEMS } from '@/components/layout/Layout'
 import { LoadingSpinner } from '@/components/shared/misc'
 
+import Login from '@/pages/Login'
+import SetPassword from '@/pages/SetPassword'
 import Dashboard from '@/pages/Dashboard'
-import MyWork from '@/pages/MyWork'
-import AIInsights from '@/pages/AIInsights'
-import MarketResearch from '@/pages/MarketResearch'
-import AdsPerformance from '@/pages/AdsPerformance'
-import ScriptLibrary from '@/pages/ScriptLibrary'
-import Inspiration from '@/pages/Inspiration'
-import ContextLibrary from '@/pages/ContextLibrary'
-import ResearchHub from '@/pages/ResearchHub'
-import ScriptBuilder from '@/pages/ScriptBuilder'
+import Direccion from '@/pages/Direccion'
+import Briefs from '@/pages/Briefs'
 import VideoOps from '@/pages/VideoOps'
-import EditorQueue from '@/pages/EditorQueue'
-import Tasks from '@/pages/Tasks'
-import Training from '@/pages/Training'
-import MyPerformance from '@/pages/MyPerformance'
-import AIRouter from '@/pages/AIRouter'
-import BonusManagement from '@/pages/BonusManagement'
-import OwnershipReview from '@/pages/OwnershipReview'
-import Users from '@/pages/Users'
-import Settings from '@/pages/Settings'
+import Performance from '@/pages/Performance'
+import Competencia from '@/pages/Competencia'
+import Bonuses from '@/pages/Bonuses'
+import Chat from '@/pages/Chat'
+import Admin from '@/pages/Admin'
 
 const PAGES = {
-  '/': Dashboard, '/MyWork': MyWork, '/AIInsights': AIInsights, '/MarketResearch': MarketResearch,
-  '/AdsPerformance': AdsPerformance, '/ScriptLibrary': ScriptLibrary, '/Inspiration': Inspiration,
-  '/ContextLibrary': ContextLibrary, '/ResearchHub': ResearchHub, '/ScriptBuilder': ScriptBuilder,
-  '/VideoOps': VideoOps, '/EditorQueue': EditorQueue, '/Tasks': Tasks, '/Training': Training,
-  '/MyPerformance': MyPerformance, '/AIRouter': AIRouter, '/BonusManagement': BonusManagement,
-  '/OwnershipReview': OwnershipReview, '/Users': Users, '/Settings': Settings,
+  '/': Dashboard, '/Direccion': Direccion, '/Briefs': Briefs, '/VideoOps': VideoOps, '/Performance': Performance,
+  '/Competencia': Competencia, '/Bonuses': Bonuses, '/Chat': Chat, '/Admin': Admin,
 }
 
 function RequireRole({ roles, children }) {
   const { effectiveRole } = useAuth()
   if (!roles.includes(effectiveRole)) {
     const fallback = NAV_ITEMS.find((i) => i.roles.includes(effectiveRole))
-    return <Navigate to={fallback?.path || '/VideoOps'} replace />
+    return <Navigate to={fallback?.path || '/Briefs'} replace />
   }
   return children
 }
 
 export default function App() {
   useStoreSync()
-  const { loading } = useAuth()
+  const { loading, user, configured } = useAuth()
+  const [needsPassword, setNeedsPassword] = useState(arrivedFromAuthLink)
   if (loading) return <div className="min-h-screen page-bg flex items-center justify-center"><LoadingSpinner size="lg" /></div>
+  if (!configured || !user) return <Login />
+  if (needsPassword) return <SetPassword onDone={() => setNeedsPassword(false)} />
   return (
     <Layout>
       <Routes>
@@ -60,7 +52,7 @@ export default function App() {
             />
           )
         })}
-        <Route path="*" element={<Navigate to="/VideoOps" replace />} />
+        <Route path="*" element={<Navigate to="/Briefs" replace />} />
       </Routes>
     </Layout>
   )

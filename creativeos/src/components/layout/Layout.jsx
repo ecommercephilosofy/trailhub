@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
-  Sparkles, LayoutDashboard, Briefcase, Brain, Search, TrendingUp, Library, Star, BookOpen,
-  FlaskConical, Wand2, Clapperboard, ListVideo, CheckSquare, GraduationCap, BarChart3, Route,
-  Coins, UserCheck, Users as UsersIcon, Settings as SettingsIcon, Menu, X, Bell, LogOut,
-  UserCircle, Eye, RefreshCw,
+  Sparkles, LayoutDashboard, FileText, Clapperboard, TrendingUp, Telescope,
+  Coins, MessageCircle, Shield, Menu, X, Bell, LogOut, Eye, Moon, Sun, Briefcase,
 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
-import { NotificationsLog } from '@/api/entities'
-import { resetDB } from '@/api/store'
+import { supabase } from '@/api/supabaseClient'
+import { Notifications } from '@/api/entities'
 import { useEntityList } from '@/hooks/useData'
 import { UserAvatar } from '@/components/shared/badges'
+import { ErrorBoundary } from '@/components/shared/misc'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -18,25 +17,14 @@ import { cn, timeAgo } from '@/lib/utils'
 
 export const NAV_ITEMS = [
   { path: '/', title: 'Dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'MANAGER'] },
-  { path: '/MyWork', title: 'Mi Trabajo', icon: Briefcase, roles: ['EDITOR'] },
-  { path: '/AIInsights', title: 'Insights IA', icon: Brain, roles: ['ADMIN', 'MANAGER'] },
-  { path: '/MarketResearch', title: 'Investigación', icon: Search, roles: ['ADMIN', 'MANAGER'] },
-  { path: '/AdsPerformance', title: 'Performance Ads', icon: TrendingUp, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
-  { path: '/ScriptLibrary', title: 'Biblioteca Scripts', icon: Library, roles: ['ADMIN', 'MANAGER', 'EDITOR', 'VIEWER'] },
-  { path: '/Inspiration', title: 'Inspiración', icon: Star, roles: ['ADMIN', 'MANAGER', 'EDITOR', 'VIEWER'] },
-  { path: '/ContextLibrary', title: 'Librería Contexto', icon: BookOpen, roles: ['ADMIN', 'MANAGER'] },
-  { path: '/ResearchHub', title: 'Research Hub', icon: FlaskConical, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
-  { path: '/ScriptBuilder', title: 'Script Builder', icon: Wand2, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
+  { path: '/Direccion', title: 'Dirección', icon: Briefcase, roles: ['ADMIN', 'MANAGER'] },
+  { path: '/Briefs', title: 'Briefs', icon: FileText, roles: ['ADMIN', 'MANAGER', 'EDITOR', 'VIEWER'] },
   { path: '/VideoOps', title: 'Video Ops', icon: Clapperboard, roles: ['ADMIN', 'MANAGER', 'EDITOR', 'VIEWER'] },
-  { path: '/EditorQueue', title: 'Cola de Edición', icon: ListVideo, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
-  { path: '/Tasks', title: 'Tareas', icon: CheckSquare, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
-  { path: '/Training', title: 'Training', icon: GraduationCap, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
-  { path: '/MyPerformance', title: 'Mi Rendimiento', icon: BarChart3, roles: ['EDITOR'] },
-  { path: '/AIRouter', title: 'Router de IA', icon: Route, roles: ['ADMIN'] },
-  { path: '/BonusManagement', title: 'Gestión de Bonos', icon: Coins, roles: ['ADMIN'] },
-  { path: '/OwnershipReview', title: 'Ownership', icon: UserCheck, roles: ['ADMIN', 'MANAGER'] },
-  { path: '/Users', title: 'Usuarios', icon: UsersIcon, roles: ['ADMIN'] },
-  { path: '/Settings', title: 'Configuración', icon: SettingsIcon, roles: ['ADMIN'] },
+  { path: '/Performance', title: 'Performance', icon: TrendingUp, roles: ['ADMIN', 'MANAGER'] },
+  { path: '/Competencia', title: 'Competencia', icon: Telescope, roles: ['ADMIN', 'MANAGER', 'EDITOR', 'VIEWER'] },
+  { path: '/Bonuses', title: 'Bonuses', icon: Coins, roles: ['ADMIN', 'MANAGER', 'EDITOR'] },
+  { path: '/Chat', title: 'Chat', icon: MessageCircle, roles: ['ADMIN', 'MANAGER'] },
+  { path: '/Admin', title: 'Admin', icon: Shield, roles: ['ADMIN'] },
 ]
 
 const ROLE_BADGE = {
@@ -46,12 +34,32 @@ const ROLE_BADGE = {
   VIEWER: 'bg-slate-100 text-slate-600',
 }
 
+function ThemeToggle() {
+  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark)
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [dark])
+  return (
+    <button onClick={() => setDark((d) => !d)} title={dark ? 'Modo claro' : 'Modo oscuro'}
+            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700">
+      {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    </button>
+  )
+}
+
 function NotificationsBell() {
-  const { currentUser } = useAuth()
-  const { data: notifs } = useEntityList(NotificationsLog, { sort: '-created_date', limit: 30, staleTime: 30_000 })
-  const mine = (notifs || []).filter((nf) => !nf.target_user_id || nf.target_user_id === currentUser?.id).slice(0, 10)
+  const { user } = useAuth()
+  const { data: notifs, refetch } = useEntityList(Notifications, { sort: '-created_at', limit: 30, staleTime: 30_000 })
+  const mine = (notifs || []).filter((nf) => !nf.target_user_id || nf.target_user_id === user?.id).slice(0, 10)
   const unread = mine.filter((nf) => !nf.read).length
-  const markAllRead = async () => { for (const nf of mine.filter((x) => !x.read)) await NotificationsLog.update(nf.id, { read: true }) }
+  const markAllRead = async () => {
+    const ids = mine.filter((x) => !x.read).map((x) => x.id)
+    if (!ids.length) return
+    // Un solo UPDATE ... IN (antes: N peticiones secuenciales)
+    await supabase.from('notifications').update({ read: true }).in('id', ids)
+    refetch()
+  }
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -71,7 +79,7 @@ function NotificationsBell() {
             <div key={nf.id} className={cn('border-b border-slate-50 px-3 py-2.5', !nf.read && 'bg-indigo-50/50')}>
               <p className="text-sm font-medium text-slate-800 leading-snug">{nf.title}</p>
               {nf.body && <p className="text-xs text-slate-500 mt-0.5">{nf.body}</p>}
-              <p className="text-[10px] text-slate-400 mt-1">{timeAgo(nf.created_date)}</p>
+              <p className="text-[10px] text-slate-400 mt-1">{timeAgo(nf.created_at)}</p>
             </div>
           ))}
         </div>
@@ -81,9 +89,8 @@ function NotificationsBell() {
 }
 
 export default function Layout({ children }) {
-  const { currentUser, profile, baseRole, effectiveRole, viewAsRole, setViewAsRole, users, switchUser } = useAuth()
+  const { currentUser, baseRole, effectiveRole, viewAsRole, setViewAsRole, signOut } = useAuth()
   const location = useLocation()
-  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const nav = NAV_ITEMS.filter((item) => item.roles.includes(effectiveRole))
@@ -97,7 +104,7 @@ export default function Layout({ children }) {
         </div>
         <div>
           <p className="font-bold text-slate-900 leading-none">Creative OS</p>
-          <p className="text-[10px] text-slate-400 mt-0.5 tracking-wide">CREATIVE INTELLIGENCE</p>
+          <p className="text-[10px] text-slate-400 mt-0.5 tracking-wide">QUIES · SISTEMA SEMANAL</p>
         </div>
       </div>
       <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 pb-3 space-y-0.5">
@@ -131,19 +138,9 @@ export default function Layout({ children }) {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-60">
-            <DropdownMenuLabel>Cambiar de usuario (demo)</DropdownMenuLabel>
-            {users.map((u) => (
-              <DropdownMenuItem key={u.id} onClick={() => { switchUser(u.id); navigate('/VideoOps') }}>
-                <UserAvatar name={u.full_name} size="sm" /> {u.full_name}
-                {u.id === currentUser?.id && <span className="ml-auto text-[10px] text-indigo-600 font-bold">ACTUAL</span>}
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuLabel>{currentUser?.email}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/Users')}><UserCircle /> Perfil</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => { if (confirm('¿Resetear todos los datos de demo?')) { resetDB(); location.reload?.() } }}>
-              <RefreshCw /> Reset datos demo
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600"><LogOut /> Sign out</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600" onClick={signOut}><LogOut /> Cerrar sesión</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -186,9 +183,13 @@ export default function Layout({ children }) {
           {effectiveRole !== baseRole && (
             <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 sm:inline">SIMULANDO {effectiveRole}</span>
           )}
+          <ThemeToggle />
           <NotificationsBell />
         </header>
-        <main className="p-4 sm:p-6 max-w-[1600px]">{children}</main>
+        <main className="p-4 sm:p-6 max-w-[1600px]">
+          {/* key=pathname: al navegar se resetea el boundary (un crash en una página no bloquea las demás) */}
+          <ErrorBoundary key={location.pathname}>{children}</ErrorBoundary>
+        </main>
       </div>
     </div>
   )

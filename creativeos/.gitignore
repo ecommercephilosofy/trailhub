@@ -1,1 +1,11 @@
+# Secrets — NUNCA commitear
+.env
+.env.local
+
+# Dependencias y builds (regenerables)
+node_modules/
+dist/
+
+# Plataforma / editor
 .vercel
+.DS_Store

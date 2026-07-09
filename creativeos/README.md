@@ -1,81 +1,80 @@
-# 🧠 CreativeOS — Sistema de Inteligencia de Creatividades
+# 🧠 CreativeOS
 
-Plataforma operativa para equipos de performance marketing. Cierra el ciclo completo:
-**datos → aprendizaje → script → producción → publicación → resultados**.
+Cara del sistema creativo semanal de Quies. El pipeline de `~/ads-agent` (repo
+aparte) analiza y publica cada lunes en Supabase; aquí el equipo ve briefs,
+produce en el kanban, cobra bonuses automáticos y dirección tiene dashboard,
+informe CMO y chat con el cerebro.
 
 ## Arranque
 
 ```bash
-cd creativeos
 npm install
-npm run dev      # http://localhost:5173
+npm run dev        # http://localhost:5173 (necesita .env — ver SETUP.md)
+npm test           # tests del camino del dinero (atribución QB → bonus)
+npm run lint       # ESLint
+npm run build      # build de producción
 ```
 
-La app arranca con **datos demo Quies-style** (12 ads × 14 días, scripts, videos, research, bonos) generados con RNG determinista. Todo persiste en `localStorage`. Reset: dropdown de usuario → "Reset datos demo".
+Primera puesta en marcha (Supabase, usuarios, edge functions): **[SETUP.md](SETUP.md)**.
 
 ## Stack
 
-React 18 · Vite · Tailwind · shadcn-style UI (Radix) · TanStack Query · @hello-pangea/dnd · Recharts · react-router-dom · lucide-react · sonner
+React 18 · Vite · Tailwind · Radix (shadcn-style) · TanStack Query ·
+Supabase (Postgres + RLS + Auth + Realtime + Storage + Edge Functions) · Vercel.
 
 ## Arquitectura
 
 ```
 src/
   api/
-    store.js        ← SDK de entidades estilo Base44: list/filter/get/create/update/delete/subscribe
-    seed.js         ← Base de datos demo determinista
-    entities.js     ← 28 entidades registradas
-    functions.js    ← "Backend functions" mock (syncMetaAds, generateScript, notify*, analyzeResearchPDF…)
+    supabaseClient.js  ← cliente único (env: VITE_SUPABASE_URL/ANON_KEY)
+    supabaseStore.js   ← SDK de entidades: list/filter/get/create/update/delete/subscribe
+    entities.js        ← entidades = tablas Supabase
+    functions.js       ← invokeFn(): helper para Edge Functions
+  hooks/useData.js     ← useEntityList: React Query + invalidación por Realtime
+  context/AuthContext.jsx ← Supabase Auth + rol (profiles.custom_role) + "Ver como"
   lib/
-    perf.js         ← Motor de agregación (Breakdown-Effect safe) + labels + motor de fatiga
-    naming.js       ← Parser de naming convention de ads
-  context/AuthContext.jsx  ← Mock auth + roles + "Ver como"
-  components/ui/    ← Primitivas shadcn-style
-  components/shared/← StatusBadge, FormatBadge, PriorityBadge, PageGuide, FatigueIndicator…
-  features/         ← videoops/, scripts/, ads/ (modales y componentes pesados)
-  pages/            ← 20 rutas
+    attribution.js     ← extractAdCode + atribución QB→editor (CON TESTS: mueve dinero)
+    briefScript.js     ← normalización de guiones del pipeline
+    constants.js       ← semáforo CMO, cuentas publicitarias
+  components/ui|shared|layout
+  pages/               ← Dashboard, Direccion, Briefs, VideoOps, Performance,
+                         Competencia, Bonuses, Chat, Admin
+supabase/
+  schema.sql           ← schema base (Fase 2) — ver nota abajo
+  migrations/          ← cambios posteriores (RLS fixes…)
+  functions/chat       ← Q&A con Claude sobre el contexto semanal (solo dirección)
+  functions/admin-users← alta/baja de usuarios (solo ADMIN)
 ```
 
-### Roles (RBAC)
+**Flujo de datos:** el pipeline escribe con la service key (bypassa RLS); la app
+lee/escribe con la anon key + sesión. La seguridad real es RLS por rol
+(ADMIN/MANAGER/EDITOR/VIEWER) + checks de rol en las edge functions — el guard
+de rutas del cliente es solo UX.
 
-ADMIN · MANAGER · EDITOR · VIEWER. Sidebar y rutas filtradas por rol efectivo. ADMIN simula roles con "Ver como" (persistido en `localStorage('admin_view_as_role')`). EDITOR: financiero oculto en Ads Performance, queries filtradas a sus datos. Cambia de usuario demo desde el dropdown inferior del sidebar (Marc=ADMIN, Claudia=MANAGER, Laura/Pablo=EDITOR).
+**Regla de privacidad:** el EDITOR nunca ve cifras de gasto/dinero. Se aplica a
+nivel de base de datos (policies + rpc `my_bonus_progress` + vista
+`my_bonus_ledger`), no de UI.
 
-### Flujos críticos implementados
+## El loop completo
 
-1. **Script → Producción**: ScriptBuilder → "Crear Tarea en VideoOps" orquesta VideoAsset + Task + EditorQueue + notificación + auto-approve.
-2. **Sync → Análisis → Iteración**: Sync Meta (o CSV) → AdsPerformanceDaily → agregación con labels → AdAnalysisDialog → ScriptBuilderDraft → Draft Editor → publicar como GeneratedScript.
-3. **PDF → Research → Generación**: Dashboard Import PDF → selección con checkboxes → Research Hub → Generate Scripts usando avatar/ángulo/deseo/problema.
+lunes 8AM pipeline → publica briefs/performance/lifecycle →
+Briefs: brief asignado a editor (tarjeta kanban + notificación) →
+editor produce y lanza el ad con el nombre sugerido (lleva su código QB) →
+lunes siguiente el pipeline cruza el QB → la tarjeta muestra ROAS real →
+ad acumula >1.500€ con ROAS total >2.0 → bonus PENDING automático →
+Admin aprueba con 1 clic.
 
-## ⭐ Extras TOP añadidos (más allá del spec)
+## ⚠️ Schema: fuente de verdad
 
-| Extra | Dónde | Por qué |
-|---|---|---|
-| **Import CSV de Meta Ads Manager** | Ads Performance → CSV | Sin token de API. Parser tolerante cabeceras ES/EN, detecta delimitador. El workflow real de análisis de exports. |
-| **Motor de fatiga creativa** | `lib/perf.js` + Dashboard + tabla | CTR decay (1ª vs 2ª mitad) + rampa de frecuencia + ROAS slide → flag con razones explicables. |
-| **Matriz Hook × Formato** | Insights IA | Heatmap de ROAS agregado por combinación. Detecta qué hooks escalar por formato. |
-| **Agregación Breakdown-Effect safe** | Todo el sistema | Ratios SIEMPRE suma/suma, nunca media de medias. Tooltips lo explican. |
-| **Naming convention parser** | `lib/naming.js` + AdStats | Extrae formato/hook/avatar/versión del nombre del ad → alimenta la matriz sin mapping manual. |
-| **Análisis IA basado en reglas** | AdAnalysisDialog | Diagnóstico hook/hold/CTR/fatiga + crea borrador de iteración automáticamente con snapshot de performance. |
-| **Creative velocity** | Dashboard | Mediana de días script→published. |
-| **AI Router con racional** | /AIRouter | Modelo por tarea (frontier/balanced/fast) con coste-beneficio explicado. Persiste en Settings. |
-| **Ownership Review accionable** | /OwnershipReview | Videos/scripts/cola sin owner + asignación inline. |
-| **Notificaciones in-app** | Campana del header | NotificationsLog por usuario; las funciones notify* escriben aquí (y a Discord si hay webhook). |
-| **Cross-tab real-time** | `store.js` | Eventos `storage` → la UI se actualiza entre pestañas abiertas. |
+`supabase/schema.sql` es el schema base de la Fase 2; el schema **real** vive en
+prod y ha evolucionado (columnas `profiles.email`, `weekly_reports.*_pdf_path`,
+`mechanisms.is_active`; tablas `brands`, `brand_profiles`, `run_requests`,
+`learned_patterns`). Para versionarlo:
 
-## Conectar backend real
+```bash
+supabase login && supabase link --project-ref <ref>
+supabase db pull    # → supabase/migrations/<ts>_remote_schema.sql
+```
 
-Sustituye implementaciones en `src/api/`:
-
-- **Entidades** → Supabase/Postgres. Mantén la firma del SDK (`list/filter/create/update/delete/subscribe`) y el resto de la app no cambia. `subscribe` → Supabase Realtime.
-- **`syncMetaAds`** → Meta Marketing API `GET /act_{id}/insights` con `level=ad`, `time_increment=1`, fields: spend, impressions, actions, action_values, video_play_actions, video_thruplay_watched_actions, video_p25/p50/p75_watched_actions, frequency. Token con scope `ads_read`. Config ya en Settings → Meta API.
-- **`generateScript`** → Claude API (`claude-fable-5` por defecto, configurable en AI Router). El prompt debe inyectar avatar/angle/desire/problem + brand voice + banned_claims de Settings.
-- **`notify*`** → POST al webhook Discord (URLs en Settings → Discord). Payload sugerido: `{content: "**título**\ncuerpo"}`.
-- **`analyzeResearchPDF`** → subir PDF + Claude con visión/documents.
-- **Drive sync** → Google Drive API con folder IDs de Settings.
-
-## Verificado
-
-- `npm run build` limpio (1.1MB bundle, gzip 330KB).
-- 0 errores de consola en Dashboard, VideoOps, AdsPerformance, ScriptBuilder, MyWork, AIInsights.
-- RBAC probado con usuario EDITOR real (Laura) y simulación "Ver como".
-- Responsive móvil sin overflow horizontal.
+Los cambios nuevos van siempre como fichero en `supabase/migrations/`.
