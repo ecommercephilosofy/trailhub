@@ -8,15 +8,13 @@ bonuses automáticos y dirección tiene dashboard + chat con el cerebro.
 
 ### 1. Base de datos
 En [supabase.com](https://supabase.com) → tu proyecto → **SQL Editor** →
-pegar y ejecutar TODO el contenido de `supabase/schema.sql`, y después
-**cada fichero de `supabase/migrations/` en orden** (incluye los fixes de RLS:
-run_requests solo ADMIN, insert de cards para editores, delete de annotations).
+pegar y ejecutar TODO el contenido de **`supabase/schema_prod.sql`** (snapshot
+del schema real de prod, 2026-07-10: tablas, RLS, policies, funciones, vistas,
+realtime y policies de storage). Después crear los buckets privados
+`creatives`, `reports` y `reports-cmo` en Storage.
 
-⚠️ `schema.sql` es el schema base; el schema real de prod tiene columnas/tablas
-añadidas después (ver nota en README). En un proyecto NUEVO, tras schema.sql +
-migrations, verifica con la app que no falten columnas (`profiles.email`,
-`weekly_reports.editor_pdf_path/cmo_pdf_path`, `mechanisms.is_active`, tablas
-`brands`, `brand_profiles`, `run_requests`, `learned_patterns`).
+`schema.sql` es el schema histórico de la Fase 2 (referencia, no usar);
+`migrations/` contiene los cambios aplicados a prod después del snapshot.
 
 ### 2. Tu usuario ADMIN
 Dashboard → **Authentication → Users → Add user** (tu email + contraseña).

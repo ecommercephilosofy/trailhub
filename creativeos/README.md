@@ -65,16 +65,10 @@ lunes siguiente el pipeline cruza el QB → la tarjeta muestra ROAS real →
 ad acumula >1.500€ con ROAS total >2.0 → bonus PENDING automático →
 Admin aprueba con 1 clic.
 
-## ⚠️ Schema: fuente de verdad
+## Schema: fuente de verdad
 
-`supabase/schema.sql` es el schema base de la Fase 2; el schema **real** vive en
-prod y ha evolucionado (columnas `profiles.email`, `weekly_reports.*_pdf_path`,
-`mechanisms.is_active`; tablas `brands`, `brand_profiles`, `run_requests`,
-`learned_patterns`). Para versionarlo:
-
-```bash
-supabase login && supabase link --project-ref <ref>
-supabase db pull    # → supabase/migrations/<ts>_remote_schema.sql
-```
-
-Los cambios nuevos van siempre como fichero en `supabase/migrations/`.
+**`supabase/schema_prod.sql`** — snapshot del schema real de prod (2026-07-10),
+generado desde el catálogo de Postgres: tablas, RLS, policies, funciones,
+vistas, realtime y storage. `schema.sql` es el histórico de la Fase 2
+(solo referencia). Cambios nuevos → fichero en `supabase/migrations/` +
+ejecutar en el SQL Editor + regenerar el snapshot.
