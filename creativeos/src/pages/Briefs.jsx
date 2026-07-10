@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { supabase } from '@/api/supabaseClient'
 import { useEntityList } from '@/hooks/useData'
-import { Briefs as BriefsE, Cards, Profiles, AdsWeekly, Notifications, EditorWeekly } from '@/api/entities'
+import { Briefs as BriefsE, Cards, Profiles, AdsWeekly, AdThumbs, Notifications, EditorWeekly } from '@/api/entities'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -473,18 +473,18 @@ export default function Briefs() {
   const { data: briefs, error, refetch } = useEntityList(BriefsE, { sort: '-week_date', limit: 200 })
   const { data: cards } = useEntityList(Cards, { sort: '-created_at', limit: 500 })
   const { data: profiles } = useEntityList(Profiles, { enabled: canAssign })
-  const { data: ads } = useEntityList(AdsWeekly, { sort: '-week_date', limit: 1000 })
+  // ads_weekly lleva dinero → RLS solo dirección; se pide solo si puede leerla (badges de ROAS)
+  const { data: ads } = useEntityList(AdsWeekly, { sort: '-week_date', limit: 1000, enabled: canAssign })
+  // vista ad_thumbs (sin dinero): thumbnails del winner de referencia para TODOS los roles
+  const { data: thumbs } = useEntityList(AdThumbs, {})
   const [open, setOpen] = useState(null)
 
   const editors = (profiles || []).filter((p) => ['EDITOR', 'MANAGER', 'ADMIN'].includes(p.custom_role))
   const cardByQb = useMemo(() => Object.fromEntries((cards || [])
     .filter((c) => c.brief_tracking_code).map((c) => [c.brief_tracking_code, c])), [cards])
   // ad_code → thumbnail (bucket creatives) — para enseñar el winner de referencia en el modal
-  const thumbByCode = useMemo(() => {
-    const m = {}
-    for (const a of ads || []) if (a.thumb_path && !m[a.ad_code]) m[a.ad_code] = a.thumb_path
-    return m
-  }, [ads])
+  const thumbByCode = useMemo(() => Object.fromEntries(
+    (thumbs || []).filter((t) => t.thumb_path).map((t) => [t.ad_code, t.thumb_path])), [thumbs])
   const roasByQb = useMemo(() => {
     const m = {}
     for (const a of ads || []) if (a.qb_code_detected && m[a.qb_code_detected] === undefined) m[a.qb_code_detected] = a.roas

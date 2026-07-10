@@ -416,6 +416,14 @@ create or replace view my_bonus_ledger as
    FROM bonus_ledger
   WHERE editor_user_id = auth.uid();
 
+create or replace view ad_thumbs as
+ SELECT DISTINCT ON (ad_code) ad_code,
+    qb_code_detected,
+    thumb_path
+   FROM ads_weekly
+  WHERE thumb_path IS NOT NULL
+  ORDER BY ad_code, week_date DESC;
+
 -- ── Triggers ──
 CREATE TRIGGER cards_touch BEFORE UPDATE ON public.cards FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 
@@ -605,7 +613,8 @@ drop policy if exists mgmt_read_weekly on weekly_reports;
 create policy mgmt_read_weekly on weekly_reports for select to authenticated
   using ((get_my_role() = ANY (ARRAY['ADMIN'::text, 'MANAGER'::text])));
 
--- ── Grants clave ──
+-- ── Grants sobre vistas ──
+grant select on ad_thumbs to authenticated;
 grant select on my_bonus_ledger to authenticated;
 
 -- ── Realtime ──
@@ -634,7 +643,7 @@ exception when duplicate_object then null; end $$;
 -- ── Storage (bucket policies sobre storage.objects) ──
 drop policy if exists creatives_read on storage.objects;
 create policy creatives_read on storage.objects for select to authenticated
-  using (((bucket_id = 'creatives'::text) AND (get_my_role() = ANY (ARRAY['ADMIN'::text, 'MANAGER'::text]))));
+  using ((bucket_id = 'creatives'::text));
 
 drop policy if exists reports_cmo_read on storage.objects;
 create policy reports_cmo_read on storage.objects for select to authenticated
