@@ -1,19 +1,14 @@
-// Formatters reconfigurables por marca (BrandContext llama setCurrencyFormat).
-// Default = Quies (EUR, es-ES): sin settings, formato identico a siempre.
-let eur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
-let eur2 = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+// Formateo de números reconfigurable por locale (BrandContext llama
+// setCurrencyFormat). El dinero con símbolo va por BrandContext.fmtMoneyFrom
+// (convierte divisas); aquí solo queda el separador de miles.
 let num = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 })
 
-export function setCurrencyFormat(locale = 'es-ES', currency = 'EUR') {
+export function setCurrencyFormat(locale = 'es-ES') {
   try {
-    eur = new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 })
-    eur2 = new Intl.NumberFormat(locale, { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 })
     num = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 })
-  } catch { /* locale/divisa invalidos: mantener formato anterior */ }
+  } catch { /* locale invalido: mantener formato anterior */ }
 }
 
-export const fmtEur = (v) => eur.format(v || 0)
-export const fmtEur2 = (v) => eur2.format(v || 0)
 export const fmtNum = (v) => num.format(v || 0)
 export const fmtPct = (v, d = 1) => `${(v || 0).toFixed(d)}%`
 export const fmtRoas = (v) => `${(v || 0).toFixed(2)}x`

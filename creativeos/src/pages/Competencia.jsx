@@ -31,6 +31,8 @@ function AdLibraryLink({ domain }) {
 }
 
 function BrandsPanel({ kind, isAdmin }) {
+  const { brand: brandCfg } = useBrand()
+  const ph = brandCfg.competitorPlaceholder
   const { data: brands, refetch } = useEntityList(Brands, { filter: { kind }, sort: 'priority' })
   const [open, setOpen] = useState(false)
   const [domain, setDomain] = useState('')
@@ -39,7 +41,7 @@ function BrandsPanel({ kind, isAdmin }) {
 
   const add = async () => {
     const d = normalizeDomain(domain)
-    if (!d || !d.includes('.')) return toast.error('Dominio inválido (ej. zquiet.com)')
+    if (!d || !d.includes('.')) return toast.error(`Dominio inválido (ej. ${ph})`)
     try {
       await Brands.create({ domain: d, name: name.trim() || d, kind,
                             priority: 3, notes: notes.trim() || null, is_active: true })
@@ -95,7 +97,7 @@ function BrandsPanel({ kind, isAdmin }) {
             <DialogHeader><DialogTitle>Añadir marca de {kind === 'competitor' ? 'competencia' : 'inspiración'}</DialogTitle></DialogHeader>
             <div className="space-y-2">
               <Input value={domain} onChange={(e) => setDomain(e.target.value)}
-                     placeholder="dominio (ej. zquiet.com)" autoFocus />
+                     placeholder={`dominio (ej. ${ph})`} autoFocus />
               <Input value={name} onChange={(e) => setName(e.target.value)}
                      placeholder="nombre (opcional)" />
               <Input value={notes} onChange={(e) => setNotes(e.target.value)}

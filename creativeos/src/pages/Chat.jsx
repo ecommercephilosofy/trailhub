@@ -19,6 +19,7 @@ export default function Chat() {
   })
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
+  const [pending, setPending] = useState(null)   // pregunta enviada, aún sin respuesta
   const bottomRef = useRef(null)
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, busy])
@@ -27,6 +28,7 @@ export default function Chat() {
     const q = input.trim()
     if (!q || busy) return
     setInput('')
+    setPending(q)   // burbuja optimista: se ve la pregunta mientras el cerebro responde
     setBusy(true)
     try {
       await invokeFn('chat', { message: q })
@@ -36,6 +38,7 @@ export default function Chat() {
       setInput(q)   // no perder lo escrito
     } finally {
       setBusy(false)
+      setPending(null)
     }
   }
 
@@ -60,6 +63,11 @@ export default function Chat() {
             </div>
           </div>
         ))}
+        {pending && (
+          <div className="flex justify-end">
+            <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-indigo-600/70 px-4 py-2.5 text-sm text-white whitespace-pre-wrap">{pending}</div>
+          </div>
+        )}
         {busy && <div className="flex justify-start"><div className="rounded-2xl bg-white border border-slate-200 px-4 py-3"><LoadingSpinner size="sm" /></div></div>}
         <div ref={bottomRef} />
       </div>

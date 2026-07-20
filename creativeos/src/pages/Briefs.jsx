@@ -227,6 +227,7 @@ function Banner({ text }) {
 const SCRIPT_LEGEND = 'VO = palabras exactas del voiceover · CLIP = descripción visual para el editor · SFX = efecto de sonido · TRANS = transición · ZOOM = movimiento de cámara · [—] = no aplica'
 
 function VideoBriefDetail({ p, thumbByCode = {} }) {
+  const { brand } = useBrand()
   // Paridad con el PDF (build_pdf.render_brief): mismos bloques, mismo orden.
   // 3 schemas de guión conocidos: hooks/sections (rows), script_beats, script (VO/CLIP/SFX).
   const qb = p.tracking_code || p.qb_code
@@ -251,7 +252,7 @@ function VideoBriefDetail({ p, thumbByCode = {} }) {
             <CopyButton text={qb} label="Copiar" />
           </div>
           <p className="text-[11px] text-indigo-700 mt-1">
-            🏷 Inclúyelo en el nombre del ad al lanzar (ej: «FER0099 {qb}») — así el sistema mide este brief la semana siguiente.
+            🏷 Inclúyelo en el nombre del ad al lanzar (ej: «{brand.adCodeExample} {qb}») — así el sistema mide este brief la semana siguiente.
           </p>
         </div>
       )}
@@ -418,6 +419,7 @@ function SeedThumb({ path, label }) {
 const AD_CODE_RE = /[A-Z]{2,5}\d{2,5}(?:-\d{1,3})?/
 
 function ImageBriefDetail({ p, thumbByCode = {} }) {
+  const { brand } = useBrand()
   const cat = p.category === 'own_variation' ? '🔁 Variación de winner' : p.category === 'new_idea' ? '✨ Exploratorio' : null
   const seed = p.based_on?.reference || p.source_code
   const season = p.seasonal_timing && !['null', 'none'].includes(String(p.seasonal_timing).toLowerCase()) ? p.seasonal_timing : null
@@ -453,7 +455,7 @@ function ImageBriefDetail({ p, thumbByCode = {} }) {
       {p.hypothesis && <p className="text-xs text-slate-600">🔬 <b>Hipótesis (la mide el código QB):</b> {p.hypothesis}</p>}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <p className="text-xs font-bold text-slate-500">PROMPT (Nano Banana Pro)</p>
+          <p className="text-xs font-bold text-slate-500">PROMPT ({brand.imageTool})</p>
           <CopyButton text={p.prompt_en || ''} />
         </div>
         <pre className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[11px] whitespace-pre-wrap max-h-72 overflow-y-auto">{p.prompt_en}</pre>
@@ -470,7 +472,6 @@ function ImageBriefDetail({ p, thumbByCode = {} }) {
 }
 
 export default function Briefs() {
-  const { brand } = useBrand()
   const { effectiveRole, user } = useAuth()
   const canAssign = ['ADMIN', 'MANAGER'].includes(effectiveRole)
   const { data: briefs, error, refetch } = useEntityList(BriefsE, { sort: '-week_date', limit: 200 })

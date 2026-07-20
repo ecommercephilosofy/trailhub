@@ -91,6 +91,7 @@ function VideoPlayer({ url }) {
 }
 
 function ScriptTab({ brief }) {
+  const { brand } = useBrand()
   if (!brief) {
     return (
       <div className="py-10 text-center text-slate-400">
@@ -115,7 +116,7 @@ function ScriptTab({ brief }) {
           {p.execution_change && <p><b>🎨 Cambio:</b> {p.execution_change}</p>}
           {p.prompt_en && (
             <div>
-              <p className="text-xs font-bold text-slate-500 uppercase mb-1">Prompt Nano Banana</p>
+              <p className="text-xs font-bold text-slate-500 uppercase mb-1">Prompt {brand.imageTool}</p>
               <pre className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[11px] whitespace-pre-wrap max-h-60 overflow-y-auto">{p.prompt_en}</pre>
             </div>
           )}

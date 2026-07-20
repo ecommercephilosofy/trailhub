@@ -19,6 +19,7 @@ import { Coins, Trophy } from 'lucide-react'
 import { fmtRoas, fmtNum } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import { useBrand } from '@/context/BrandContext'
 
 const LEDGER_BADGE = {
   PENDING: 'bg-amber-100 text-amber-800',
@@ -132,8 +133,12 @@ function EditorView({ rule }) {
 
 // ── Vista de DIRECCIÓN: todo visible + aprobar ───────────────────────────────
 function MgmtView({ rule, isAdmin }) {
+  const { fmtMoneyFrom } = useBrand()
   const minSpend = rule?.min_lifetime_spend || 1500
   const minRoas = rule?.min_lifetime_roas || 2.0
+  // Umbral por divisa (igual que la RPC del editor): un ad en USD se compara
+  // contra su umbral USD, no contra el de EUR. Fallback al umbral plano.
+  const thresholdFor = (cur) => Number(rule?.currency_thresholds?.[cur || 'EUR']) || minSpend
   const { data: ledger, refetch } = useEntityList(BonusLedger, { sort: '-created_at' })
   const { data: lifecycle } = useEntityList(AdLifecycle, { limit: 1000 })
   const { data: ads } = useEntityList(AdsWeekly, { sort: '-week_date', limit: 1000 })
@@ -172,6 +177,8 @@ function MgmtView({ rule, isAdmin }) {
           )}
           {attributed.map((l) => {
             const roas = l.lifetime_spend ? l.lifetime_revenue / l.lifetime_spend : 0
+            const threshold = thresholdFor(l.currency)
+            const spend = l.lifetime_spend || 0
             return (
               <div key={l.code} className="rounded-lg border border-slate-100 p-3">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -186,11 +193,11 @@ function MgmtView({ rule, isAdmin }) {
                 </div>
                 <div className="mt-2 flex items-center gap-3">
                   <div className="h-2 w-full rounded-full bg-slate-100">
-                    <div className={cn('h-2 rounded-full', (l.lifetime_spend || 0) >= minSpend ? 'bg-emerald-500' : 'bg-indigo-400')}
-                         style={{ width: `${Math.min(100, ((l.lifetime_spend || 0) / minSpend) * 100)}%` }} />
+                    <div className={cn('h-2 rounded-full', spend >= threshold ? 'bg-emerald-500' : 'bg-indigo-400')}
+                         style={{ width: `${Math.min(100, (spend / threshold) * 100)}%` }} />
                   </div>
                   <span className="text-xs text-slate-500 whitespace-nowrap">
-                    {fmtNum(l.lifetime_spend || 0)}€ / {fmtNum(minSpend)}€
+                    {fmtMoneyFrom(spend, l.currency)} / {fmtMoneyFrom(threshold, l.currency)}
                   </span>
                 </div>
               </div>
@@ -212,7 +219,7 @@ function MgmtView({ rule, isAdmin }) {
                   <span className="font-medium text-slate-800">{e.ad_code}</span>
                   <span className="text-xs text-slate-500">{nameOf(e.editor_user_id)}</span>
                   <span className="text-xs text-slate-400">
-                    {e.evidence?.lifetime_spend && `${fmtNum(e.evidence.lifetime_spend)}€ · ROAS ${e.evidence.lifetime_roas}`}
+                    {e.evidence?.lifetime_spend && `${fmtMoneyFrom(e.evidence.lifetime_spend, e.evidence.currency)} · ROAS ${e.evidence.lifetime_roas}`}
                   </span>
                   <span className="ml-auto font-bold text-slate-900">{e.amount_eur}€</span>
                   {isAdmin && e.status === 'PENDING' && <Button size="sm" onClick={() => setStatus(e, 'APPROVED')}>Aprobar</Button>}

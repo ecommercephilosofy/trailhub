@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { supabase } from '@/api/supabaseClient'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useBrand } from '@/context/BrandContext'
 
 export default function SetPassword({ onDone }) {
+  const { brand } = useBrand()
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState(null)
@@ -32,7 +34,7 @@ export default function SetPassword({ onDone }) {
     <div className="min-h-screen page-bg flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
         <div className="mb-6 text-center">
-          <div className="text-2xl font-bold text-slate-900">CreativeOS</div>
+          <div className="text-2xl font-bold text-slate-900">{brand.appName}</div>
           <div className="text-sm text-slate-500 mt-1">Crea tu contraseña para entrar</div>
         </div>
         <form onSubmit={submit} className="space-y-3">
