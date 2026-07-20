@@ -25,11 +25,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!supabaseConfigured) { setLoading(false); return }
+    // .finally garantiza salir del spinner aunque getSession/loadProfile fallen
+    // (p.ej. un hipo de red al refrescar la sesión): si no, la app se queda
+    // colgada en el loader para siempre en vez de caer al login.
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       await loadProfile(session?.user?.id)
-      setLoading(false)
-    })
+    }).catch(() => {}).finally(() => setLoading(false))
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       // Perfil ANTES de exponer la sesión: si no, hay un render con rol VIEWER
       // (perfil aún null) y RequireRole redirige mal el aterrizaje del ADMIN.
