@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch'
 import { Telescope, ExternalLink, Plus, Trash2, Power, Sparkles } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
+import { useBrand } from '@/context/BrandContext'
 
 function normalizeDomain(raw) {
   return (raw || '').trim().toLowerCase()
@@ -48,10 +49,14 @@ function BrandsPanel({ kind, isAdmin }) {
       toast.error(e.message.includes('duplicate') ? 'Ya existe esa marca' : e.message)
     }
   }
-  const toggle = async (b) => { await Brands.update(b.id, { is_active: !b.is_active }); refetch() }
+  const toggle = async (b) => {
+    try { await Brands.update(b.id, { is_active: !b.is_active }); refetch() }
+    catch (e) { toast.error(e.message) }
+  }
   const remove = async (b) => {
     if (!confirm(`¿Quitar ${b.domain}? (se puede volver a añadir)`)) return
-    await Brands.delete(b.id); refetch()
+    try { await Brands.delete(b.id); refetch() }
+    catch (e) { toast.error(e.message) }
   }
 
   return (
@@ -217,6 +222,7 @@ function BrandProfileDrawer({ brand, onClose }) {
 }
 
 export default function Competencia() {
+  const { brand: brandCfg } = useBrand()
   const { effectiveRole } = useAuth()
   const isAdmin = effectiveRole === 'ADMIN'
   const { data: mechanisms, error } = useEntityList(Mechanisms, { sort: '-week_date', limit: 300 })
@@ -244,7 +250,7 @@ export default function Competencia() {
         {KIND_TABS.map((t) => (
           <button key={t.key} onClick={() => { setKind(t.key); setBrand('all') }}
                   className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    kind === t.key ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}>
+                    kind === t.key ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/40'}`}>
             {t.label}
           </button>
         ))}
@@ -298,7 +304,7 @@ export default function Competencia() {
               {m.what_works && <p className="text-sm text-slate-700">{m.what_works}</p>}
               {m.extrapolation && (
                 <p className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2">
-                  <b>→ Para Quies:</b> {m.extrapolation}
+                  <b>→ Para {brandCfg.name}:</b> {m.extrapolation}
                 </p>
               )}
               <div className="flex items-center justify-between text-xs text-slate-400">

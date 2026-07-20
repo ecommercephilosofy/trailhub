@@ -13,13 +13,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Switch } from '@/components/ui/switch'
 import { UserAvatar } from '@/components/shared/badges'
-import { EmptyState } from '@/components/shared/misc'
+import { EmptyState, ErrorState } from '@/components/shared/misc'
 import { Clapperboard, Plus, Trash2, ExternalLink, MessageSquare } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { cn, timeAgo } from '@/lib/utils'
 import { extractAdCode } from '@/lib/attribution'
 import { toast } from 'sonner'
+import { useBrand } from '@/context/BrandContext'
 
 const COLUMNS = [
   { key: 'SCRIPT_DRAFT', title: '📝 Guión', color: 'border-slate-300', section: 'pre' },
@@ -154,11 +155,14 @@ function ScriptTab({ brief }) {
 }
 
 function DetailsTab({ card, editors, canDelete, onSave, onDelete }) {
+  const { brand } = useBrand()
+  // assigned_editor (uuid) y due_date (date): null, nunca '' — Postgres rechaza
+  // '' en columnas date/uuid ("invalid input syntax") y el guardado fallaría.
   const [state, setState] = useState({
     title: card.title || '', drive_url: card.drive_url || '',
     launched_ad_name: card.launched_ad_name || '', format: card.format || '',
-    product: card.product || 'Quies', assigned_editor: card.assigned_editor || '',
-    notes: card.notes || '', due_date: card.due_date || '', status: card.status,
+    product: card.product || brand.productName, assigned_editor: card.assigned_editor || null,
+    notes: card.notes || '', due_date: card.due_date || null, status: card.status,
   })
   const set = (k, v) => setState((s) => ({ ...s, [k]: v }))
   return (
@@ -308,8 +312,14 @@ function CardDetail({ card, onClose, editors }) {
   const canDelete = effectiveRole === 'ADMIN'
     || (card.assigned_editor === user?.id && card.status !== 'PUBLISHED')
 
-  const save = async (patch) => {
+  const save = async (rawPatch) => {
     try {
+      // '' → null en columnas date/uuid (Postgres rechaza '' ahí)
+      const patch = {
+        ...rawPatch,
+        assigned_editor: rawPatch.assigned_editor || null,
+        due_date: rawPatch.due_date || null,
+      }
       // Si el estado pasa a aprobado/publicado, casa la tarjeta con su ad
       const extra = approvalPatch({ ...card, ...patch }, patch.status)
       await Cards.update(card.id, { ...patch, ...extra })
@@ -367,7 +377,7 @@ function CardDetail({ card, onClose, editors }) {
 export default function VideoOps() {
   const { user, effectiveRole } = useAuth()
   const canManage = ['ADMIN', 'MANAGER'].includes(effectiveRole)
-  const { data: cards, refetch } = useEntityList(Cards, { sort: '-created_at', limit: 500, staleTime: 10_000 })
+  const { data: cards, error, refetch } = useEntityList(Cards, { sort: '-created_at', limit: 500, staleTime: 10_000 })
   const { data: profiles } = useEntityList(Profiles)
   const [onlyMine, setOnlyMine] = useState(effectiveRole === 'EDITOR')
   const [open, setOpen] = useState(null)
@@ -397,10 +407,15 @@ export default function VideoOps() {
 
   const createCard = async () => {
     if (!newTitle.trim()) return
-    await Cards.create({ title: newTitle.trim(), status: 'TODO' })
-    setNewTitle(''); setCreating(false); refetch()
+    try {
+      await Cards.create({ title: newTitle.trim(), status: 'TODO' })
+      setNewTitle(''); setCreating(false); refetch()
+    } catch (e) {
+      toast.error(`No se pudo crear la tarjeta: ${e.message}`)
+    }
   }
 
+  if (error) return <ErrorState error={error} />
   if (!cards) return null
 
   return (

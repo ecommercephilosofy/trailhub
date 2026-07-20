@@ -16,7 +16,7 @@ import { toast } from 'sonner'
 
 // PDFs del run (los mismos que llegan a Telegram) — signed URLs por rol:
 // el CMO solo lo puede firmar dirección (RLS de storage).
-function PdfButtons({ report }) {
+function PdfButtons({ report, staleWeek }) {
   const open = async (bucket, path) => {
     const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600)
     if (error) return toast.error(error.message)
@@ -24,7 +24,7 @@ function PdfButtons({ report }) {
   }
   if (!report?.editor_pdf_path && !report?.cmo_pdf_path) return null
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
       {report.editor_pdf_path && (
         <Button variant="outline" size="sm" onClick={() => open('reports', report.editor_pdf_path)}>
           <FileDown className="h-3.5 w-3.5" /> PDF editores
@@ -34,6 +34,9 @@ function PdfButtons({ report }) {
         <Button variant="outline" size="sm" onClick={() => open('reports-cmo', report.cmo_pdf_path)}>
           <FileDown className="h-3.5 w-3.5" /> PDF CMO 🔒
         </Button>
+      )}
+      {staleWeek && (
+        <span className="text-[11px] text-amber-600">PDF de {staleWeek} (esta semana aún sin CMO)</span>
       )}
     </div>
   )
@@ -121,10 +124,26 @@ function SystemMemory() {
 }
 
 export default function Dashboard() {
-  const { data: reports, error } = useEntityList(WeeklyReports, { sort: '-week_date', limit: 1 })
-  const { data: snapshots } = useEntityList(MetricsSnapshots, { sort: 'week_date', limit: 12 })
+  const { data: reports, error } = useEntityList(WeeklyReports, { sort: '-week_date', limit: 6 })
+  // Últimas 12 semanas: se piden en orden descendente (para coger las MÁS
+  // recientes, no las 12 más viejas) y se invierten para el chart cronológico.
+  const { data: snapshots } = useEntityList(MetricsSnapshots, { sort: '-week_date', limit: 12 })
+  const trend = [...(snapshots || [])].reverse()
   const { data: verdicts } = useEntityList(CmoVerdicts, { sort: '-week_date', limit: 1 })
-  const report = reports?.[0]
+  const latest = reports?.[0]
+  // El paso CMO corre DESPUÉS de publicar weekly_reports. Si el report más
+  // reciente aún no tiene su PDF/semáforo CMO, NO heredamos el semáforo de otra
+  // semana (mentiría que es de esta); sí ofrecemos el último PDF disponible,
+  // pero etiquetando de qué semana viene.
+  const pdfSrc = (reports || []).find((r) => r.editor_pdf_path || r.cmo_pdf_path)
+  const pdfStale = pdfSrc && latest && !latest.editor_pdf_path && !latest.cmo_pdf_path
+    && pdfSrc.week_date !== latest.week_date
+  const report = latest && {
+    ...latest,
+    editor_pdf_path: latest.editor_pdf_path || pdfSrc?.editor_pdf_path,
+    cmo_pdf_path: latest.cmo_pdf_path || pdfSrc?.cmo_pdf_path,
+  }
+  const pdfWeekLabel = pdfStale ? pdfSrc.week_label : null
   const plan = verdicts?.[0]?.action_plan || {}
 
   if (error) return <ErrorState error={error} />
@@ -142,7 +161,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <RunNowButton />
-        <PdfButtons report={report} />
+        <PdfButtons report={report} staleWeek={pdfWeekLabel} />
       </div>
       <Card className={cn('border-2', CMO_STATUS_STYLE[report.status_cmo] || '')}>
         <CardContent className="pt-6">
@@ -175,7 +194,7 @@ export default function Dashboard() {
           <CardHeader><CardTitle className="text-base">ROAS blended — tendencia</CardTitle></CardHeader>
           <CardContent className="h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={snapshots || []}>
+              <LineChart data={trend}>
                 <XAxis dataKey="week_date" fontSize={11} />
                 <YAxis fontSize={11} domain={['auto', 'auto']} tickFormatter={(v) => `${v}x`} />
                 <Tooltip formatter={(v) => fmtRoas(v)} />

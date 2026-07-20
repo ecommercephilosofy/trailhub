@@ -17,10 +17,11 @@ import Competencia from '@/pages/Competencia'
 import Bonuses from '@/pages/Bonuses'
 import Chat from '@/pages/Chat'
 import Admin from '@/pages/Admin'
+import Ajustes from '@/pages/Ajustes'
 
 const PAGES = {
   '/': Dashboard, '/Direccion': Direccion, '/Briefs': Briefs, '/VideoOps': VideoOps, '/Performance': Performance,
-  '/Competencia': Competencia, '/Bonuses': Bonuses, '/Chat': Chat, '/Admin': Admin,
+  '/Competencia': Competencia, '/Bonuses': Bonuses, '/Chat': Chat, '/Admin': Admin, '/Ajustes': Ajustes,
 }
 
 function RequireRole({ roles, children }) {

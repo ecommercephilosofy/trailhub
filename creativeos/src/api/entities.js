@@ -36,5 +36,7 @@ export async function getSettings() {
 }
 
 export async function saveSettings(data) {
-  return SettingsTable.update('main', { data })
+  // upsert (no update): crea la fila 'main' si no existe — robusto en instancias
+  // nuevas o si se limpió la tabla.
+  return SettingsTable.upsert({ id: 'main', data })
 }

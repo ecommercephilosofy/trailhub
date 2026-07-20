@@ -147,15 +147,19 @@ function MgmtView({ rule, isAdmin }) {
   const nameOf = (uid) => (profiles || []).find((p) => p.user_id === uid)?.name || '—'
 
   const setStatus = async (entry, status) => {
-    await BonusLedger.update(entry.id, { status })
-    if (status === 'APPROVED') {
-      await Notifications.create({
-        target_user_id: entry.editor_user_id, type: 'BONUS',
-        title: `🎉 Bonus aprobado: ${entry.amount_eur}€`, body: `Tu ad ${entry.ad_code} lo consiguió`,
-      }).catch(() => {})
+    try {
+      await BonusLedger.update(entry.id, { status })
+      if (status === 'APPROVED') {
+        await Notifications.create({
+          target_user_id: entry.editor_user_id, type: 'BONUS',
+          title: `🎉 Bonus aprobado: ${entry.amount_eur}€`, body: `Tu ad ${entry.ad_code} lo consiguió`,
+        }).catch(() => {})
+      }
+      toast.success(`Bonus → ${status}`)
+      refetch()
+    } catch (e) {
+      toast.error(`No se pudo actualizar el bonus: ${e.message}`)
     }
-    toast.success(`Bonus → ${status}`)
-    refetch()
   }
 
   return (

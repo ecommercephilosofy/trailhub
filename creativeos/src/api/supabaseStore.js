@@ -82,6 +82,12 @@ export function createEntity(table, { pk = 'id' } = {}) {
       emit(table)
       return data
     },
+    async upsert(row, onConflict = pk) {
+      const { data, error } = await supabase.from(table).upsert(row, { onConflict }).select().single()
+      if (error) throw new Error(`${table}.upsert: ${error.message}`)
+      emit(table)
+      return data
+    },
     async delete(id) {
       // .select() para detectar el caso "0 filas borradas": RLS deniega en
       // silencio y sin esto la UI daría éxito con el item aún vivo.

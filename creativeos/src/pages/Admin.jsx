@@ -85,9 +85,17 @@ export default function Admin() {
   const [inviting, setInviting] = useState(false)
 
   const setRole = async (p, role) => {
-    await Profiles.update(p.user_id, { custom_role: role })
-    toast.success(`${p.name || 'Usuario'} → ${role}`)
-    refetch()
+    // Evita que el ADMIN se quite a sí mismo el rol y se deje fuera de /Admin.
+    if (p.user_id === user?.id && role !== 'ADMIN') {
+      return toast.error('No puedes quitarte a ti mismo el rol ADMIN')
+    }
+    try {
+      await Profiles.update(p.user_id, { custom_role: role })
+      toast.success(`${p.name || 'Usuario'} → ${role}`)
+      refetch()
+    } catch (e) {
+      toast.error(e.message)
+    }
   }
 
   const removeUser = async (p) => {
@@ -114,14 +122,22 @@ export default function Admin() {
   }
 
   const saveRule = async () => {
-    await BonusRules.update(rule.id, {
-      amount_eur: Number(edit.amount_eur),
-      min_lifetime_spend: Number(edit.min_lifetime_spend),
-      min_lifetime_roas: Number(edit.min_lifetime_roas),
-    })
-    toast.success('Regla de bonus actualizada (aplica desde el próximo lunes)')
-    setEdit(null)
-    refetchRules()
+    const amount = Number(edit.amount_eur)
+    const spend = Number(edit.min_lifetime_spend)
+    const roas = Number(edit.min_lifetime_roas)
+    if ([amount, spend, roas].some((n) => !Number.isFinite(n))) {
+      return toast.error('Todos los valores de la regla deben ser números')
+    }
+    try {
+      await BonusRules.update(rule.id, {
+        amount_eur: amount, min_lifetime_spend: spend, min_lifetime_roas: roas,
+      })
+      toast.success('Regla de bonus actualizada (aplica desde el próximo lunes)')
+      setEdit(null)
+      refetchRules()
+    } catch (e) {
+      toast.error(e.message)
+    }
   }
 
   return (

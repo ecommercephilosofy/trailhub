@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/context/AuthContext'
+import { BrandProvider } from '@/context/BrandContext'
 import App from './App'
 import './index.css'
 
@@ -17,10 +18,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
+          <BrandProvider>
           <TooltipProvider delayDuration={200}>
             <App />
             <Toaster richColors position="top-right" />
           </TooltipProvider>
+          </BrandProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

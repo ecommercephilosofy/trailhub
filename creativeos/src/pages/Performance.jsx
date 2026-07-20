@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button'
 import { EmptyState, ErrorState } from '@/components/shared/misc'
 import { TrendingUp, Table2, LayoutGrid, ChevronDown } from 'lucide-react'
 import { fmtRoas, fmtNum } from '@/lib/format'
-import { ACCOUNT_NAMES, ACCOUNT_BADGE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { useBrand } from '@/context/BrandContext'
 
 // Tarjeta de creativo con thumbnail + review (la galería del viejo Informe_Quies).
 function CreativeCard({ review }) {
@@ -71,6 +71,7 @@ const STATUS_BADGE = {
 }
 
 export default function Performance() {
+  const { brand, accountName, accountBadge, fmtMoneyFrom, fxDate } = useBrand()
   const { data: ads, error } = useEntityList(AdsWeekly, { sort: '-week_date', limit: 1000 })
   const { data: lifecycle } = useEntityList(AdLifecycle, { limit: 1000 })
   const { data: cards } = useEntityList(Cards, { limit: 500 })
@@ -155,7 +156,7 @@ export default function Performance() {
               {rows.map((a) => {
                 const lc = lcByCode[a.ad_code] || {}
                 return (
-                  <tr key={`${a.ad_code}-${a.account_id}`} className="border-b border-slate-50 hover:bg-slate-50/60">
+                  <tr key={`${a.ad_code}-${a.account_id}`} className="border-b border-slate-50 hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
                     <td className="px-3 py-2">
                       <p className="font-medium text-slate-800">{a.ad_code}</p>
                       {a.qb_code_detected && <code className="text-[9px] text-indigo-500">{a.qb_code_detected}</code>}
@@ -167,8 +168,8 @@ export default function Performance() {
                     </td>
                     <td className="px-3 py-2">
                       <span className={cn('rounded px-1.5 py-0.5 text-[10px] font-medium',
-                        ACCOUNT_BADGE[a.account_id] || 'bg-slate-100 text-slate-600')}>
-                        {ACCOUNT_NAMES[a.account_id] || a.account_id || '—'}
+                        accountBadge(a.account_id))}>
+                        {accountName(a.account_id)}
                       </span>
                     </td>
                     <td className="px-3 py-2">
@@ -178,7 +179,7 @@ export default function Performance() {
                       {lc.stale && <Badge variant="outline" className="ml-1 text-[9px] text-amber-600">STALE</Badge>}
                     </td>
                     <td className="px-3 py-2 text-slate-500">{a.geo || '—'}</td>
-                    <td className="px-3 py-2 text-right">{fmtNum(a.spend)} {a.currency === 'USD' ? '$' : '€'}</td>
+                    <td className="px-3 py-2 text-right">{fmtMoneyFrom(a.spend, a.currency)}</td>
                     <td className={cn('px-3 py-2 text-right font-semibold',
                       a.roas >= 2 ? 'text-emerald-600' : a.roas < 0.8 ? 'text-red-600' : 'text-slate-700')}>
                       {a.roas != null ? fmtRoas(a.roas) : '—'}
@@ -187,13 +188,19 @@ export default function Performance() {
                     <td className="px-3 py-2 text-right">{a.frequency ?? '—'}</td>
                     <td className="px-3 py-2 text-right text-slate-500">{lc.best_roas ? fmtRoas(lc.best_roas) : '—'}</td>
                     <td className="px-3 py-2 text-right text-slate-500">
-                      {lc.lifetime_spend ? `${fmtNum(lc.lifetime_spend)}${lc.currency === 'USD' ? '$' : '€'}` : '—'}
+                      {lc.lifetime_spend ? fmtMoneyFrom(lc.lifetime_spend, lc.currency) : '—'}
                     </td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
+          {fxDate && rows.some((a) => a.currency && a.currency !== brand.currency) && (
+            <p className="mt-3 text-[11px] text-slate-400">
+              ≈ importes convertidos a {brand.currency} con el cambio BCE del {fxDate} (frankfurter.dev).
+              La divisa se elige en Ajustes; las cuentas que ya operan en {brand.currency} no se tocan.
+            </p>
+          )}
           <p className="mt-3 text-[11px] text-slate-400">
             * Lifetime = gasto acumulado por el sistema desde jul-2026 (arranque de la memoria por creativo).
             Un ad con historia anterior puede mostrar lifetime menor que su gasto semanal hasta que la memoria acumule.

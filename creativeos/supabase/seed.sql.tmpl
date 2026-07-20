@@ -1,0 +1,14 @@
+-- Seed por instancia (lo rellena el wizard de setup — NO aplicar tal cual).
+-- {{ADMIN_USER_ID}} = uuid del primer admin (creado vía Auth Admin API antes de esto)
+insert into profiles (user_id, name, custom_role, email)
+values ('{{ADMIN_USER_ID}}', '{{ADMIN_NAME}}', 'ADMIN', '{{ADMIN_EMAIL}}')
+on conflict (user_id) do nothing;
+
+-- Marca (la genera el wizard desde brand/brand.json — una sola fuente de verdad)
+insert into settings (id, data) values ('main', '{{BRAND_SETTINGS_JSON}}')
+on conflict (id) do update set data = excluded.data;
+
+-- Regla de bonus inicial
+insert into bonus_rules (rule_key, name, amount_eur, min_lifetime_spend, min_lifetime_roas, currency_thresholds, is_active)
+values ('PER_WINNER_LIFETIME', '{{BONUS_RULE_NAME}}', {{BONUS_AMOUNT}}, {{BONUS_MIN_SPEND}}, {{BONUS_MIN_ROAS}}, '{{BONUS_CURRENCY_THRESHOLDS}}', true)
+on conflict do nothing;

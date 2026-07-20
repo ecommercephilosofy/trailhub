@@ -18,6 +18,7 @@ import { fmtRoas } from '@/lib/format'
 import { normRow, SCRIPT_COLS } from '@/lib/briefScript'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import { useBrand } from '@/context/BrandContext'
 
 // Análisis de ESTRATEGIA CREATIVA semanal (editor-safe: ROAS sí, dinero jamás).
 // Lo publica el pipeline cada lunes en editor_weekly.
@@ -366,6 +367,7 @@ function VideoBriefDetail({ p, thumbByCode = {} }) {
 
 function SendToVideoOpsBtn({ brief, card, disabled, onSent }) {
   const { user } = useAuth()
+  const { brand } = useBrand()
   const send = async () => {
     try {
       if (card && !card.assigned_editor) {
@@ -377,7 +379,7 @@ function SendToVideoOpsBtn({ brief, card, disabled, onSent }) {
           status: 'TODO',
           assigned_editor: user.id,
           format: brief.payload?.format_family || null,
-          product: 'Quies',
+          product: brand.productName,
         })
       } else {
         return toast.info('Ya está en Video Ops')
@@ -462,12 +464,13 @@ function ImageBriefDetail({ p, thumbByCode = {} }) {
           <pre className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[11px] whitespace-pre-wrap max-h-40 overflow-y-auto">{p.negative_prompt}</pre>
         </div>
       )}
-      <p className="text-[11px] text-slate-400">📌 Adjuntar SOLO el asset aislado del Quies Pro como referencia. NUNCA el ad winner completo.</p>
+      <p className="text-[11px] text-slate-400">📌 Adjuntar SOLO el asset aislado del producto como referencia. NUNCA el ad winner completo.</p>
     </div>
   )
 }
 
 export default function Briefs() {
+  const { brand } = useBrand()
   const { effectiveRole, user } = useAuth()
   const canAssign = ['ADMIN', 'MANAGER'].includes(effectiveRole)
   const { data: briefs, error, refetch } = useEntityList(BriefsE, { sort: '-week_date', limit: 200 })

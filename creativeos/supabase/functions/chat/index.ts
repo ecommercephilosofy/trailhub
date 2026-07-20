@@ -8,7 +8,7 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const MODEL = "claude-sonnet-5";
-const MAX_TOKENS = 900;
+const MAX_TOKENS = 1500;
 const HISTORY_LIMIT = 12;
 
 // CORS: solo la app (SITE_URL) y desarrollo local — antes era "*".
@@ -58,15 +58,23 @@ Deno.serve(async (req) => {
 
     const { data: ctx } = await service.from("chat_context")
       .select("digest,week_date").eq("id", "main").maybeSingle();
+    // Marca dinámica (white-label): settings.data.brand manda; fallback Quies.
+    const { data: settingsRow } = await service.from("settings")
+      .select("data").eq("id", "main").maybeSingle();
+    const b = settingsRow?.data?.brand ?? {};
+    const brandLine = b.chatIdentity
+      ?? `Eres el analista de adquisición pagada de ${b.name ?? "Quies"}${b.productName && b.name !== b.productName ? ` (producto: ${b.productName})` : b.name ? "" : " (dispositivo EMS anti-ronquidos, mercado hispano USAH/MX)"}.`;
+    const opsLine = b.opsNote
+      ?? "La cuenta opera con CBO: las únicas palancas son pausar / clonar-iterar winners / zombie campaign. Nunca recomiendes 'subir budget a un ad'.";
     const { data: history } = await service.from("chat_messages")
       .select("role,content").eq("user_id", user.id)
       .order("created_at", { ascending: false }).limit(HISTORY_LIMIT);
 
     const system = [
-      "Eres el analista de adquisición pagada de Quies (dispositivo EMS anti-ronquidos, mercado hispano USAH/MX).",
+      brandLine,
       "Respondes al dueño/dirección en español, claro y directo, con cifras concretas del contexto.",
       "REGLAS: no inventes datos que no estén en el contexto; si falta el dato, dilo.",
-      "La cuenta opera con CBO: las únicas palancas son pausar / clonar-iterar winners / zombie campaign. Nunca recomiendes 'subir budget a un ad'.",
+      opsLine,
       "",
       `## Contexto semanal (publicado ${ctx?.week_date ?? "?"})`,
       ctx?.digest ?? "(sin contexto publicado todavía — el pipeline lo sube cada lunes)",
@@ -77,23 +85,36 @@ Deno.serve(async (req) => {
       { role: "user", content: message },
     ];
 
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": Deno.env.get("ANTHROPIC_API_KEY")!,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ model: MODEL, max_tokens: MAX_TOKENS, system, messages }),
-    });
-    if (!resp.ok) {
-      const detail = await resp.text();
-      return Response.json({ error: `Anthropic ${resp.status}: ${detail.slice(0, 200)}` },
-        { status: 502, headers: cors });
+    // El modelo puede agotar max_tokens sin emitir texto (respuesta 200 con
+    // content sin bloques text) — un reintento con más presupuesto lo resuelve.
+    const ask = async (maxTokens: number) => {
+      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "x-api-key": Deno.env.get("ANTHROPIC_API_KEY")!,
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ model: MODEL, max_tokens: maxTokens, system, messages }),
+      });
+      if (!resp.ok) {
+        const detail = await resp.text();
+        throw Object.assign(new Error(`Anthropic ${resp.status}: ${detail.slice(0, 200)}`), { upstream: true });
+      }
+      const data = await resp.json();
+      return (data.content ?? []).filter((b: { type: string }) => b.type === "text")
+        .map((b: { text: string }) => b.text).join("\n");
+    };
+    let answer: string;
+    try {
+      answer = await ask(MAX_TOKENS) || await ask(MAX_TOKENS * 2)
+        || "No pude generar respuesta esta vez — reintenta la pregunta.";
+    } catch (e) {
+      if ((e as { upstream?: boolean }).upstream) {
+        return Response.json({ error: (e as Error).message }, { status: 502, headers: cors });
+      }
+      throw e;
     }
-    const data = await resp.json();
-    const answer = (data.content ?? []).filter((b: { type: string }) => b.type === "text")
-      .map((b: { text: string }) => b.text).join("\n") || "(sin respuesta)";
 
     await service.from("chat_messages").insert([
       { user_id: user.id, role: "user", content: message },

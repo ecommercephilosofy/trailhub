@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useBrand } from '@/context/BrandContext'
 
 export default function Login() {
+  const { brand } = useBrand()
   const { signIn, configured } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -29,8 +31,8 @@ export default function Login() {
     <div className="min-h-screen page-bg flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
         <div className="mb-6 text-center">
-          <div className="text-2xl font-bold text-slate-900">CreativeOS</div>
-          <div className="text-sm text-slate-500 mt-1">Quies — sistema creativo semanal</div>
+          <div className="text-2xl font-bold text-slate-900">{brand.appName}</div>
+          <div className="text-sm text-slate-500 mt-1">{brand.loginSubtitle}</div>
         </div>
         {!configured ? (
           <div className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">

@@ -69,9 +69,13 @@ function VoteList({ title, items, color }) {
 
 export default function Direccion() {
   const { data: verdicts, error } = useEntityList(CmoVerdicts, { sort: '-week_date', limit: 1 })
-  const { data: reports } = useEntityList(WeeklyReports, { sort: '-week_date', limit: 1 })
+  const { data: reports } = useEntityList(WeeklyReports, { sort: '-week_date', limit: 6 })
   const v = verdicts?.[0]
-  const report = reports?.[0]
+  // El PDF debe ser el de la MISMA semana que el verdict mostrado. Si esa semana
+  // aún no tiene su PDF CMO, cae al más reciente que lo tenga, pero avisando.
+  const sameWeek = (reports || []).find((r) => r.week_date === v?.week_date)
+  const pdfSrc = sameWeek?.cmo_pdf_path ? sameWeek : (reports || []).find((r) => r.cmo_pdf_path)
+  const pdfStaleWeek = pdfSrc && v && pdfSrc.week_date !== v.week_date ? pdfSrc.week_label : null
 
   if (error) return <ErrorState error={error} />
   if (!v) {
@@ -88,8 +92,8 @@ export default function Direccion() {
   const exec = v.executive_summary || {}
 
   const openPdf = async () => {
-    if (!report?.cmo_pdf_path) return toast.error('PDF no disponible aún')
-    const { data, error } = await supabase.storage.from('reports-cmo').createSignedUrl(report.cmo_pdf_path, 3600)
+    if (!pdfSrc?.cmo_pdf_path) return toast.error('PDF no disponible aún')
+    const { data, error } = await supabase.storage.from('reports-cmo').createSignedUrl(pdfSrc.cmo_pdf_path, 3600)
     if (error) return toast.error(error.message)
     window.open(data.signedUrl, '_blank')
   }
@@ -103,6 +107,7 @@ export default function Direccion() {
             <span className={cn('rounded-full px-3 py-1 text-xs font-bold uppercase border',
               CMO_STATUS_STYLE[dash.status] || 'bg-slate-100')}>{dash.status || '—'}</span>
             <span className="text-sm text-slate-500">{v.week_date}</span>
+            {pdfStaleWeek && <span className="text-[11px] text-amber-600">PDF de {pdfStaleWeek}</span>}
             <Button variant="outline" size="sm" className="ml-auto" onClick={openPdf}>
               <FileDown className="h-3.5 w-3.5" /> PDF completo 🔒
             </Button>

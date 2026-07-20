@@ -1,12 +1,14 @@
 // Auth real: Supabase Auth (email+password) + rol desde `profiles.custom_role`.
 // Se mantiene "Ver como" (ADMIN simula otro rol para revisar la UI del equipo).
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { supabase, supabaseConfigured } from '@/api/supabaseClient'
 
 const AuthContext = createContext(null)
 const VIEW_AS_KEY = 'admin_view_as_role'
 
 export function AuthProvider({ children }) {
+  const queryClient = useQueryClient()
   const [session, setSession] = useState(null)
   const [profile, setProfile] = useState(null)
   const [viewAsRole, setViewAsRoleState] = useState(() => localStorage.getItem(VIEW_AS_KEY) || null)
@@ -14,7 +16,10 @@ export function AuthProvider({ children }) {
 
   const loadProfile = useCallback(async (userId) => {
     if (!userId) { setProfile(null); return }
-    const { data } = await supabase.from('profiles').select('*').eq('user_id', userId).maybeSingle()
+    const { data, error } = await supabase.from('profiles').select('*').eq('user_id', userId).maybeSingle()
+    // Fallo transitorio (red/RLS): NO degradar el perfil a null → si no, un ADMIN
+    // caería a VIEWER en silencio. Conserva el perfil actual hasta el próximo pull.
+    if (error) return
     setProfile(data || null)
   }, [])
 
@@ -62,9 +67,12 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(VIEW_AS_KEY)
         setViewAsRoleState(null)
         await supabase.auth.signOut()
+        // Vaciar la caché de queries: si no, otro usuario en el mismo navegador
+        // (p.ej. un EDITOR tras un ADMIN) vería datos con dinero cacheados.
+        queryClient.clear()
       },
     }
-  }, [loading, session, profile, viewAsRole])
+  }, [loading, session, profile, viewAsRole, queryClient])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

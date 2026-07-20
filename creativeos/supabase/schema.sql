@@ -11,6 +11,7 @@
 create table if not exists profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   name text not null default '',
+  email text,
   custom_role text not null default 'VIEWER'
     check (custom_role in ('ADMIN','MANAGER','EDITOR','VIEWER')),
   skills_tags text[] default '{}',
@@ -443,3 +444,10 @@ exception when duplicate_object then null; end $$;
 -- insert into profiles (user_id, name, custom_role)
 -- select id, 'Marc', 'ADMIN' from auth.users where email = 'mdelgadolinde@gmail.com'
 -- on conflict (user_id) do update set custom_role = 'ADMIN';
+
+-- ── Tracking de migraciones (update.sh del cerebro las aplica y registra) ────
+create table if not exists schema_migrations (
+  name text primary key,
+  applied_at timestamptz default now()
+);
+alter table schema_migrations enable row level security;
