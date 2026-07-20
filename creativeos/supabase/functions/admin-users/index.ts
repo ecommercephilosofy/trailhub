@@ -55,6 +55,7 @@ Deno.serve(async (req) => {
       // ¿Existe ya? → solo generar link de recovery (re-invitación)
       const { data: list } = await service.auth.admin.listUsers({ perPage: 1000 });
       let target = list?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+      const existed = !!target;
       if (!target) {
         const { data: created, error } = await service.auth.admin.createUser({
           email, email_confirm: true,
@@ -63,12 +64,18 @@ Deno.serve(async (req) => {
         if (error) throw error;
         target = created.user;
       }
-      await service.from("profiles").upsert({
-        user_id: target!.id,
-        email,
-        name: name || email.split("@")[0],
-        custom_role: ["ADMIN", "MANAGER", "EDITOR", "VIEWER"].includes(role) ? role : "EDITOR",
-      });
+      // El rol solo se fija al CREAR el usuario (el trigger handle_new_user dejó el
+      // profile en VIEWER). En una re-invitación NO se toca el rol: los cambios de
+      // rol van por /Admin (setRole) — así una re-invitación no puede degradar al
+      // último ADMIN a EDITOR y dejar el sistema sin admin.
+      const profileRow: Record<string, unknown> = {
+        user_id: target!.id, email, name: name || email.split("@")[0],
+      };
+      if (!existed) {
+        profileRow.custom_role = ["ADMIN", "MANAGER", "EDITOR", "VIEWER"].includes(role) ? role : "EDITOR";
+      }
+      const { error: upErr } = await service.from("profiles").upsert(profileRow);
+      if (upErr) throw upErr;
       const { data: link, error: linkErr } = await service.auth.admin.generateLink({
         type: "recovery", email, options: { redirectTo: site },
       });
@@ -92,8 +99,13 @@ Deno.serve(async (req) => {
           return Response.json({ error: "no puedes borrar al último ADMIN" }, { status: 400, headers: cors });
         }
       }
-      await service.from("profiles").delete().eq("user_id", user_id);
-      await service.auth.admin.deleteUser(user_id);
+      // Con las FKs en ON DELETE SET NULL (migración 002) el borrado del profile
+      // ya no falla por bonus/anotaciones/run_requests. Comprobamos AMBOS errores:
+      // antes se ignoraban y la función devolvía ok:true sin borrar nada.
+      const { error: delProfErr } = await service.from("profiles").delete().eq("user_id", user_id);
+      if (delProfErr) throw delProfErr;
+      const { error: delUserErr } = await service.auth.admin.deleteUser(user_id);
+      if (delUserErr) throw delUserErr;
       return Response.json({ ok: true }, { headers: cors });
     }
 

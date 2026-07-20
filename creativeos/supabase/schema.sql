@@ -203,7 +203,7 @@ create table if not exists annotations (
   timestamp_sec numeric,
   severity text default 'INFO' check (severity in ('BLOCKING','IMPORTANT','INFO')),
   text text not null,
-  author uuid references profiles(user_id),
+  author uuid references profiles(user_id) on delete set null,
   created_at timestamptz default now()
 );
 
@@ -223,7 +223,7 @@ on conflict (rule_key) do nothing;
 
 create table if not exists bonus_ledger (
   id bigint generated always as identity primary key,
-  editor_user_id uuid not null references profiles(user_id),
+  editor_user_id uuid references profiles(user_id) on delete set null,
   ad_code text not null,
   rule_key text not null default 'PER_WINNER_LIFETIME',
   amount_eur numeric not null default 50,
@@ -451,3 +451,21 @@ create table if not exists schema_migrations (
   applied_at timestamptz default now()
 );
 alter table schema_migrations enable row level security;
+
+-- ── Alta de usuario → profile automático (rol mínimo VIEWER) ─────────────────
+-- Garantiza que todo usuario de auth tenga fila en profiles (visible en /Admin);
+-- la invitación del admin fija luego el rol real. Con el signup cerrado, los
+-- usuarios llegan por invitación o alta manual desde el dashboard.
+create or replace function handle_new_user() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into profiles (user_id, email, custom_role)
+  values (new.id, new.email, 'VIEWER')
+  on conflict (user_id) do nothing;
+  return new;
+end $$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();

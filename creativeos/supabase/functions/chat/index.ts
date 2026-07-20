@@ -67,8 +67,12 @@ Deno.serve(async (req) => {
     const opsLine = b.opsNote
       ?? "La cuenta opera con CBO: las únicas palancas son pausar / clonar-iterar winners / zombie campaign. Nunca recomiendes 'subir budget a un ad'.";
     const { data: history } = await service.from("chat_messages")
+      // Ordena por `id` (identity monótona), NO por created_at: el par
+      // user+assistant se inserta en un solo statement con el mismo now(), así que
+      // ordenar por created_at desempata al azar y podría invertir roles → la
+      // Messages API exige alternancia user/assistant empezando por user.
       .select("role,content").eq("user_id", user.id)
-      .order("created_at", { ascending: false }).limit(HISTORY_LIMIT);
+      .order("id", { ascending: false }).limit(HISTORY_LIMIT);
 
     const system = [
       brandLine,
