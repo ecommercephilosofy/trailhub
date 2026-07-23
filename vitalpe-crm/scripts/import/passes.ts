@@ -634,7 +634,7 @@ export async function importSalesSheet(
       const forecastLiters = N.parseLiters(forecastRaw);
       const upper = forecastRaw.toUpperCase();
       let dataType: string | null = null;
-      let forecastNext: string | null = null;
+      let forecastNext: string;
       let notes: string | null = null;
 
       if (forecastLiters.value !== null) {

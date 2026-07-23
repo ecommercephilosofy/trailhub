@@ -16,6 +16,15 @@ export interface Normalized<T> {
 
 const ok = <T>(value: T | null, rule: string): Normalized<T> => ({ value, rule });
 
+/**
+ * "No value, and that is the correct answer."
+ *
+ * A separate helper because passing `null` to `ok` infers `T = null` and yields a
+ * `Normalized<null>` that no caller can use. `Normalized<never>` carries
+ * `value: null`, which is assignable to every `Normalized<T>`.
+ */
+const empty = (rule: string): Normalized<never> => ({ value: null, rule });
+
 export function clean(input: string | null | undefined): string | null {
   if (input === null || input === undefined) return null;
   const trimmed = input.replace(/\s+/g, ' ').trim();
@@ -30,7 +39,7 @@ export function clean(input: string | null | undefined): string | null {
  */
 export function parseLiters(input: string | null | undefined): Normalized<number> {
   const raw = clean(input);
-  if (raw === null) return ok(null, 'buit');
+  if (raw === null) return empty('buit');
   const compact = raw.replace(/\s/g, '');
   if (/^\d{1,3}(\.\d{3})+$/.test(compact)) {
     return ok(Number(compact.replace(/\./g, '')), 'separador de milers ES');
@@ -48,7 +57,7 @@ export function parseLiters(input: string | null | undefined): Normalized<number
 /** ISO timestamps (from real Excel dates), DD/MM/YYYY and D/M/YYYY text. */
 export function parseDate(input: string | null | undefined): Normalized<string> {
   const raw = clean(input);
-  if (raw === null) return ok(null, 'buit');
+  if (raw === null) return empty('buit');
 
   const iso = /^(\d{4})-(\d{2})-(\d{2})([T ]|$)/.exec(raw);
   if (iso) return ok(`${iso[1]}-${iso[2]}-${iso[3]}`, 'ISO');
@@ -78,7 +87,7 @@ export function campaignForDate(isoDate: string): string {
 
 export function parsePriority(input: string | null | undefined): Normalized<'ALTA' | 'MITJANA' | 'BAIXA'> {
   const raw = clean(input)?.toUpperCase();
-  if (!raw) return ok(null, 'buit');
+  if (!raw) return empty('buit');
   if (raw === 'A' || raw === 'ALTA') return ok('ALTA', 'prioritat A');
   if (raw === 'B' || raw === 'MITJANA' || raw === 'MEDIA') return ok('MITJANA', 'prioritat B');
   if (raw === 'C' || raw === 'BAIXA' || raw === 'BAJA') return ok('BAIXA', 'prioritat C');
@@ -103,7 +112,7 @@ export function parseAction(
   input: string | null | undefined,
 ): Normalized<{ action: string; other?: string }> {
   const raw = clean(input);
-  if (!raw) return ok(null, 'buit');
+  if (!raw) return empty('buit');
   const key = raw.toLowerCase();
   const table: Record<string, string> = {
     llamar: 'TRUCAR',
@@ -137,7 +146,7 @@ export function parseAction(
  */
 export function parseResult(input: string | null | undefined): Normalized<string> {
   const raw = clean(input);
-  if (!raw) return ok(null, 'buit');
+  if (!raw) return empty('buit');
   const key = raw.toUpperCase().replace(/\s+/g, ' ');
 
   const exact: Record<string, string> = {
@@ -162,7 +171,7 @@ export function parseResult(input: string | null | undefined): Normalized<string
 /** "Estado" from the active-clients sheet -> the activity type it implies. */
 export function activityTypeForState(state: string | null | undefined): Normalized<string> {
   const raw = clean(state);
-  if (!raw) return ok(null, 'buit');
+  if (!raw) return empty('buit');
   const key = raw.toLowerCase();
   if (key === 'visita realizada') return ok('VISITA', 'estat «Visita realizada»');
   if (key === 'contactado') {
@@ -171,7 +180,7 @@ export function activityTypeForState(state: string | null | undefined): Normaliz
     return ok('ALTRES', 'estat «Contactado» sense canal -> ALTRES');
   }
   if (key === 'seguimiento') return ok('ALTRES', 'estat «Seguimiento» -> ALTRES');
-  if (key === 'pendiente' || key === 'visita concertada') return ok(null, 'estat sense contacte registrat');
+  if (key === 'pendiente' || key === 'visita concertada') return empty('estat sense contacte registrat');
   if (key === 'sin interés' || key === 'sin interes') return ok('ALTRES', 'estat «Sin interés» -> ALTRES');
   return { value: null, rule: 'estat desconegut', unmapped: { kind: 'ALTRES', raw } };
 }
@@ -220,7 +229,7 @@ export function inferClientType(
   if (/^agr[ií]cola\b|secci[óo] de cr[èe]dit/i.test(name)) {
     return ok('COOPERATIVA', 'denominació de cooperativa agrícola al nom');
   }
-  return ok(null, 'sense evidència del tipus');
+  return empty('sense evidència del tipus');
 }
 
 /** Country names as they appear in the export sheet. */
@@ -281,13 +290,13 @@ const PROVINCE_BY_PREFIX: Record<string, string> = {
 
 export function provinceFromPostalCode(cp: string | null | undefined): Normalized<string> {
   const raw = clean(cp);
-  if (!raw) return ok(null, 'buit');
+  if (!raw) return empty('buit');
   // Excel drops the leading zero: "8770" is really "08770".
   const digits = raw.replace(/\D/g, '').replace(/\.0$/, '');
-  if (digits.length < 4) return ok(null, 'CP massa curt');
+  if (digits.length < 4) return empty('CP massa curt');
   const padded = digits.padStart(5, '0').slice(0, 5);
   const province = PROVINCE_BY_PREFIX[padded.slice(0, 2)];
-  return province ? ok(province, `prefix CP ${padded.slice(0, 2)}`) : ok(null, 'prefix CP no catalogat');
+  return province ? ok(province, `prefix CP ${padded.slice(0, 2)}`) : empty('prefix CP no catalogat');
 }
 
 export function normalizePostalCode(cp: string | null | undefined): string | null {

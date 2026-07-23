@@ -8,6 +8,5 @@ const nextConfig = {
   // PGlite ships a WASM binary; it must stay external to the server bundle.
   serverExternalPackages: ['@electric-sql/pglite', 'postgres'],
   typescript: { ignoreBuildErrors: false },
-  eslint: { ignoreDuringBuilds: true },
 };
 export default nextConfig;

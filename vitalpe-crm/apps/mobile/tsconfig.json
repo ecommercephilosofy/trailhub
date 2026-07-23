@@ -1,0 +1,36 @@
+{
+  "_comment": [
+    "Deliberately self-contained instead of `extends: expo/tsconfig.base`.",
+    "The base config only exists once the native dependencies are installed, and",
+    "vitest resolves `extends` eagerly, which would make `pnpm test` fail in a",
+    "bare checkout — exactly the situation the pure src/core layer exists to",
+    "survive. The options below are the expo base plus this repo's strictness."
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@vitalpe/domain": ["../../packages/domain/src/index.ts"],
+      "@vitalpe/domain/*": ["../../packages/domain/src/*"],
+      "@vitalpe/types": ["../../packages/types/src/index.ts"],
+      "@vitalpe/validation": ["../../packages/validation/src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules", "ios", "android", ".expo"]
+}

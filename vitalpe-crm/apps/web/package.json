@@ -12,6 +12,11 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.16",
+    "@vitalpe/config": "workspace:*",
+    "@vitalpe/domain": "workspace:*",
+    "@vitalpe/integrations": "workspace:*",
+    "@vitalpe/types": "workspace:*",
+    "@vitalpe/validation": "workspace:*",
     "next": "^16.2.11",
     "postgres": "^3.4.9",
     "react": "^19.2.8",

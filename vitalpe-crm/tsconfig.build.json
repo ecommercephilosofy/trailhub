@@ -1,0 +1,18 @@
+{
+  // `pnpm typecheck` — type checks the shared packages, the scripts and the SQL
+  // test suites. The web app is checked by `next build`, which understands the
+  // App Router's generated types; running tsc over it directly would report
+  // false errors about route props it generates at build time.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": [
+    "packages/**/*.ts",
+    "scripts/**/*.ts",
+    "supabase/tests/**/*.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["node_modules", "**/dist", "**/.next", "apps/mobile", "apps/web"]
+}

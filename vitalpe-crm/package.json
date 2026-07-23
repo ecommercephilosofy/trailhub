@@ -12,8 +12,8 @@
     "dev:web": "pnpm --filter @vitalpe/web dev",
     "dev:mobile": "pnpm --filter @vitalpe/mobile start",
     "build": "pnpm --filter @vitalpe/web build",
-    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
-    "typecheck": "tsc -b tsconfig.build.json",
+    "lint": "eslint packages scripts supabase --no-warn-ignored",
+    "typecheck": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "pnpm --filter @vitalpe/web test:e2e",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.14",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
@@ -37,6 +38,7 @@
     "postgres": "^3.4.9",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
+    "typescript-eslint": "^8.65.0",
     "vitest": "^3.0.5"
   },
   "dependencies": {

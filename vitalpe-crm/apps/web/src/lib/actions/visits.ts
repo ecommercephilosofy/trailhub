@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { isManager, query, requireSession } from '@/lib/auth';
 import { friendlyError } from '@/lib/db';
 import { pushVisit, queueVisitSync } from '@/app/api/google/sync-engine';
+import { civilToInstant } from '@/components/calendar/dates';
+import type { CompanyLocation } from '@/components/calendar/types';
 
 /**
  * Visit server actions.
@@ -32,53 +34,12 @@ export interface ActionResult {
   sync?: string;
 }
 
-const MADRID = 'Europe/Madrid';
-
 /**
  * `datetime-local` gives a wall-clock string with no zone. The user is always
  * working in Europe/Madrid, so it is interpreted there — not in the server's
  * zone, which in production is UTC and would silently shift every visit.
  */
-function madridToInstant(value: string): Date | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/.exec(value.trim());
-  if (!match) {
-    const fallback = new Date(value);
-    return Number.isNaN(fallback.getTime()) ? null : fallback;
-  }
-  const [, y, mo, d, h, mi] = match as unknown as [string, string, string, string, string, string];
-  const naiveUtc = Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi));
-  // Two passes: the offset is looked up at the candidate instant, which is
-  // correct on every day of the year including the two DST switches.
-  let guess = naiveUtc;
-  for (let i = 0; i < 2; i += 1) {
-    guess = naiveUtc - offsetAt(new Date(guess));
-  }
-  const result = new Date(guess);
-  return Number.isNaN(result.getTime()) ? null : result;
-}
-
-function offsetAt(instant: Date): number {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: MADRID,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).formatToParts(instant);
-  const read = (type: string): number => Number(parts.find((p) => p.type === type)?.value ?? '0');
-  const asUtc = Date.UTC(
-    read('year'),
-    read('month') - 1,
-    read('day'),
-    read('hour') % 24,
-    read('minute'),
-    read('second'),
-  );
-  return asUtc - instant.getTime();
-}
+const madridToInstant = civilToInstant;
 
 function minutesBetween(start: Date, end: Date): number {
   return Math.max(5, Math.min(1440, Math.round((end.getTime() - start.getTime()) / 60000)));
@@ -427,6 +388,54 @@ export async function completeVisit(formData: FormData): Promise<ActionResult> {
 // ---------------------------------------------------------------------------
 // Manual resync of a single visit
 // ---------------------------------------------------------------------------
+
+/**
+ * Company lookup for the visit form.
+ *
+ * A server action rather than a preloaded list: the workspace holds thousands
+ * of companies and shipping them all to the browser to fill a `<select>` would
+ * be both slow and pointless. Runs inside the caller's RLS context.
+ */
+export async function searchCompanies(
+  term: string,
+): Promise<{ id: string; name: string; subtitle: string }[]> {
+  const session = await requireSession();
+  const needle = term.trim();
+  if (needle.length < 2) return [];
+  return query(session, (q) =>
+    q.many<{ id: string; name: string; subtitle: string }>(
+      `select c.id, c.name,
+              concat_ws(' · ', nullif(c.municipality, ''), nullif(c.province, '')) as subtitle
+         from public.clients c
+        where c.workspace_id = $2 and c.deleted_at is null
+          and (c.name ilike '%' || $1 || '%' or c.name_norm % app.normalize_company($1))
+        order by case when c.name ilike $1 || '%' then 0 else 1 end, c.name
+        limit 15`,
+      [needle, session.workspaceId],
+    ),
+  );
+}
+
+/** The locations of one company, for the "UBICACIÓ" field. */
+export async function companyLocations(clientId: string): Promise<CompanyLocation[]> {
+  const session = await requireSession();
+  if (!clientId) return [];
+  const rows = await query(session, (q) =>
+    q.many<{ id: string; label: string }>(
+      `select l.id,
+              coalesce(
+                nullif(btrim(concat_ws(' · ', nullif(l.name, ''), nullif(l.formatted_address, ''))), ''),
+                nullif(btrim(concat_ws(', ', nullif(l.street, ''), nullif(l.municipality, ''))), ''),
+                l.location_type::text
+              ) as label
+         from public.client_locations l
+        where l.client_id = $1 and l.deleted_at is null
+        order by l.is_primary desc, l.created_at`,
+      [clientId],
+    ),
+  );
+  return rows.map((r) => ({ id: r.id, label: r.label }));
+}
 
 export async function resyncVisit(formData: FormData): Promise<ActionResult> {
   const session = await requireSession();

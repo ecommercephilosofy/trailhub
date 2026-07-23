@@ -85,12 +85,46 @@ export async function createDatabase(options: CreateDbOptions = {}): Promise<PGl
     : new PGlite({ extensions: { pg_trgm } });
   await db.exec(SUPABASE_SHIM);
 
-  for (const file of await listMigrations()) {
+  // A real migration ledger, so a persisted database can be reopened without
+  // replaying migrations that are not idempotent (CREATE TRIGGER is not).
+  await db.exec(`
+    create table if not exists public.schema_migrations (
+      version    text primary key,
+      applied_at timestamptz not null default now()
+    );
+  `);
+  const applied = new Set(
+    (await db.query<{ version: string }>('select version from public.schema_migrations')).rows.map(
+      (r) => r.version,
+    ),
+  );
+
+  const migrations = await listMigrations();
+
+  // Adopt a database created before the ledger existed: if the schema is
+  // clearly already there, record the migrations as applied rather than
+  // replaying them.
+  if (applied.size === 0) {
+    const existing = await db.query<{ n: number }>(
+      `select count(*)::int as n from information_schema.tables
+        where table_schema = 'public' and table_name = 'clients'`,
+    );
+    if ((existing.rows[0]?.n ?? 0) > 0) {
+      for (const file of migrations) {
+        await db.query('insert into public.schema_migrations (version) values ($1)', [file]);
+        applied.add(file);
+      }
+    }
+  }
+
+  for (const file of migrations) {
+    if (applied.has(file)) continue;
     const sql = await readFile(path.join(MIGRATIONS_DIR, file), 'utf8');
     try {
       await db.exec(sql);
+      await db.query('insert into public.schema_migrations (version) values ($1)', [file]);
     } catch (error) {
-      throw new Error(`Migration failed: ${file}\n${(error as Error).message}`);
+      throw new Error(`Migration failed: ${file}\n${(error as Error).message}`, { cause: error });
     }
   }
 
@@ -104,6 +138,7 @@ export async function createDatabase(options: CreateDbOptions = {}): Promise<PGl
   `);
 
   if (options.seed) {
+    // The seed is written to be re-runnable (ON CONFLICT DO NOTHING everywhere).
     const seed = await readFile(SEED_FILE, 'utf8');
     await db.exec(seed);
   }

@@ -52,7 +52,9 @@ export function cellToString(value: ExcelJS.CellValue): string | null {
   if (typeof value === 'boolean') return value ? 'TRUE' : 'FALSE';
   if (typeof value === 'string') return value;
   if (typeof value === 'object') {
-    const v = value as Record<string, unknown>;
+    // ExcelJS models rich text, formulas, hyperlinks and errors as distinct
+    // object shapes; probing by key is the only way to read them uniformly.
+    const v = value as unknown as Record<string, unknown>;
     if ('text' in v && typeof v.text === 'string') return v.text;
     if ('result' in v) return cellToString(v.result as ExcelJS.CellValue);
     if ('richText' in v && Array.isArray(v.richText)) {
