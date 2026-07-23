@@ -97,13 +97,16 @@ function splitUrl(raw: string): SplitUrl | null {
   let host = '';
   if (rest.startsWith('//')) {
     rest = rest.slice(2);
-    const slash = rest.indexOf('/');
-    if (slash === -1) {
+    // The authority ends at the first '/', '?' or '#'. Splitting only on '/'
+    // would swallow the query of an authority-only URL such as
+    // `vitalpe://arribada?candidats=…`, leaving the chooser unparseable.
+    const end = rest.search(/[/?#]/);
+    if (end === -1) {
       host = rest;
       rest = '';
     } else {
-      host = rest.slice(0, slash);
-      rest = rest.slice(slash);
+      host = rest.slice(0, end);
+      rest = rest.slice(end);
     }
   }
 

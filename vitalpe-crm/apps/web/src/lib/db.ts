@@ -23,8 +23,21 @@ const DATA_DIR = process.env.PGLITE_DATA_DIR ?? path.resolve(process.cwd(), '../
 
 export type Params = readonly unknown[];
 
+/** A query function bound to ONE connection for the life of a transaction. */
+type Bound = <T>(sql: string, params: Params) => Promise<T[]>;
+
 interface Backend {
-  query<T>(sql: string, params: Params): Promise<T[]>;
+  /**
+   * Reserves a single connection and runs `fn` against it.
+   *
+   * This is the whole point of the abstraction. `BEGIN`, `SET LOCAL ROLE`,
+   * `set_config(..., true)` and the query itself MUST land on the same
+   * connection: they are transaction-scoped. Issuing them through a pool
+   * without reserving would let `BEGIN` run on one connection and the query on
+   * another — which would execute with **no RLS context at all**. That is a
+   * security bug, not a performance detail.
+   */
+  transaction<T>(fn: (q: Bound) => Promise<T>): Promise<T>;
   kind: 'pglite' | 'postgres';
 }
 
@@ -34,11 +47,18 @@ async function createBackend(): Promise<Backend> {
   const url = process.env.DATABASE_URL;
   if (url) {
     const { default: postgres } = await import('postgres');
-    const sql = postgres(url, { max: 5, prepare: false });
+    const sql = postgres(url, { max: 10, prepare: false });
     return {
       kind: 'postgres',
-      async query<T>(text: string, params: Params): Promise<T[]> {
-        return (await sql.unsafe(text, params as never[])) as unknown as T[];
+      async transaction<T>(fn: (q: Bound) => Promise<T>): Promise<T> {
+        const reserved = await sql.reserve();
+        try {
+          const bound: Bound = async <R>(text: string, params: Params) =>
+            (await reserved.unsafe(text, params as never[])) as unknown as R[];
+          return await fn(bound);
+        } finally {
+          reserved.release();
+        }
       },
     };
   }
@@ -47,11 +67,23 @@ async function createBackend(): Promise<Backend> {
   const { pg_trgm } = await import('@electric-sql/pglite/contrib/pg_trgm');
   const db = new PGlite(DATA_DIR, { extensions: { pg_trgm } });
   await db.waitReady;
+
+  // PGlite is a single embedded connection, so "reserving" is really a mutex:
+  // two overlapping transactions on one connection would interleave their
+  // BEGIN/COMMIT and corrupt each other's scope. Requests are serialised.
+  let queue: Promise<unknown> = Promise.resolve();
+  const bound: Bound = async <T>(text: string, params: Params) => {
+    const result = await db.query<T>(text, params as unknown[]);
+    return result.rows;
+  };
+
   return {
     kind: 'pglite',
-    async query<T>(text: string, params: Params): Promise<T[]> {
-      const result = await db.query<T>(text, params as unknown[]);
-      return result.rows;
+    transaction<T>(fn: (q: Bound) => Promise<T>): Promise<T> {
+      const run = queue.then(() => fn(bound));
+      // Keep the chain alive even when this transaction rejects.
+      queue = run.catch(() => undefined);
+      return run;
     },
   };
 }
@@ -75,35 +107,38 @@ export async function withUser<T>(
   options: { origin?: string; device?: string; correlationId?: string } = {},
 ): Promise<T> {
   const be = await backend();
-  await be.query('begin', []);
-  try {
-    await be.query('set local role authenticated', []);
-    await be.query(`select set_config('request.jwt.claim.sub', $1, true)`, [userId]);
-    await be.query(`select set_config('request.jwt.claim.role', 'authenticated', true)`, []);
-    if (options.origin) await be.query(`select set_config('app.origin', $1, true)`, [options.origin]);
-    if (options.device) await be.query(`select set_config('app.device', $1, true)`, [options.device]);
-    if (options.correlationId) {
-      await be.query(`select set_config('app.correlation_id', $1, true)`, [options.correlationId]);
+  return be.transaction(async (exec) => {
+    await exec('begin', []);
+    try {
+      await exec('set local role authenticated', []);
+      await exec(`select set_config('request.jwt.claim.sub', $1, true)`, [userId]);
+      await exec(`select set_config('request.jwt.claim.role', 'authenticated', true)`, []);
+      if (options.origin) await exec(`select set_config('app.origin', $1, true)`, [options.origin]);
+      if (options.device) await exec(`select set_config('app.device', $1, true)`, [options.device]);
+      if (options.correlationId) {
+        await exec(`select set_config('app.correlation_id', $1, true)`, [options.correlationId]);
+      }
+      const result = await fn(wrap(exec));
+      await exec('commit', []);
+      return result;
+    } catch (error) {
+      await exec('rollback', []).catch(() => undefined);
+      throw error;
     }
-    const query: Query = {
-      async many<T2>(sql: string, params: Params = []) {
-        return be.query<T2>(sql, params);
-      },
-      async one<T2>(sql: string, params: Params = []) {
-        const rows = await be.query<T2>(sql, params);
-        return rows[0] ?? null;
-      },
-      async run(sql: string, params: Params = []) {
-        await be.query(sql, params);
-      },
-    };
-    const result = await fn(query);
-    await be.query('commit', []);
-    return result;
-  } catch (error) {
-    await be.query('rollback', []).catch(() => undefined);
-    throw error;
-  }
+  });
+}
+
+function wrap(exec: Bound): Query {
+  return {
+    many: (sql, params = []) => exec(sql, params),
+    async one(sql, params = []) {
+      const rows = await exec(sql, params);
+      return rows[0] ?? null;
+    },
+    async run(sql, params = []) {
+      await exec(sql, params);
+    },
+  } as Query;
 }
 
 /**
@@ -113,28 +148,18 @@ export async function withUser<T>(
  */
 export async function withServiceRole<T>(fn: (q: Query) => Promise<T>): Promise<T> {
   const be = await backend();
-  await be.query('begin', []);
-  try {
-    await be.query('reset role', []);
-    const query: Query = {
-      async many<T2>(sql: string, params: Params = []) {
-        return be.query<T2>(sql, params);
-      },
-      async one<T2>(sql: string, params: Params = []) {
-        const rows = await be.query<T2>(sql, params);
-        return rows[0] ?? null;
-      },
-      async run(sql: string, params: Params = []) {
-        await be.query(sql, params);
-      },
-    };
-    const result = await fn(query);
-    await be.query('commit', []);
-    return result;
-  } catch (error) {
-    await be.query('rollback', []).catch(() => undefined);
-    throw error;
-  }
+  return be.transaction(async (exec) => {
+    await exec('begin', []);
+    try {
+      await exec('reset role', []);
+      const result = await fn(wrap(exec));
+      await exec('commit', []);
+      return result;
+    } catch (error) {
+      await exec('rollback', []).catch(() => undefined);
+      throw error;
+    }
+  });
 }
 
 export interface Query {

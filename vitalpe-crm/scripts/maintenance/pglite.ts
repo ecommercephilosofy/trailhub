@@ -87,11 +87,15 @@ export async function createDatabase(options: CreateDbOptions = {}): Promise<PGl
 
   // A real migration ledger, so a persisted database can be reopened without
   // replaying migrations that are not idempotent (CREATE TRIGGER is not).
+  // RLS on, and deliberately no policy: this is infrastructure, not data, and
+  // nothing reachable through the API has any business reading it. It also
+  // keeps the "every public table has RLS" assertion honest.
   await db.exec(`
     create table if not exists public.schema_migrations (
       version    text primary key,
       applied_at timestamptz not null default now()
     );
+    alter table public.schema_migrations enable row level security;
   `);
   const applied = new Set(
     (await db.query<{ version: string }>('select version from public.schema_migrations')).rows.map(

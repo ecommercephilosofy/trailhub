@@ -706,3 +706,78 @@ Recorded so they are not mistaken for oversights.
 | `postgres.js` transaction affinity | See §3. Must be fixed before the hosted backend takes concurrent traffic. |
 | Writable master data | `products`, `product_aliases`, `campaigns` and `client_types` have SELECT-only policies, so the ADMINISTRACIÓ screens cannot write them as `authenticated`. Either add ADMIN write policies or route those screens through the service role deliberately. |
 | `google_calendar_connections` DELETE | `revoke select, insert, update` did not revoke `DELETE`, so a user can delete their own connection row. Harmless, arguably intended, but it is an implicit grant rather than an explicit one. |
+
+---
+
+## 30. Transaction affinity is a security property, not a performance one
+
+`withUser()` issues `BEGIN`, `SET LOCAL ROLE authenticated`,
+`set_config('request.jwt.claim.sub', …, true)` and then the actual query. All of
+those are **transaction-scoped**.
+
+The first implementation sent them through a `postgres.js` pool of 5 with
+`sql.unsafe()`. Under concurrent traffic each statement can land on a *different*
+connection — which means a query could execute with **no RLS context set at
+all**. That is not a slow path; it is a hole.
+
+The backend now exposes `transaction(fn)` instead of `query(sql)`:
+
+- **postgres.js** — `sql.reserve()` pins one connection for the whole
+  transaction and releases it in a `finally`.
+- **PGlite** — a single embedded connection, so "reserving" is a mutex.
+  Overlapping transactions would interleave their `BEGIN`/`COMMIT` and corrupt
+  each other's scope, so requests are serialised through a promise chain that
+  survives rejections.
+
+The same reasoning already applied in the test harness: `asUser()` wraps
+everything in a transaction because `SET LOCAL` outside one silently does
+nothing — and a suite that passes because the role never changed proves nothing.
+That was the first bug this project found, and it is the same bug twice.
+
+---
+
+## 31. `schema_migrations` has RLS and no policy
+
+The local migration ledger is a table in `public`, so `pnpm db:local`'s
+"every public table has RLS" assertion caught it immediately. RLS is enabled and
+**no policy is granted**: it is infrastructure, not data, and nothing reachable
+through the API has any business reading it.
+
+Keeping the assertion honest was worth more than the two lines it cost. This is
+also why the ledger lives in the PGlite harness rather than in a migration — on
+hosted Supabase the CLI does its own tracking, and the production schema has 41
+tables, not 42.
+
+---
+
+## 32. `lint` and `typecheck` now exist
+
+Both scripts were declared in `package.json` with nothing behind them.
+
+- `eslint.config.mjs` — flat config, deliberately narrow: unused symbols,
+  `any` creeping into the data layer, caught-error causes. Formatting is not
+  linted; there is no style argument to have here. It found two real defects
+  (a dead assignment and a discarded error cause).
+- `tsconfig.build.json` — type checks `packages`, `scripts` and the SQL test
+  suites. The web app is checked by `next build`, which understands the App
+  Router's generated types; running `tsc` over it directly reports false errors
+  about route props that do not exist until build time.
+
+Fixing the resulting errors exposed a genuine typing bug: a generic helper
+`ok<T>(value: T | null, …)` inferred `T = null` when called as `ok(null, …)`,
+producing a `Normalized<null>` no caller could consume. Split into `ok()` and
+`empty()`, where `empty()` returns `Normalized<never>` — assignable to every
+`Normalized<T>`.
+
+---
+
+## 33. Deep-link authority parsing
+
+`vitalpe://arribada?candidats=…` has no path: everything after `//` is the
+authority. The parser split the authority on `/` only, so the query string was
+swallowed into the host and never parsed — the multi-candidate arrival chooser
+could never have opened.
+
+The authority now ends at the first `/`, `?` or `#`, per RFC 3986. Caught by the
+mobile test suite, which is the only reason it was found before a device ever
+ran the code.
