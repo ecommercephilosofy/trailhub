@@ -1,0 +1,1279 @@
+{
+  "source_file": "Listado_de_Bodegas_Elaboradoras_de_Cava_Certificadas.pdf",
+  "sha256": "35086d1dbf67ec3bcc37bdb4f2920bfc1264faee06e225a2f698bca0656dd59c",
+  "extracted_at": "2026-07-23",
+  "companies": [
+    {
+      "name": "AGR. I SEC. DE CREDIT DE LLORENÇ DEL PENEDES, S.C.C.L.",
+      "municipality": "Llorenç del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "AGRUPACIO VITICULTORS ARTESANALS, S.L.",
+      "municipality": "La Granada",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "AGUSTI TORELLO , S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ALTA ALELLA, S.L.",
+      "municipality": "Tiana",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ANDRES VALIENTE E HIJOS, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ANTONIO MASCARO, S.L.",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "AVINYO VINYATERS, S.L.",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BATLLE Y MONTSERRAT, S.L.",
+      "municipality": "Santa Margarida i Els Monjos",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BERRAL I MIRO, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BLANCHER CAPDEVILA PUJOL, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS CA N'ESTELLA, S.L.",
+      "municipality": "Sant Esteve Sesrovires",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS ESCUDERO, S.L.",
+      "municipality": "Gravalos",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS FAUSTINO, S.L.",
+      "municipality": "Oyón",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS HISPANO SUIZAS, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS JAUME SERRA, S.L.",
+      "municipality": "Vilanova i La Geltrú",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS LANGA, HNOS, S.L.",
+      "municipality": "Calatayud",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS MARCELINO DIAZ, S.A.",
+      "municipality": "Almendralejo",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS MONASTERIO DE VERUELA, S.L.",
+      "municipality": "Ainzón",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS MUGA, S.L.",
+      "municipality": "Haro",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS ONDARRE, S.A.",
+      "municipality": "Viana",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS PEÑALBA LOPEZ, S.L.",
+      "municipality": "Aranda de Duero",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS ROMALE, S.L.",
+      "municipality": "Almendralejo",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS SAN VALERO, S.COOP.",
+      "municipality": "Cariñena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGAS TROBAT, S.A.",
+      "municipality": "Garriguella",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BODEGUES SUMARROCA, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "BUTI MASANA, MARIA BLANCA",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CALAF VIDALES, FRANCESC",
+      "municipality": "Nulles",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CAN QUETU, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CANALS NADAL,S.L.",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CANALS Y DOMINGO, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CANALS Y MUNNE, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CASTELL D'AGE, S.A.",
+      "municipality": "Sant Llorenç d'Hortons",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CASTELL D'OR, S.L. (VILA-RODONA)",
+      "municipality": "Vila-Rodona",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CASTELLBLANCH, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CASTELO DE PEDREGOSA, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CAVAS DEL CASTILLO DE PERELADA, S.A.",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CAVAS J. HILL, S.L.",
+      "municipality": "Olèrdola",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CAVAS PARES BALTA, S.A.",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER CAN BATLLE, S.C.P.",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER CARLES ANDREU, S.L.",
+      "municipality": "Pira",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER COOPERATIU D'ARTES, S.C.C.L.",
+      "municipality": "Artés",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER JOSEP M. FERRET, S.L.",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER REVERTE, S.C.P.",
+      "municipality": "Salomó",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLER VELL, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS ALSINA, S.L.",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS CAN SURIOL DEL CASTELL, S.L.",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS DOMENYS I S.C., S.C.C.L. (ROCAFORT)",
+      "municipality": "Rocafort de Queralt",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS GRAU DORIA, S.L.",
+      "municipality": "Canyelles",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS MOST DORÉ, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS PLANAS ALBAREDA, S.L.",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CELLERS VIVES GAU, S.L.",
+      "municipality": "Aiguamurcia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CHOZAS CARRASCAL, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COCA SOLER, S.L.",
+      "municipality": "Turis",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CODORNIU, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COLET ROMERO ELABORADORS, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COLLDEJUI, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COLOMER ELABORADORS ARTESANS, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COOP. VINICOLA DEL PENEDES, S.C.C.L. (COVIDES) (SANT SADURNÍ)",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "COVIÑAS, COOP. V.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "CUSCO I ESTEVE, S.L.",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "DOMINGUEZ CRUCES, FRANCISCO",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "DOMINIO DE LA VEGA, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ESMEL, S.C.P.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "EXPLOTACIONES SADURNI BEGAS, S.A.",
+      "municipality": "Begues",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FELIX MASSANA , S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FERMI BOHIGAS, S.A.",
+      "municipality": "Ódena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FERRÉ I CATASÚS, S.L.",
+      "municipality": "La Granada",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FERRER MATA, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FINCA VALLDOSERA, S.A.",
+      "municipality": "Olèrdola",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FONPINET, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FREIXA RIGAU, S.A.",
+      "municipality": "Capmany",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "FREIXENET, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GASTON COTY, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GATELL ESTATE WINES, S.L.",
+      "municipality": "Bonastre",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GIBERT ARISSA, JAUME",
+      "municipality": "Artés",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GIRÓ DEL GORNER, S.L.",
+      "municipality": "Puigdàlber",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GIRO RIBOT, S.L.",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "GONZALEZ BYASS, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "HERETAT GUILERA, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "HERETAT MAS TINELL, S.L.",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "J. PUJADO, S.L.",
+      "municipality": "Ordal",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "J.B. BERGER, S.A.",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JANE BAQUES, S.L.",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JANE SANTACANA, S.L.",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JANE VENTURA, S.A.",
+      "municipality": "El Vendrell",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JAUME GIRO I GIRO, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JOSEP MASACHS, S.L.",
+      "municipality": "Torrelles de Foix",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JOSEP TORRES SIBILL, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JOVE MARTI, DOMINGO",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "JUVE Y CAMPS, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LA XARMADA, S.C.C.L.",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LLAGRIMA D'OR, S.L.U.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LLEURE OLESA, S.L.",
+      "municipality": "Olesa de Bonesvalls",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LLOPART GÜELL, S.L.",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LLUCH LLUCH, JORDI",
+      "municipality": "Sant Quintí de Mediona",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LOPEZ MORENAS, S.L.",
+      "municipality": "Almendralejo",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "LUDENS, S.A.",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MAINEGRA, S.A.",
+      "municipality": "Mendavia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MARIA CASANOVAS I ROIG, S.L.",
+      "municipality": "Sant Jaume Sesoliveres",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MARIA OLIVER PORTI, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MARQUES DE LA CONCORDIA FAMILY OF WINES, S.L.U.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MARTI GRAU VITICULTORS, S.L.",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASIA CODINA, S.L.",
+      "municipality": "Puigdàlber",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASIA PUIGMOLTO, S.A.",
+      "municipality": "Castellet i La Gornal",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASIA ROMAGOSA, S.L.",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASIA VALLFORMOSA, S.L.",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASOLIVE, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MASSANA NOYA, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MIR VIDAL, JAUME",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MOLÍ PARELLADA, S.L.",
+      "municipality": "Torretavit",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MONT MARÇAL VINICOLA, S.A.",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "MONTSERRAT ESTEVE, PEDRO",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "OLIVELLA ROVIRA, PERE",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "OLIVER VITICULTORS, S.L.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ORGANISME AUTÒNOM DES. DE LA CONCA DE BARBERÀ",
+      "municipality": "Montblanc",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ORIOL ROSSELL, S.A.",
+      "municipality": "Castellet i La Gornal",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PAGES ENTRENA, S.L.",
+      "municipality": "Piera",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PAGO DE THARSYS, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PARATO VINICOLA, S.L.",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PARXET, S.A.",
+      "municipality": "Sant Cugat Sesgarrigues",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PERE CANALS, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PERE RIUS, S.L.",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PERE VENTURA I FAMILIA, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PEREZ ROURA, JUAN ANTONIO",
+      "municipality": "Alella",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PONS I FONT ELABORADORS, S.L.",
+      "municipality": "La Granada",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "PUJOL VILALLONGA, JOAN",
+      "municipality": "Cornellá de Llobregat",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "RAMON CANALS CANALS, S.A.",
+      "municipality": "Castellví de Rosanes",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "RAVENTOS ROSELL, S.L.",
+      "municipality": "Masquefa",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "REXACH BAQUES, S.A.",
+      "municipality": "Guardiola de Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "RICARD M. DE SIMON, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "RIGOL ORDI, Mª ISABEL",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ROGER GOULART, S.A.",
+      "municipality": "Sant Esteve Sesrovires",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ROS AMIGO, JAUME",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ROSELL Y FORMOSA, S.A.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "ROVELLATS, S.A.",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "S.A.T . MAS LLUET Nº 907",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SADEVE, S.A.",
+      "municipality": "Torrelavit",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SALVANY FORNS, LAURA",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SEGURA PUJADAS, JOAN",
+      "municipality": "Torrelavit",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SEGURA VIUDAS, S.A.",
+      "municipality": "Torrelavit",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SOLER JOVE, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "SUC. DE RAFAEL DE CAMPS, S.C.P.",
+      "municipality": "Subirats",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "TORNE CALDU, FELIX",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "TORRE ORIA, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "TORREDANOIA, S.L.",
+      "municipality": "Piera",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "TORRENS MOLINER, S.L.",
+      "municipality": "Piera",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "TORRES PRUNERA, S.L.",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "U MES U FAN TRES, S.L.",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "UNIÓN VINÍCOLA DEL ESTE, S.L.",
+      "municipality": "Requena",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "V.C. MONASTELL, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VIA DE LA PLATA, S.L.",
+      "municipality": "Almendralejo",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VIADER CAYON, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VIDAL MORGADES, RAMON",
+      "municipality": "Aiguamurcia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VINICOLA DE SARRAL I SECCIÓ DE CREDIT, S.C.C.L.",
+      "municipality": "Sarral",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VINICOLA DEL PAIS, S.A.U.",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VINICOLA I SEC. CREDIT S. ISIDRE DE NULLES, S.C.C.L.",
+      "municipality": "Nulles",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VINS EL CEP, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VIÑA TORREBLANCA, S.L.",
+      "municipality": "Olèrdola",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    },
+    {
+      "name": "VIVES AMBROS, S.L.",
+      "municipality": "Montferri",
+      "province": null,
+      "other_columns": {
+        "ALCANCE": "Elaboración de Cava"
+      }
+    }
+  ]
+}

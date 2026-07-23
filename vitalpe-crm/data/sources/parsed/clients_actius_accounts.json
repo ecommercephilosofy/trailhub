@@ -1,0 +1,603 @@
+{
+  "source_file": "CLIENTS_ACTIUS.pdf",
+  "sha256": "6aff8a707b77751ef04c9f375c1f164ee3da512b32675a484672640db5c866f5",
+  "extracted_at": "2026-07-23",
+  "period": {
+    "from": "2025-08-01",
+    "to": "2026-06-03"
+  },
+  "accounts": [
+    {
+      "account_code": "430000009",
+      "company_name": "MIGUEL TORRES S.A.",
+      "movement_count": 4,
+      "first_movement_date": "2026-03-26",
+      "last_movement_date": "2026-05-15",
+      "page": 1
+    },
+    {
+      "account_code": "430000099",
+      "company_name": "CEVIPE GRUP COOPERATIU, SCCL",
+      "movement_count": 2,
+      "first_movement_date": "2026-05-25",
+      "last_movement_date": "2026-05-29",
+      "page": 1
+    },
+    {
+      "account_code": "4300001",
+      "company_name": "JOAN SEGURA PUJADAS",
+      "movement_count": 5,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 1
+    },
+    {
+      "account_code": "4300011",
+      "company_name": "FREIXEDAS VINICOLA S.L.",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-09-09",
+      "page": 1
+    },
+    {
+      "account_code": "4300025",
+      "company_name": "CADES PENEDÈS",
+      "movement_count": 22,
+      "first_movement_date": "2025-09-06",
+      "last_movement_date": "2026-01-13",
+      "page": 1
+    },
+    {
+      "account_code": "4300049",
+      "company_name": "CAN QUETU SL",
+      "movement_count": 9,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-08",
+      "page": 1
+    },
+    {
+      "account_code": "4300060",
+      "company_name": "CANALS I MUNNÉ SL",
+      "movement_count": 2,
+      "first_movement_date": "2026-01-28",
+      "last_movement_date": "2026-02-13",
+      "page": 2
+    },
+    {
+      "account_code": "4300072",
+      "company_name": "CAVAS DEL CASTILLO DE PERELADA",
+      "movement_count": 5,
+      "first_movement_date": "2025-12-02",
+      "last_movement_date": "2026-01-16",
+      "page": 2
+    },
+    {
+      "account_code": "4300075",
+      "company_name": "BERRAL I MIRO SL",
+      "movement_count": 27,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-15",
+      "page": 2
+    },
+    {
+      "account_code": "4300082",
+      "company_name": "VINICOLA DE GANDESA SL",
+      "movement_count": 7,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-03-10",
+      "page": 2
+    },
+    {
+      "account_code": "4300092",
+      "company_name": "PERE MONTSERRAT ESTEVE",
+      "movement_count": 10,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-04-14",
+      "page": 3
+    },
+    {
+      "account_code": "4304016",
+      "company_name": "BODEGUES SUMARROCA",
+      "movement_count": 11,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-06-01",
+      "page": 3
+    },
+    {
+      "account_code": "4304023",
+      "company_name": "viticultura Ramon Junyent SCP",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 3
+    },
+    {
+      "account_code": "4304028",
+      "company_name": "CELLER CAN BATLLE SCP",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-03-31",
+      "page": 3
+    },
+    {
+      "account_code": "4304031",
+      "company_name": "BODEGAS CARBO MAS SA",
+      "movement_count": 1,
+      "first_movement_date": "2026-03-31",
+      "last_movement_date": "2026-03-31",
+      "page": 3
+    },
+    {
+      "account_code": "4304061",
+      "company_name": "GASTON COTY S.A",
+      "movement_count": 5,
+      "first_movement_date": "2026-02-28",
+      "last_movement_date": "2026-04-28",
+      "page": 3
+    },
+    {
+      "account_code": "4304068",
+      "company_name": "CAVAS ST. MARTIN S.A",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-22",
+      "last_movement_date": "2025-09-10",
+      "page": 3
+    },
+    {
+      "account_code": "4304073",
+      "company_name": "MASIA VALLFORMOSA S.L",
+      "movement_count": 11,
+      "first_movement_date": "2025-10-03",
+      "last_movement_date": "2026-04-29",
+      "page": 4
+    },
+    {
+      "account_code": "4304090",
+      "company_name": "ORIOL ROSSELL S.A",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-10-15",
+      "page": 4
+    },
+    {
+      "account_code": "4304093",
+      "company_name": "VENTAS COMPTAT",
+      "movement_count": 14,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-26",
+      "page": 4
+    },
+    {
+      "account_code": "4304103",
+      "company_name": "CAVAS BERNARD MASSARD S.A.",
+      "movement_count": 8,
+      "first_movement_date": "2025-09-05",
+      "last_movement_date": "2025-10-06",
+      "page": 4
+    },
+    {
+      "account_code": "4304118",
+      "company_name": "MASIA PUIGMOLTO S.L.",
+      "movement_count": 16,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-08",
+      "page": 4
+    },
+    {
+      "account_code": "4304120",
+      "company_name": "ROQUETA ORIGEN S.L",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-11-25",
+      "page": 5
+    },
+    {
+      "account_code": "4304128",
+      "company_name": "MARIA OLIVER PORTI S.L",
+      "movement_count": 4,
+      "first_movement_date": "2025-09-16",
+      "last_movement_date": "2026-03-16",
+      "page": 5
+    },
+    {
+      "account_code": "4304170",
+      "company_name": "AGUSTI FONT ESTRUCH",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304172",
+      "company_name": "MANUEL MIRET CASANOVAS",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304174",
+      "company_name": "JOSEP MARIA RIBAS NOGUES",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304177",
+      "company_name": "PERE MARIMON MONTSERRAT",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304178",
+      "company_name": "CAL SABATE S.C.P",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-08-01",
+      "page": 5
+    },
+    {
+      "account_code": "4304179",
+      "company_name": "EUGENI TORNER DURAN",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304180",
+      "company_name": "PERE SURIA PASCUAL",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 5
+    },
+    {
+      "account_code": "4304181",
+      "company_name": "NATIVITAT SONET DOMENECH",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-08-01",
+      "page": 6
+    },
+    {
+      "account_code": "4304185",
+      "company_name": "CELLERS MOST DORÉ S.L",
+      "movement_count": 5,
+      "first_movement_date": "2026-03-20",
+      "last_movement_date": "2026-04-13",
+      "page": 6
+    },
+    {
+      "account_code": "4304188",
+      "company_name": "AGRUPACIO VITICULTORS ARTESANA",
+      "movement_count": 3,
+      "first_movement_date": "2026-01-08",
+      "last_movement_date": "2026-04-24",
+      "page": 6
+    },
+    {
+      "account_code": "4304192",
+      "company_name": "JOAN PAGES RIBA",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 6
+    },
+    {
+      "account_code": "4304194",
+      "company_name": "VICENTE RUBIO CASTILLO",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 6
+    },
+    {
+      "account_code": "4304196",
+      "company_name": "FINCA LA BARBARANA S.L",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 6
+    },
+    {
+      "account_code": "4304204",
+      "company_name": "IGNASI ROMEU SOLE",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-08-01",
+      "page": 6
+    },
+    {
+      "account_code": "4304205",
+      "company_name": "JOAN RAVENTOS ROSELL S.L",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 6
+    },
+    {
+      "account_code": "4304209",
+      "company_name": "UNITED WINERIES ESTATES S.A.U",
+      "movement_count": 2,
+      "first_movement_date": "2026-02-28",
+      "last_movement_date": "2026-03-10",
+      "page": 6
+    },
+    {
+      "account_code": "4304210",
+      "company_name": "MIQUEL ESCALA CAMPS",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-19",
+      "page": 6
+    },
+    {
+      "account_code": "4304224",
+      "company_name": "CA L´EUGENI S.C.P",
+      "movement_count": 3,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-12-31",
+      "page": 6
+    },
+    {
+      "account_code": "4304225",
+      "company_name": "NIL FONT FORNS",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 7
+    },
+    {
+      "account_code": "4304231",
+      "company_name": "UNIDAD TECNICA DE INNOVACION Y D",
+      "movement_count": 1,
+      "first_movement_date": "2026-03-31",
+      "last_movement_date": "2026-03-31",
+      "page": 7
+    },
+    {
+      "account_code": "4304238",
+      "company_name": "BODEGAS PINORD S.A",
+      "movement_count": 12,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-06-02",
+      "page": 7
+    },
+    {
+      "account_code": "4304239",
+      "company_name": "ALBERT RAVENTOS SEGURA",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 7
+    },
+    {
+      "account_code": "4304242",
+      "company_name": "VINS NADAL S.L",
+      "movement_count": 6,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-06-03",
+      "page": 7
+    },
+    {
+      "account_code": "4304243",
+      "company_name": "CELLER CAN BATLLE S.L",
+      "movement_count": 3,
+      "first_movement_date": "2026-03-12",
+      "last_movement_date": "2026-05-08",
+      "page": 7
+    },
+    {
+      "account_code": "4304245",
+      "company_name": "JOSEP MASACHS",
+      "movement_count": 33,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-06-02",
+      "page": 7
+    },
+    {
+      "account_code": "4304251",
+      "company_name": "FERRE I CATASUS S.L",
+      "movement_count": 7,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-18",
+      "page": 8
+    },
+    {
+      "account_code": "4304257",
+      "company_name": "BODEGUES CA N´ESTELLA S.L",
+      "movement_count": 2,
+      "first_movement_date": "2025-11-01",
+      "last_movement_date": "2026-01-26",
+      "page": 8
+    },
+    {
+      "account_code": "4304260",
+      "company_name": "SCS. DE F. MASENS S.A",
+      "movement_count": 2,
+      "first_movement_date": "2025-10-20",
+      "last_movement_date": "2025-11-20",
+      "page": 8
+    },
+    {
+      "account_code": "4304266",
+      "company_name": "DERIVADOS VITIVINICOLES GARRIDO",
+      "movement_count": 2,
+      "first_movement_date": "2025-12-01",
+      "last_movement_date": "2026-01-22",
+      "page": 8
+    },
+    {
+      "account_code": "4304273",
+      "company_name": "CELLER ENTREVINYES S.L",
+      "movement_count": 1,
+      "first_movement_date": "2026-03-12",
+      "last_movement_date": "2026-03-12",
+      "page": 8
+    },
+    {
+      "account_code": "4304276",
+      "company_name": "CELLER CAL FERU S.L",
+      "movement_count": 4,
+      "first_movement_date": "2025-10-10",
+      "last_movement_date": "2026-01-30",
+      "page": 8
+    },
+    {
+      "account_code": "4304279",
+      "company_name": "LLUIS VICH SASTRE",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 9
+    },
+    {
+      "account_code": "4304281",
+      "company_name": "FINCA AGRICOLA PARERA S.L",
+      "movement_count": 6,
+      "first_movement_date": "2026-03-12",
+      "last_movement_date": "2026-05-11",
+      "page": 9
+    },
+    {
+      "account_code": "4304290",
+      "company_name": "COLLDEJUI S.L",
+      "movement_count": 10,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-05-25",
+      "page": 9
+    },
+    {
+      "account_code": "4304291",
+      "company_name": "ROVELLATS S.A",
+      "movement_count": 1,
+      "first_movement_date": "2025-10-03",
+      "last_movement_date": "2025-10-03",
+      "page": 9
+    },
+    {
+      "account_code": "4304310",
+      "company_name": "ALMIRALL SCP",
+      "movement_count": 2,
+      "first_movement_date": "2026-05-08",
+      "last_movement_date": "2026-05-18",
+      "page": 9
+    },
+    {
+      "account_code": "4304325",
+      "company_name": "CELLER VELL S.A",
+      "movement_count": 1,
+      "first_movement_date": "2026-03-31",
+      "last_movement_date": "2026-03-31",
+      "page": 9
+    },
+    {
+      "account_code": "4304326",
+      "company_name": "Aarstiderne a/s engros",
+      "movement_count": 5,
+      "first_movement_date": "2025-10-01",
+      "last_movement_date": "2026-05-26",
+      "page": 9
+    },
+    {
+      "account_code": "4304333",
+      "company_name": "DIFUSION GASTRONOMICA S.L",
+      "movement_count": 7,
+      "first_movement_date": "2025-08-08",
+      "last_movement_date": "2026-05-25",
+      "page": 9
+    },
+    {
+      "account_code": "4304338",
+      "company_name": "PERE BAQUES BAQUES",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 10
+    },
+    {
+      "account_code": "4304344",
+      "company_name": "DASHANG INVESTMENT TRADING S.A",
+      "movement_count": 2,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2025-10-24",
+      "page": 10
+    },
+    {
+      "account_code": "4304349",
+      "company_name": "BRINS D´OPORTUNITATS EMPRESA D´",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 10
+    },
+    {
+      "account_code": "4304350",
+      "company_name": "EUDALD PLANELLA CUTRINA",
+      "movement_count": 1,
+      "first_movement_date": "2026-05-19",
+      "last_movement_date": "2026-05-19",
+      "page": 10
+    },
+    {
+      "account_code": "4304352",
+      "company_name": "CAVA SOGAS MASCARÓ S.L",
+      "movement_count": 5,
+      "first_movement_date": "2025-08-22",
+      "last_movement_date": "2026-03-12",
+      "page": 10
+    },
+    {
+      "account_code": "4304355",
+      "company_name": "L´OLIVERA SCCL- CAN CALOPA",
+      "movement_count": 2,
+      "first_movement_date": "2025-09-18",
+      "last_movement_date": "2025-09-23",
+      "page": 10
+    },
+    {
+      "account_code": "4304356",
+      "company_name": "KATXINA RESTAURANTE S.L",
+      "movement_count": 2,
+      "first_movement_date": "2025-11-14",
+      "last_movement_date": "2025-11-20",
+      "page": 10
+    },
+    {
+      "account_code": "4304357",
+      "company_name": "CA LA KATY S.L",
+      "movement_count": 9,
+      "first_movement_date": "2025-12-04",
+      "last_movement_date": "2026-04-09",
+      "page": 10
+    },
+    {
+      "account_code": "4304358",
+      "company_name": "ALANI HIGIENE PROFESIONAL S.L.U",
+      "movement_count": 2,
+      "first_movement_date": "2026-01-31",
+      "last_movement_date": "2026-03-10",
+      "page": 10
+    },
+    {
+      "account_code": "430462",
+      "company_name": "GERARD MARISTANY BADELL",
+      "movement_count": 2,
+      "first_movement_date": "2026-04-22",
+      "last_movement_date": "2026-04-27",
+      "page": 10
+    },
+    {
+      "account_code": "4308995",
+      "company_name": "CLIENTS VI PTE DE FRAR",
+      "movement_count": 22,
+      "first_movement_date": "2025-08-01",
+      "last_movement_date": "2026-03-19",
+      "page": 11
+    }
+  ]
+}

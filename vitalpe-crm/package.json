@@ -1,0 +1,43 @@
+{
+  "name": "vitalpe-crm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": { "node": ">=20.11" },
+  "scripts": {
+    "dev": "pnpm --filter @vitalpe/web dev",
+    "dev:web": "pnpm --filter @vitalpe/web dev",
+    "dev:mobile": "pnpm --filter @vitalpe/mobile start",
+    "build": "pnpm --filter @vitalpe/web build",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "typecheck": "tsc -b tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "pnpm --filter @vitalpe/web test:e2e",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "db:migrate": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:seed": "tsx scripts/maintenance/seed.ts",
+    "db:local": "tsx scripts/maintenance/pglite-apply.ts",
+    "import:inspect": "tsx scripts/import/inspect.ts",
+    "import:run": "tsx scripts/import/run.ts",
+    "import:verify": "tsx scripts/import/verify.ts",
+    "export:data": "tsx scripts/export/export.ts"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^9.18.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "zod": "^3.24.1"
+  }
+}
