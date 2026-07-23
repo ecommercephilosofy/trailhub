@@ -448,8 +448,9 @@ export function parseRelativeDate(
 
   // -- 4. "d'aquí a quinze dies", "dentro de 2 semanas", "d'aquí a un mes" --
   {
+    // Units are listed longest-first so "meses" is never truncated to "mes".
     const re = new RegExp(
-      String.raw`\b(?:d'aqui\s+a|d\s*aqui\s+a|dintre\s+de|dins\s+de|dentro\s+de|en)\s+(\d{1,3}|${NUMBER_WORD_ALT})\s+(dies|dias|setmanes|semanas|mesos|meses)\b`,
+      String.raw`\b(?:d'aqui\s+a|d\s*aqui\s+a|dintre\s+de|dins\s+de|dentro\s+de|en)\s+(\d{1,3}|${NUMBER_WORD_ALT})\s+(setmanes|setmana|semanas|semana|mesos|meses|dies|dias|mes|dia)\b`,
     );
     const m = re.exec(haystack);
     if (m !== null) {
@@ -460,7 +461,7 @@ export function parseRelativeDate(
       const unit = m[2] as string;
       const matchedText = original(m.index, m[0].length);
       const time = extractTime(haystack, m.index, m.index + m[0].length);
-      if (unit === 'mesos' || unit === 'meses') {
+      if (unit === 'mesos' || unit === 'meses' || unit === 'mes') {
         const absolute = todayParts.year * 12 + (todayParts.month - 1) + amount;
         const year = Math.floor(absolute / 12);
         const month = (absolute % 12) + 1;
@@ -469,7 +470,9 @@ export function parseRelativeDate(
           matchedText,
         };
       }
-      const days = unit === 'setmanes' || unit === 'semanas' ? amount * 7 : amount;
+      const isWeeks =
+        unit === 'setmanes' || unit === 'setmana' || unit === 'semanas' || unit === 'semana';
+      const days = isWeeks ? amount * 7 : amount;
       return {
         date: at(todayParts.year, todayParts.month, todayParts.day + days, time),
         matchedText,

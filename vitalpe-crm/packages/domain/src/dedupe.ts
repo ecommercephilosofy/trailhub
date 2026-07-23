@@ -54,9 +54,9 @@ export interface DuplicateScore {
 /** Weight of every positive signal. Exported so the UI can explain a score. */
 export const DEDUPE_WEIGHTS = Object.freeze({
   taxIdMatch: 0.6,
-  nameExact: 0.3,
+  nameExact: 0.35,
   /** Multiplied by the trigram similarity when the names are not identical. */
-  nameSimilar: 0.3,
+  nameSimilar: 0.35,
   aliasMatch: 0.2,
   phoneMatch: 0.2,
   corporateEmailMatch: 0.2,
@@ -65,8 +65,8 @@ export const DEDUPE_WEIGHTS = Object.freeze({
   webDomainMatch: 0.2,
   addressMatch: 0.1,
   sharedContact: 0.1,
-  municipalityMatch: 0.05,
-  provinceMatch: 0.03,
+  municipalityMatch: 0.1,
+  provinceMatch: 0.05,
 });
 
 /** Penalty applied when a hard identity field is populated on both sides and differs. */
@@ -82,6 +82,23 @@ export const NAME_SIMILARITY_THRESHOLD = 0.5;
 
 /** Scores at or above this land in the review queue; below it we do not bother a human. */
 export const DEDUPE_REVIEW_THRESHOLD = 0.45;
+
+/**
+ * Tax-id identity key.
+ *
+ * The database stores `tax_id_norm = app.normalize_text(tax_id)`, which turns
+ * "B-12345678" into "b 12345678" and therefore does NOT collapse it onto
+ * "B12345678". For a fiscal identifier that separator is pure formatting, so
+ * dedupe drops the spaces too. This is deliberately STRICTER than the database
+ * key: `clients_tax_id_uq` still rejects the exactly-equal case, and this
+ * catches the differently-punctuated one. See DECISIONS.md.
+ */
+export function normalizeTaxId(input: string | null | undefined): string | null {
+  const base = normalizeText(input);
+  if (base === null) return null;
+  const compact = base.replace(/ /g, '');
+  return compact === '' ? null : compact;
+}
 
 function normalizedSet(
   values: readonly (string | null | undefined)[] | undefined,
@@ -138,8 +155,8 @@ export function duplicateScore(a: DedupeCandidate, b: DedupeCandidate): Duplicat
   const aliasesB = normalizedSet([b.name, ...(b.aliases ?? [])], normalizeCompany);
   const aliasMatch = !nameExact && intersects(aliasesA, aliasesB);
 
-  const taxA = normalizeText(a.taxId);
-  const taxB = normalizeText(b.taxId);
+  const taxA = normalizeTaxId(a.taxId);
+  const taxB = normalizeTaxId(b.taxId);
   const taxIdMatch = taxA !== null && taxA === taxB;
   const taxIdConflict = conflicts(taxA, taxB);
 

@@ -15,6 +15,14 @@ import { z } from 'zod';
  * unrelated zod usage elsewhere in the monorepo.
  */
 export const caErrorMap: z.ZodErrorMap = (issue, ctx) => {
+  // zod runs the error maps in a chain and hands each one the previous result as
+  // `ctx.defaultError`. If a schema supplied its own message (`required_error`,
+  // `.min(1, '…')`, …) it has already landed there, and it is more specific than
+  // anything a generic translation could say — so leave it alone. We only step
+  // in when what we received is still zod's own English default.
+  const zodDefault = z.defaultErrorMap(issue, { data: ctx.data, defaultError: '' }).message;
+  if (ctx.defaultError !== zodDefault) return { message: ctx.defaultError };
+
   switch (issue.code) {
     case z.ZodIssueCode.invalid_type:
       if (issue.received === 'undefined' || issue.received === 'null') {

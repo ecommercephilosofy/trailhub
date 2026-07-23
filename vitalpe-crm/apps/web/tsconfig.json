@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@vitalpe/domain": [
+        "../../packages/domain/src/index.ts"
+      ],
+      "@vitalpe/domain/*": [
+        "../../packages/domain/src/*"
+      ],
+      "@vitalpe/types": [
+        "../../packages/types/src/index.ts"
+      ],
+      "@vitalpe/validation": [
+        "../../packages/validation/src/index.ts"
+      ],
+      "@vitalpe/config": [
+        "../../packages/config/src/index.ts"
+      ],
+      "@vitalpe/integrations/*": [
+        "../../packages/integrations/src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

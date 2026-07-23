@@ -54,6 +54,11 @@ const SUPABASE_SHIM = /* sql */ `
     $fn$;
 
   grant usage on schema public to anon, authenticated, service_role;
+  -- Supabase grants the API roles usage on auth so auth.uid() is callable from
+  -- SECURITY INVOKER functions. Without it, every domain function fails as a
+  -- normal user and the RLS suite would test nothing.
+  grant usage on schema auth to anon, authenticated, service_role;
+  grant select on auth.users to service_role;
   alter default privileges in schema public
     grant all on tables to anon, authenticated, service_role;
   alter default privileges in schema public
@@ -89,10 +94,11 @@ export async function createDatabase(options: CreateDbOptions = {}): Promise<PGl
     }
   }
 
-  // Grants are re-applied after migrations because tables created by a
-  // migration do not inherit the default privileges set before it ran.
+  // Table privileges come from the default privileges set before the
+  // migrations ran, exactly as on Supabase. They are deliberately NOT
+  // re-granted here: a blanket GRANT after the fact would undo the
+  // column-level REVOKEs that keep OAuth tokens unreadable by the API roles.
   await db.exec(`
-    grant select, insert, update, delete on all tables in schema public to anon, authenticated;
     grant usage, select on all sequences in schema public to anon, authenticated;
     grant usage on schema app to anon, authenticated;
   `);
@@ -107,6 +113,10 @@ export async function createDatabase(options: CreateDbOptions = {}): Promise<PGl
 /**
  * Runs `fn` as a specific end user with a specific Postgres role, exactly as
  * PostgREST would: RLS on, auth.uid() populated. Used by the RLS test suite.
+ *
+ * The transaction is not optional: `SET LOCAL` and `set_config(..., true)` are
+ * transaction-scoped, so running them outside one silently does nothing — and a
+ * test suite that "passes" because the role never changed proves nothing.
  */
 export async function asUser<T>(
   db: PGlite,
@@ -114,19 +124,31 @@ export async function asUser<T>(
   fn: () => Promise<T>,
   role: 'authenticated' | 'anon' = 'authenticated',
 ): Promise<T> {
-  await db.exec(`set local role ${role};`);
-  await db.query(`select set_config('request.jwt.claim.sub', $1, true)`, [userId ?? '']);
-  await db.query(`select set_config('request.jwt.claim.role', $1, true)`, [role]);
+  await db.exec('begin;');
   try {
-    return await fn();
-  } finally {
-    await db.exec('reset role;');
+    await db.query(`select set_config('request.jwt.claim.sub', $1, true)`, [userId ?? '']);
+    await db.query(`select set_config('request.jwt.claim.role', $1, true)`, [role]);
+    await db.exec(`set local role ${role};`);
+    const result = await fn();
+    await db.exec('commit;');
+    return result;
+  } catch (error) {
+    await db.exec('rollback;').catch(() => undefined);
+    throw error;
   }
 }
 
 /** service_role: bypasses RLS. Server-side only, never shipped to a client. */
 export async function asService<T>(db: PGlite, fn: () => Promise<T>): Promise<T> {
-  await db.exec('reset role;');
-  await db.query(`select set_config('request.jwt.claim.sub', '', true)`);
-  return fn();
+  await db.exec('begin;');
+  try {
+    await db.exec('reset role;');
+    await db.query(`select set_config('request.jwt.claim.sub', '', true)`);
+    const result = await fn();
+    await db.exec('commit;');
+    return result;
+  } catch (error) {
+    await db.exec('rollback;').catch(() => undefined);
+    throw error;
+  }
 }

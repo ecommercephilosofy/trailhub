@@ -224,14 +224,25 @@ create policy visits_update on public.visits
 create policy gcal_connections_own on public.google_calendar_connections
   for all using (user_id = auth.uid()) with check (user_id = auth.uid());
 
--- Tokens must not be selectable even by the owner from the client.
--- They are read server-side only, with the service role.
-revoke select (access_token_enc, refresh_token_enc, sync_token)
-  on public.google_calendar_connections from anon, authenticated;
-revoke insert (access_token_enc, refresh_token_enc, sync_token)
-  on public.google_calendar_connections from anon, authenticated;
-revoke update (access_token_enc, refresh_token_enc, sync_token)
-  on public.google_calendar_connections from anon, authenticated;
+-- Tokens must not be readable or writable through the API, not even by their
+-- owner: they are handled server-side with the service role.
+--
+-- A column-level REVOKE cannot subtract from a table-level GRANT, so the table
+-- grant is withdrawn first and then re-granted column by column, deliberately
+-- omitting access_token_enc, refresh_token_enc and sync_token.
+revoke select, insert, update on public.google_calendar_connections from anon, authenticated;
+grant select (
+  id, workspace_id, user_id, provider, google_account_email, calendar_id,
+  calendar_name, status, scopes, token_expires_at, last_sync_at, last_error,
+  disconnected_at, created_at, updated_at
+) on public.google_calendar_connections to authenticated;
+grant insert (
+  id, workspace_id, user_id, provider, google_account_email, calendar_id,
+  calendar_name, status, scopes
+) on public.google_calendar_connections to authenticated;
+grant update (
+  google_account_email, calendar_id, calendar_name, status, disconnected_at
+) on public.google_calendar_connections to authenticated;
 
 create policy calendar_links_select on public.calendar_event_links
   for select using (app.is_member(workspace_id));

@@ -69,15 +69,18 @@ interface StoreState {
   horizon: number;
 }
 
-/** Shape of the headers Google sends; the local provider emits the same. */
-export interface LocalNotification {
+/**
+ * Shape of the headers Google sends; the local provider emits the same.
+ * A type alias rather than an interface so it satisfies `HeaderBag` directly.
+ */
+export type LocalNotification = {
   readonly 'x-goog-channel-id': string;
   readonly 'x-goog-channel-token': string;
   readonly 'x-goog-resource-id': string;
   readonly 'x-goog-resource-state': 'sync' | 'exists';
   readonly 'x-goog-message-number': string;
   readonly 'x-goog-channel-expiration': string;
-}
+};
 
 export interface LocalCalendarOptions {
   /** Persist to this JSON file. Omit for pure in-memory. */

@@ -54,7 +54,7 @@ import {
   type RetryDecision,
   type RetryPolicy,
 } from '../util/http';
-import { redact } from '../util/redact';
+import { createSecretScrubber, redact } from '../util/redact';
 import {
   CalendarAuthError,
   CalendarError,
@@ -292,6 +292,18 @@ export class GoogleCalendarProvider implements CalendarProvider {
     this.verificationTokenFactory =
       options.verificationTokenFactory ?? (() => cryptoRandomToken());
     this.channelIdFactory = options.channelIdFactory ?? (() => cryptoRandomToken());
+  }
+
+  /**
+   * Removes this connection's own credentials from any diagnostic text.
+   * Rebuilt per call because a refresh replaces the access token.
+   */
+  private scrub(text: string): string {
+    return createSecretScrubber(
+      this.tokens.accessToken,
+      this.tokens.refreshToken,
+      this.config.clientSecret,
+    )(text);
   }
 
   currentTokens(): GoogleTokens {
@@ -541,7 +553,9 @@ export class GoogleCalendarProvider implements CalendarProvider {
           return {
             kind: 'fail',
             error: new CalendarPermissionError(
-              `Google no permet ${meta.context}: ${String(redact(summariseError(body)))}`,
+              `Google no permet ${meta.context}: ${this.scrub(
+                String(redact(summariseError(body))),
+              )}`,
               403,
             ),
           };
@@ -585,8 +599,8 @@ export class GoogleCalendarProvider implements CalendarProvider {
           return {
             kind: 'fail',
             error: new CalendarError(
-              `Error de Google en ${meta.context} (${response.status}): ${String(
-                redact(summariseError(body)),
+              `Error de Google en ${meta.context} (${response.status}): ${this.scrub(
+                String(redact(summariseError(body))),
               )}`,
               response.status,
             ),

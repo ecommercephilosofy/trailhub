@@ -126,6 +126,16 @@ export function redact<T>(value: T, seen: WeakSet<object> = new WeakSet()): unkn
   return REDACTED;
 }
 
+/**
+ * Query parameters that carry credentials.
+ *
+ * Deliberately broader than {@link SENSITIVE_KEY}: a bare `key=` in a URL is
+ * an API key (Google Maps), whereas a bare `key` *property* on an object
+ * usually is not (`deviceKey`, `idempotencyKey`), so the two lists differ.
+ */
+const SENSITIVE_QUERY_PARAM =
+  /^(key|token|secret|password|passwd|signature|sig|auth|authorization|api[-_]?key|apikey|access[-_]?token|refresh[-_]?token|client[-_]?secret|session)$/i;
+
 /** Strips credential-bearing query parameters from a URL-looking string. */
 function redactUrl(value: string): string {
   if (!/^https?:\/\//i.test(value) || !value.includes('?')) return value;
@@ -133,7 +143,7 @@ function redactUrl(value: string): string {
     const url = new URL(value);
     let changed = false;
     for (const key of [...url.searchParams.keys()]) {
-      if (SENSITIVE_KEY.test(key)) {
+      if (SENSITIVE_QUERY_PARAM.test(key) || SENSITIVE_KEY.test(key)) {
         url.searchParams.set(key, REDACTED);
         changed = true;
       }
@@ -142,6 +152,29 @@ function redactUrl(value: string): string {
   } catch {
     return value;
   }
+}
+
+/**
+ * Builds a scrubber that also removes *specific known secrets* by value.
+ *
+ * Pattern-matching cannot catch every credential shape — an upstream service
+ * will happily echo your own key back inside a prose error message
+ * ("The provided API key maps-key-123456 is invalid"), where no generic
+ * pattern applies. Every adapter that holds a credential passes it here before
+ * putting an upstream message into an error or a log line, so its own secret
+ * can never travel with the diagnostic.
+ */
+export function createSecretScrubber(
+  ...secrets: readonly (string | undefined | null)[]
+): (text: string) => string {
+  const known = secrets.filter(
+    (secret): secret is string => typeof secret === 'string' && secret.trim().length >= 6,
+  );
+  return (text: string): string => {
+    let out = scrubEmbeddedSecrets(text);
+    for (const secret of known) out = out.split(secret).join(REDACTED);
+    return out;
+  };
 }
 
 /** Convenience: a one-line, safe representation for a log statement. */

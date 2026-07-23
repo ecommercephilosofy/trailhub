@@ -339,7 +339,7 @@ describe('reconcile', () => {
     expect(decision.type).toBe('CONFLICT');
     if (decision.type !== 'CONFLICT') throw new Error('unreachable');
     expect(decision.report.visitId).toBe(VISIT);
-    expect(decision.report.fields.sort()).toEqual(['description', 'title']);
+    expect([...decision.report.fields].sort()).toEqual(['description', 'title']);
     expect(decision.report.message).toContain('alhora');
     expect(decision.report.detectedAt).toBe('2026-07-23T12:00:05.000Z');
   });

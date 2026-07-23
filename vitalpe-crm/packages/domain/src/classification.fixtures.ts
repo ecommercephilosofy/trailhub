@@ -25,6 +25,17 @@
  *   hasOtherSupplier     activity.result = 'TE UN ALTRE PROVEIDOR'
  *   hasRecentNegative    activity.result in (NO COMPRA VI A GRANEL,
  *                        TANCAT / INACTIU, NO COMPRARA), occurred_on within 18 months
+ *
+ * Two traps when materialising a fixture as rows:
+ *   - `clientTypeCode: 'ALTRES'` also needs `other_client_type`, or
+ *     `clients_other_type_needs_explanation` rejects the INSERT;
+ *   - use an ACTIVITY with result 'REPETIRA COMANDA' for `hasRepeatSignal`, not
+ *     an opportunity with `forecast_next = 'REPETIR COMANDA'`: an opportunity
+ *     would also have to carry a `data_type`, and 'POSSIBLE COMPRA' would
+ *     silently switch `hasConcreteInterest` on as well.
+ *
+ * This table has been run end to end against `app.propose_classification` in
+ * PostgreSQL 17: all 25 cases produce the same value in SQL and in TypeScript.
  */
 
 import type { Classification } from '@vitalpe/types';

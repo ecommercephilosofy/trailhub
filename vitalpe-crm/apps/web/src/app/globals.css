@@ -1,0 +1,281 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens.
+ *
+ * Sober, print-like, quietly tied to the wine trade: warm paper background,
+ * dark burgundy for identity and emphasis, charcoal for text. No gradients, no
+ * decorative panels. Status is never carried by colour alone — every state also
+ * has a label and a shape (see .estat-*).
+ */
+@theme {
+  --color-paper: #faf7f2;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunken: #f3eee6;
+
+  --color-ink: #1c1a19;
+  --color-ink-soft: #4a4644;
+  --color-ink-faint: #7c7773;
+
+  --color-line: #e2dbd0;
+  --color-line-strong: #cdc3b4;
+
+  --color-burgundy: #6b1230;
+  --color-burgundy-soft: #8d2a48;
+  --color-burgundy-wash: #f5e9ed;
+
+  --color-ok: #2f6b43;
+  --color-ok-wash: #e8f1ea;
+  --color-warn: #9a6212;
+  --color-warn-wash: #fbf1de;
+  --color-danger: #a02020;
+  --color-danger-wash: #fbe9e9;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  /* Focus must always be visible: the app is fully keyboard operable. */
+  :focus-visible {
+    outline: 2px solid var(--color-burgundy);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  a {
+    color: var(--color-burgundy);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* --- field labels, states and actions are always upper case ----------- */
+  .etiqueta {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    font-weight: 600;
+  }
+
+  .targeta {
+    background: var(--color-paper-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  /* --- state chips: colour + label + a shape marker --------------------- */
+  .estat {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .estat::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+  }
+  .estat-ok {
+    color: var(--color-ok);
+    background: var(--color-ok-wash);
+    border-color: color-mix(in srgb, var(--color-ok) 30%, transparent);
+  }
+  .estat-ok::before {
+    background: currentColor;
+    border-radius: 999px;
+  }
+  .estat-avis {
+    color: var(--color-warn);
+    background: var(--color-warn-wash);
+    border-color: color-mix(in srgb, var(--color-warn) 30%, transparent);
+  }
+  /* triangle = attention */
+  .estat-avis::before {
+    background: currentColor;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+  .estat-perill {
+    color: var(--color-danger);
+    background: var(--color-danger-wash);
+    border-color: color-mix(in srgb, var(--color-danger) 30%, transparent);
+  }
+  /* square = overdue / error */
+  .estat-perill::before {
+    background: currentColor;
+  }
+  .estat-neutre {
+    color: var(--color-ink-soft);
+    background: var(--color-paper-sunken);
+    border-color: var(--color-line-strong);
+  }
+  /* diamond = pending / undetermined */
+  .estat-neutre::before {
+    background: currentColor;
+    transform: rotate(45deg);
+  }
+  .estat-marca {
+    color: var(--color-burgundy);
+    background: var(--color-burgundy-wash);
+    border-color: color-mix(in srgb, var(--color-burgundy) 25%, transparent);
+  }
+  .estat-marca::before {
+    background: currentColor;
+    border-radius: 999px;
+  }
+
+  /* --- buttons ---------------------------------------------------------- */
+  .boto {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 7px 13px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-paper-raised);
+    color: var(--color-ink);
+    cursor: pointer;
+    min-height: 34px;
+    text-decoration: none;
+  }
+  .boto:hover:not(:disabled) {
+    background: var(--color-paper-sunken);
+  }
+  .boto:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .boto-principal {
+    background: var(--color-burgundy);
+    border-color: var(--color-burgundy);
+    color: #fff;
+  }
+  .boto-principal:hover:not(:disabled) {
+    background: var(--color-burgundy-soft);
+  }
+  .boto-perill {
+    color: var(--color-danger);
+    border-color: color-mix(in srgb, var(--color-danger) 40%, transparent);
+  }
+  /* Touch targets on phones stay comfortably large. */
+  @media (max-width: 768px) {
+    .boto {
+      min-height: 44px;
+      padding: 10px 14px;
+    }
+  }
+
+  /* --- forms ------------------------------------------------------------ */
+  .camp {
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    padding: 7px 9px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-paper-raised);
+    color: var(--color-ink);
+    min-height: 34px;
+  }
+  .camp:disabled {
+    background: var(--color-paper-sunken);
+    color: var(--color-ink-faint);
+  }
+  .error-camp {
+    color: var(--color-danger);
+    font-size: 12px;
+    margin-top: 3px;
+  }
+  @media (max-width: 768px) {
+    .camp {
+      min-height: 44px;
+      font-size: 16px; /* stops iOS zooming on focus */
+    }
+  }
+
+  /* --- tables ----------------------------------------------------------- */
+  .taula {
+    width: 100%;
+    font-size: 13px;
+  }
+  .taula thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--color-paper-sunken);
+    border-bottom: 1px solid var(--color-line-strong);
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+  .taula tbody td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 7px 10px;
+    vertical-align: top;
+  }
+  .taula tbody tr:hover {
+    background: color-mix(in srgb, var(--color-burgundy-wash) 55%, transparent);
+  }
+  .taula-compacta tbody td,
+  .taula-compacta thead th {
+    padding: 4px 8px;
+  }
+  .taula-ampla {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .fila-vencuda td:first-child {
+    box-shadow: inset 3px 0 0 var(--color-danger);
+  }
+  .fila-avui td:first-child {
+    box-shadow: inset 3px 0 0 var(--color-burgundy);
+  }
+}

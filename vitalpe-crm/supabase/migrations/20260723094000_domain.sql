@@ -252,6 +252,7 @@ as $$
 declare
   v_task public.tasks%rowtype;
   v_activity_id uuid;
+  v_updated uuid;
   v_type app.activity_type;
 begin
   select * into v_task from public.tasks where id = p_task_id and deleted_at is null for update;
@@ -284,7 +285,15 @@ begin
          result = p_result,
          notes = coalesce(p_notes, notes),
          completed_at = now()
-   where id = p_task_id;
+   where id = p_task_id
+  returning id into v_updated;
+
+  -- SECURITY INVOKER: the SELECT above is allowed for every workspace member,
+  -- but the UPDATE is filtered by RLS. Without this check a commercial could
+  -- fail to close someone else's task and still write history for it.
+  if v_updated is null then
+    raise exception 'SENSE_PERMIS_PER_TANCAR_TASCA' using errcode = '42501';
+  end if;
 
   if v_task.client_id is not null then
     insert into public.activities (

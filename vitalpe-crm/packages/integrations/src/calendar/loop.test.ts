@@ -6,7 +6,7 @@
  * the assertion counts outbound mutating calls and requires zero.
  */
 import { describe, expect, it } from 'vitest';
-import { LocalCalendarProvider } from './local';
+import { LocalCalendarProvider, type LocalNotification } from './local';
 import {
   buildCrmEvent,
   contentHash,
@@ -143,7 +143,7 @@ describe('bidirectional loop, end to end', () => {
     // --- 4. the webhook arrives -----------------------------------------
     const notifications = local.drainNotifications();
     expect(notifications).toHaveLength(1);
-    const verification = verifyChannel(notifications[0] as Record<string, string>, {
+    const verification = verifyChannel(notifications[0] as LocalNotification, {
       channelId: channel.channelId,
       verificationToken: channel.verificationToken,
     });
@@ -194,7 +194,7 @@ describe('bidirectional loop, end to end', () => {
     local.editDirectly('primary', created.id, { location: 'Nova adreça' });
 
     const notifications = local.drainNotifications();
-    const last = notifications.at(-1) as Record<string, string>;
+    const last = notifications.at(-1) as LocalNotification;
 
     const first = verifyChannel(last, channel);
     expect(first.ok && dedupe.accept(first.notification)).toBe(true);
