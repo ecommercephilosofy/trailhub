@@ -81,15 +81,33 @@ try {
       from public.clients
      where workspace_id = ${profile.workspace_id} and deleted_at is null`;
 
+  // The pending "next action" tasks come out of the import unassigned when the
+  // owner user does not exist yet (on a hosted database the local placeholder
+  // commercial is never created). An unassigned task belongs to nobody: it does
+  // not show on its commercial's board and the per-person filter cannot see it.
+  // The single commercial owns the portfolio, so its open work is theirs too.
+  const [taskCounts] = await sql<{ unassigned: string; mine: string; others: string }[]>`
+    select count(*) filter (where assigned_to is null)::text as unassigned,
+           count(*) filter (where assigned_to = ${profile.id})::text as mine,
+           count(*) filter (where assigned_to is not null and assigned_to <> ${profile.id})::text as others
+      from public.tasks
+     where workspace_id = ${profile.workspace_id} and deleted_at is null and status = 'PENDENT'`;
+
   console.log(`\n── Cartera de ${profile.full_name} (${profile.role}) ──`);
-  console.log(`  Empreses actives      : ${counts?.total ?? '0'}`);
-  console.log(`  Ja seves              : ${counts?.mine ?? '0'}`);
-  console.log(`  D’una altra persona   : ${counts?.others ?? '0'}  (no es toquen)`);
-  console.log(`  Sense propietari      : ${counts?.unowned ?? '0'}  ← s’assignaran`);
+  console.log('  EMPRESES');
+  console.log(`    Actives             : ${counts?.total ?? '0'}`);
+  console.log(`    Ja seves            : ${counts?.mine ?? '0'}`);
+  console.log(`    D’una altra persona : ${counts?.others ?? '0'}  (no es toquen)`);
+  console.log(`    Sense propietari    : ${counts?.unowned ?? '0'}  ← s’assignaran`);
+  console.log('  TASQUES PENDENTS');
+  console.log(`    Ja seves            : ${taskCounts?.mine ?? '0'}`);
+  console.log(`    D’una altra persona : ${taskCounts?.others ?? '0'}  (no es toquen)`);
+  console.log(`    Sense assignar      : ${taskCounts?.unassigned ?? '0'}  ← s’assignaran`);
 
-  const pending = Number(counts?.unowned ?? '0');
+  const pendingClients = Number(counts?.unowned ?? '0');
+  const pendingTasks = Number(taskCounts?.unassigned ?? '0');
 
-  if (pending === 0) {
+  if (pendingClients === 0 && pendingTasks === 0) {
     console.log('\n✓ No hi ha res per assignar.\n');
     await sql.end();
     process.exit(0);
@@ -105,28 +123,43 @@ try {
   // The audit trigger stamps every row, so the change is attributable; it needs
   // to know who did it. This runs outside a session, so the actor is the person
   // receiving the portfolio — which is the truth: it is their own catalogue.
-  const updated = await sql.begin(async (tx) => {
+  const result = await sql.begin(async (tx) => {
     await tx`select set_config('request.jwt.claim.sub', ${profile.id}, true)`;
-    const rows = await tx<{ id: string }[]>`
+
+    const clientRows = await tx<{ id: string }[]>`
       update public.clients
          set owner_id = ${profile.id}, updated_at = now()
        where workspace_id = ${profile.workspace_id}
          and deleted_at is null
          and owner_id is null
       returning id`;
-
-    if (rows.length !== pending) {
+    if (clientRows.length !== pendingClients) {
       // Somebody wrote between the count and the update. Better to fail and be
       // run again than to report a number that was never true.
       throw new Error(
-        `esperava ${pending} files i n’he tocat ${rows.length}; la transacció es desfà`,
+        `empreses: esperava ${pendingClients} files i n’he tocat ${clientRows.length}; es desfà`,
       );
     }
-    return rows.length;
+
+    const taskRows = await tx<{ id: string }[]>`
+      update public.tasks
+         set assigned_to = ${profile.id}, updated_at = now()
+       where workspace_id = ${profile.workspace_id}
+         and deleted_at is null
+         and status = 'PENDENT'
+         and assigned_to is null
+      returning id`;
+    if (taskRows.length !== pendingTasks) {
+      throw new Error(
+        `tasques: esperava ${pendingTasks} files i n’he tocat ${taskRows.length}; es desfà`,
+      );
+    }
+
+    return { clients: clientRows.length, tasks: taskRows.length };
   });
 
-  console.log(`\n✓ ${updated} empreses assignades a ${profile.full_name}.`);
-  console.log('  Queda registrat a AUDITORIA amb el camp owner_id i qui l’ha canviat.\n');
+  console.log(`\n✓ ${result.clients} empreses i ${result.tasks} tasques assignades a ${profile.full_name}.`);
+  console.log('  Tot queda registrat a AUDITORIA amb qui ho ha canviat.\n');
 } catch (error) {
   console.error(`\n✗ ${error instanceof Error ? error.message : String(error)}\n`);
   process.exitCode = 1;
