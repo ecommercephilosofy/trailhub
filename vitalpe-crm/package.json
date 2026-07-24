@@ -27,7 +27,8 @@
     "import:run": "tsx scripts/import/run.ts",
     "import:verify": "tsx scripts/import/verify.ts",
     "export:data": "tsx scripts/export/export.ts",
-    "env:check": "tsx scripts/check-env.ts"
+    "env:check": "tsx scripts/check-env.ts",
+    "db:push": "tsx scripts/maintenance/apply-remote.ts"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.14",
