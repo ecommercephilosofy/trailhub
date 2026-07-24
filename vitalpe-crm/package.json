@@ -25,11 +25,14 @@
     "db:local": "tsx scripts/maintenance/pglite-apply.ts",
     "import:inspect": "tsx scripts/import/inspect.ts",
     "import:run": "tsx scripts/import/run.ts",
+    "import:local": "tsx scripts/import/run.ts --local",
     "import:verify": "tsx scripts/import/verify.ts",
     "export:data": "tsx scripts/export/export.ts",
     "env:check": "tsx scripts/check-env.ts",
     "db:push": "tsx scripts/maintenance/apply-remote.ts",
     "user:add": "tsx scripts/maintenance/create-user.ts",
+    "clients:assign": "tsx scripts/maintenance/assign-portfolio.ts",
+    "import:abandon": "tsx scripts/maintenance/abandon-import.ts",
     "audit:remote": "tsx scripts/maintenance/audit-remote.ts"
   },
   "devDependencies": {

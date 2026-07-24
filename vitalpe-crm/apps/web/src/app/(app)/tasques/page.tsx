@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { isManager, query, requireSession } from '@/lib/auth';
 import { formatDate, formatTime, relativeDays, TASK_TONE } from '@/lib/format';
 import { TaskRowActions } from '@/components/task-row-actions';
-import { civilToInstant, todayCivil } from '@/components/calendar/dates';
+import { civilToInstant, toCivilDate, todayCivil } from '@/components/calendar/dates';
 import { AssigneeSelect } from './assignee-select';
 
 /**
@@ -41,7 +41,10 @@ interface TaskRow {
   action: string;
   other_action: string | null;
   title: string | null;
-  due_at: string | null;
+  // Both drivers hand back a Date for `timestamptz`, not a string. Typing this
+  // as `string` is what let `due_at.slice(0, 10)` compile and then throw at
+  // request time. Say what actually arrives.
+  due_at: Date | string | null;
   duration_minutes: number | null;
   priority: string;
   status: string;
@@ -182,7 +185,7 @@ export default async function TasquesPage({
 
   const now = Date.now();
   const isOverdue = (row: TaskRow): boolean =>
-    row.due_at !== null && row.status === 'PENDENT' && Date.parse(row.due_at) < now;
+    row.due_at !== null && row.status === 'PENDENT' && new Date(row.due_at).getTime() < now;
   const overdueCount = data.dated.filter(isOverdue).length;
 
   return (
@@ -350,7 +353,11 @@ export default async function TasquesPage({
                         {row.visit_id && (
                           <Link
                             className="block text-[11px]"
-                            href={`/calendari?vista=dia&data=${(row.due_at ?? '').slice(0, 10)}`}
+                            // `due_at` arrives as a Date from both drivers, so
+                            // slicing it as a string threw; and slicing an ISO
+                            // string would give the UTC day, sending a 23:30
+                            // Madrid visit to the day before.
+                            href={`/calendari?vista=dia&data=${row.due_at ? toCivilDate(row.due_at) : todayCivil()}`}
                           >
                             VEURE AL CALENDARI
                           </Link>

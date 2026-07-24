@@ -8,7 +8,7 @@ import { defineConfig } from '@playwright/test';
  * dev server. Parallel workers would interleave mutations and produce flaky
  * assertions about counts.
  *
- * The suite assumes the imported dataset is present (pnpm import:run --fresh).
+ * The suite assumes the imported dataset is present (pnpm import:local -- --fresh).
  * Tests pick their subjects dynamically (first pending task, a company by
  * name) rather than hardcoding ids, so re-runs against a mutated database
  * still pass.

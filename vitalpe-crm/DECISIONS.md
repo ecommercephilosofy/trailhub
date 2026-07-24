@@ -781,3 +781,136 @@ could never have opened.
 The authority now ends at the first `/`, `?` or `#`, per RFC 3986. Caught by the
 mobile test suite, which is the only reason it was found before a device ever
 ran the code.
+
+---
+
+## 34. The supervisor reads; she does not co-edit
+
+The original brief described ADMIN, GERENT and COMERCIAL as three ranks, and the
+first implementation followed it: `app.is_manager()` — ADMIN **or** GERENT —
+gated both reading and writing. That was wrong about the business.
+
+Vitalpe has one commercial. The CRM is his personal working tool. The other
+person in the system is his superior, and what she needs is to see what he did:
+activities, closed clients, visits made, what was observed in them, what came out
+of them. Not to co-edit his portfolio.
+
+So `20260724150000_supervisor_read_only.sql` moves **every** write policy from
+`app.is_manager()` to `app.is_admin()` and drops GERENT from
+`app.can_edit_client()`. `app.is_manager()` survives untouched and still governs
+`SELECT` for both tiers — which is the whole point: she sees everything and
+changes nothing.
+
+Two consequences worth stating:
+
+- The satellites came free. Contacts, locations, opportunities and verifications
+  all route through `can_edit_client`, so removing GERENT there removed it from
+  all of them at once. The one that did **not** route through it —
+  `client_verifications_insert`, gated on membership alone — had to be fixed by
+  hand, and would have been the hole left behind.
+- The read-only tier is enforced in the database, not in the navigation.
+  `/supervisio` is her landing page and the working tools are absent from her
+  menu, but that is ergonomics. Six tests in `el supervisor només mira` assert
+  the writes fail at the policy, which is the part that would still hold if the
+  interface were bypassed entirely.
+
+## 35. The imported portfolio had no owner
+
+`owner_id` is what `can_edit_client` reads for the COMERCIAL tier, and the 801
+imported companies had it `null`: the source spreadsheets never named a
+commercial, and the importer does not invent data. With the role model corrected
+this became unambiguous — there is one commercial — so `pnpm clients:assign`
+sets it, in one audited statement.
+
+The script simulates by default and only writes with `--apply`; it refuses a
+GERENT (recording an owner who cannot act on the rows); it never takes a company
+off somebody who already owns it, because a silent reassignment is precisely
+what the audit log exists to make impossible; and it rolls back if the number of
+rows it touched differs from the number it reported, rather than print a figure
+that was never true.
+
+## 36. The importer no longer decides its own target
+
+`.env.local` exists so credentials never travel through a command line. The side
+effect: merely having the file makes `DATABASE_URL` set, so `pnpm import:run`
+silently targeted the hosted database. And `--fresh` compounded it — it reads as
+"start from scratch", but the code only ever deleted the local `.data/crm`
+directory, so against a remote database the flag was a no-op attached to a
+production write.
+
+That combination fired: a run meant to rebuild the local copy went to Supabase
+and was interrupted part-way. The damage was recoverable and worth recording
+precisely, because it says something about the design:
+
+- **No company, opportunity, activity, contact or duplicate candidate was
+  created.** The importer matches deterministically, and re-reading the same
+  sources produced the same values. Every audit row from that run lists exactly
+  one changed field: `updated_at`. Idempotence is not a nicety here; it is what
+  turned a bad command into a bumped timestamp.
+- What it did leave was an **open run**: an `imports` row stuck at
+  `INSPECCIONAT` and 1,182 staged rows at `PENDENT`, which the production audit
+  correctly flagged. `pnpm import:abandon` closes such a run — status `DESFET`,
+  a written reason, unapplied rows marked `IGNORADA`, already-applied rows left
+  alone because they describe work that really happened. It refuses an `APLICAT`
+  import: undoing an applied import is a different operation.
+
+The guard: `pnpm import:run` refuses to write to a non-local `DATABASE_URL`
+without `--remote`, refuses `--fresh` against a remote database at all, and
+prints which database it opened. `pnpm import:local` forces the throwaway copy
+through an explicit `local: true` option rather than by unsetting an environment
+variable, so the intent lives in the code and not in the shell.
+
+No confirmation prompt was added. A prompt in a script that is run repeatedly
+gets answered by habit; a flag that has to be typed does not.
+
+## 37. The database handle lives on `globalThis`, not in a module variable
+
+`.data/crm` was corrupted twice during this work, and the second time nothing
+was running against it except the dev server — which is supposed to be its only
+writer. The cause was the cache, not the concurrency:
+
+```ts
+let backendPromise: Promise<Backend> | null = null;   // one cache per module instance
+```
+
+In development every hot reload evaluates a **fresh instance** of the module,
+and a fresh instance means a fresh `null`. With Postgres that leaks a pool and
+nobody notices. With PGlite it is destructive: PGlite is a single embedded
+writer over a directory, so the second instance opening `.data/crm` corrupts it.
+The process then dies with `RuntimeError: Aborted()` and every request 500s
+until the database is rebuilt from the sources.
+
+This is exactly what the E2E suite hit: seven tests passed, a write-heavy flow
+triggered a reload, and the eighth found a dead database — which read, from the
+outside, like a bug in the page it happened to be on. Two hours went into the
+wrong suspect.
+
+The handle now lives under `Symbol.for('vitalpe.crm.backend')` on `globalThis`,
+which survives module reloads. The single-writer rule is unchanged and still
+matters — do not run the importer and the dev server at the same time — but the
+app can no longer break it on its own.
+
+## 38. Two E2E tests only passed on a virgin database
+
+The E2E config claims the suite "picks subjects dynamically … so re-runs against
+a mutated database still pass". Two tests did not honour that, and both failures
+looked like product bugs until they were read carefully:
+
+- The classification test named CAN QUETU. Its own first run confirms that
+  company, so its second run found a panel offering **TORNAR A CONFIRMAR**
+  instead of **CONFIRMAR** and timed out. It now takes whichever company is
+  still pending and accepts either label — same action, two names.
+- The visit test asserted that "CAN QUETU" was visible after saving. The chosen
+  company is displayed *inside the form*, so the assertion would have passed on
+  a form that never submitted. It now waits for the form to close, then anchors
+  the day view on the visit's own date — the calendar opens on today, and the
+  visit is tomorrow.
+
+Chasing the second one found a real defect: `/tasques` crashed with
+`(row.due_at ?? '').slice is not a function`. Both drivers return a `Date` for
+`timestamptz`, but the row interface declared `string | null`, so the compiler
+had no objection. The link is only rendered for visit-linked tasks, which is why
+the page looked fine until a visit existed — and it would have crashed in
+production the same way. Fixed with `toCivilDate()`, which also stops a 23:30
+Madrid visit from linking to the previous day, and the interface now says
+`Date | string | null` — what actually arrives.

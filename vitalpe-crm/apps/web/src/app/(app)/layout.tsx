@@ -18,13 +18,25 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect('/entrar');
   }
 
-  const nav = [
-    { href: '/inici', label: 'INICI' },
-    { href: '/clients', label: 'CLIENTS' },
-    { href: '/calendari', label: 'CALENDARI' },
-    { href: '/tasques', label: 'TASQUES' },
-    { href: '/registre', label: 'REGISTRE' },
-  ];
+  // The supervisor does not work the portfolio; she watches it. Her landing
+  // page is SUPERVISIÓ, and the working tools (REGISTRE, TASQUES) are not
+  // offered — the database refuses those writes anyway (migration 0008).
+  const supervisor = session.role === 'GERENT';
+  const home = supervisor ? '/supervisio' : '/inici';
+
+  const nav = supervisor
+    ? [
+        { href: '/supervisio', label: 'SUPERVISIÓ' },
+        { href: '/clients', label: 'CLIENTS' },
+        { href: '/calendari', label: 'CALENDARI' },
+      ]
+    : [
+        { href: '/inici', label: 'INICI' },
+        { href: '/clients', label: 'CLIENTS' },
+        { href: '/calendari', label: 'CALENDARI' },
+        { href: '/tasques', label: 'TASQUES' },
+        { href: '/registre', label: 'REGISTRE' },
+      ];
   const admin = [
     { href: '/administracio/usuaris', label: 'USUARIS', adminOnly: true },
     { href: '/administracio/productes', label: 'PRODUCTES', adminOnly: true },
@@ -40,7 +52,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {/* ---------------- desktop sidebar ---------------- */}
       <aside className="hidden md:flex flex-col border-r border-[var(--color-line)] bg-[var(--color-paper-sunken)] sticky top-0 h-screen">
         <div className="px-4 py-4 border-b border-[var(--color-line)]">
-          <Link href="/inici" className="no-underline">
+          <Link href={home} className="no-underline">
             <span className="block text-[19px] font-semibold tracking-tight text-[var(--color-burgundy)]">
               VITALPE
             </span>
@@ -89,7 +101,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <div className="min-w-0 flex flex-col">
         <header className="sticky top-0 z-20 bg-[var(--color-paper)]/95 backdrop-blur border-b border-[var(--color-line)] px-4 py-2 flex items-center gap-3">
           <Link
-            href="/inici"
+            href={home}
             className="md:hidden text-[16px] font-semibold text-[var(--color-burgundy)] no-underline"
           >
             VITALPE
@@ -102,7 +114,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {/* ---------------- mobile bottom bar ---------------- */}
       <nav
-        className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[var(--color-paper-raised)] border-t border-[var(--color-line-strong)] grid grid-cols-5"
+        className={`md:hidden fixed bottom-0 inset-x-0 z-30 bg-[var(--color-paper-raised)] border-t border-[var(--color-line-strong)] grid ${
+          supervisor ? 'grid-cols-4' : 'grid-cols-5'
+        }`}
         aria-label="Navegació"
       >
         {[...nav.slice(0, 4), { href: '/mes', label: 'MÉS' }].map((item) => (

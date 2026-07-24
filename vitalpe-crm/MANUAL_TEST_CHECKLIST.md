@@ -63,7 +63,7 @@ se repite aquí.
 | C10 | Esperar a que caduque el canal (7 días) | Se renueva solo | ☐ |
 | C11 | Revocar el acceso desde Google | El CRM muestra TOKEN INVALID y ofrece reconectar | ☐ |
 | C12 | Evento personal ajeno al CRM | **No** se importa | ☐ |
-| C13 | Como GERENT | Ve las visitas del equipo, **no** la cuenta de Google de nadie | ☐ |
+| C13 | Como GERENT | Ve las visitas del comercial, **no** la cuenta de Google de nadie | ☐ |
 | C14 | Desconectar | Deja de sincronizar; el historial permanece | ☐ |
 
 ## D. Voz con credenciales reales
@@ -105,7 +105,7 @@ se repite aquí.
 | F1 | Entrar → INICI → tarea de hoy → abrir cliente → completar llamada con resultado → aparece en historial → crear siguiente tarea | ☐ |
 | F2 | Crear visita → verla en CALENDARI → evento vinculado → cambiar hora en Google → verla actualizada en CRM y en la ficha | ☐ |
 | F3 | Simular llegada → notificación → abrir ficha → grabar voz → transcribir → propuesta → confirmar → nota y tarea creadas | ☐ |
-| F4 | ADMIN invita a GERENT → acepta → ve el calendario del equipo y la actividad → **no** accede a configuración restringida | ☐ |
+| F4 | ADMIN invita a GERENT → acepta → **entra directo en SUPERVISIÓ** → ve visitas con observaciones, cierres y tareas vencidas → no tiene TASQUES ni REGISTRE en el menú → intentar guardar una ficha de empresa falla en la base de datos, no en la interfaz | ☐ |
 | F5 | Subir Excel → mapear → detectar duplicados → importar → informe → abrir empresa → ver procedencia | ☐ |
 
 ## G. Accesibilidad y móvil (navegador)

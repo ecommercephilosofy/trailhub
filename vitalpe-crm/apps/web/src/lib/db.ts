@@ -41,7 +41,21 @@ interface Backend {
   kind: 'pglite' | 'postgres';
 }
 
-let backendPromise: Promise<Backend> | null = null;
+/**
+ * The backend is cached on `globalThis`, not in a module variable.
+ *
+ * A module-level cache is one cache *per module instance*, and in development
+ * every hot reload evaluates a fresh instance of this module. With Postgres
+ * that only leaks a pool. With PGlite it is destructive: PGlite is a single
+ * embedded writer over `.data/crm`, so a second instance opening the same
+ * directory corrupts it — the process then dies with `RuntimeError: Aborted()`
+ * and every request 500s until the database is rebuilt from the sources.
+ *
+ * `globalThis` survives module reloads, so the first PGlite instance stays the
+ * only one for the lifetime of the process.
+ */
+const BACKEND_KEY = Symbol.for('vitalpe.crm.backend');
+const globalStore = globalThis as unknown as Record<symbol, Promise<Backend> | undefined>;
 
 async function createBackend(): Promise<Backend> {
   const url = process.env.DATABASE_URL;
@@ -89,8 +103,8 @@ async function createBackend(): Promise<Backend> {
 }
 
 function backend(): Promise<Backend> {
-  backendPromise ??= createBackend();
-  return backendPromise;
+  globalStore[BACKEND_KEY] ??= createBackend();
+  return globalStore[BACKEND_KEY];
 }
 
 export async function backendKind(): Promise<'pglite' | 'postgres'> {

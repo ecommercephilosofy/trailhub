@@ -28,13 +28,17 @@ documentation are in English.
 
 ## 1. Who uses it
 
+Vitalpe has **one** commercial. This is his working tool, and the second role is
+the person he reports to — who watches, and writes nothing.
+
 | Role | Who | What they do |
 | --- | --- | --- |
-| `COMERCIAL` | Sales rep | Works their assigned companies: calls, visits, samples, offers. Records what happened. |
-| `GERENT` | Sales manager | Sees and edits the whole workspace, reads the audit log and the import reports. |
-| `ADMIN` | Owner / IT | Everything a `GERENT` does, plus users, roles, invitations, imports and duplicate decisions. |
+| `ADMIN` | The commercial | Works the whole portfolio and administers the system: users, roles, invitations, imports, duplicate decisions, product catalogue. |
+| `GERENT` | His superior | **Read only.** Lands on `/supervisio`: activity done, visits made with their objective and observations, what was closed, what is overdue, which companies have gone quiet. Cannot write to any table. |
+| `COMERCIAL` | A second rep, if there ever is one | Works their assigned companies: calls, visits, samples, offers. Records what happened. |
 
 The role is a **preset evaluated in the database**, not a set of hidden buttons.
+The supervisor's writes fail at the row-level policy, not in the interface.
 See [`PERMISSIONS.md`](PERMISSIONS.md).
 
 ---
@@ -55,7 +59,7 @@ scripts/
   import/       the real import pipeline for the supplied Excel/PDF sources
   maintenance/  local Postgres harness (PGlite)
 supabase/
-  migrations/   6 SQL files: 41 tables, 2 views, 65 RLS policies, 35 app.* functions
+  migrations/   8 SQL files: 42 tables, 2 views, 69 RLS policies, 36 app.* functions
   seed.sql      master data: workspace, 42 products, 4 campaigns, product aliases
   tests/        SQL-level suites: RLS, domain rules, SQL↔TypeScript parity
 docs/imports/   generated import reports (one dated folder per run)
@@ -97,16 +101,16 @@ This is the supported path, not a degraded one.
 pnpm db:local
 ```
 
-Applies the 6 migrations plus `supabase/seed.sql` to an in-memory PGlite
+Applies the 8 migrations plus `supabase/seed.sql` to an in-memory PGlite
 instance, prints what was created, and **fails with a non-zero exit code if any
 public table is missing row level security**. Current output:
 
 ```
-Tables: 41
+Tables: 42
 Views: 2  (v_client_derived, v_client_geo_status)
-Tables with RLS enabled: 41
-RLS policies: 65
-app.* functions: 35
+Tables with RLS enabled: 42
+RLS policies: 69
+app.* functions: 36
 Seeded products: 42, campaigns: 4
 ✓ Every public table has row level security enabled.
 ```
@@ -116,7 +120,7 @@ This is a smoke test: it does not persist anything.
 ### 5.2 Load the real commercial data into a persistent local database
 
 ```bash
-pnpm import:run -- --fresh
+pnpm import:local -- --fresh
 ```
 
 With `DATABASE_URL` unset the importer writes to a persistent PGlite database in
@@ -186,10 +190,11 @@ state actually observed on 2026-07-23.
 | --- | --- | --- |
 | `pnpm dev` | Web app on port 3004 | yes |
 | `pnpm build` | `next build` of the web app | yes |
-| `pnpm test` | Full vitest run (636 tests) | yes |
+| `pnpm test` | Full vitest run (647 tests) | yes |
 | `pnpm test:watch` | vitest in watch mode | yes |
 | `pnpm db:local` | Migrations + seed on throwaway PGlite, asserts RLS | yes |
-| `pnpm import:run` | Full import of `data/sources/` | yes |
+| `pnpm import:local` | Full import of `data/sources/` into `.data/crm` | yes |
+| `pnpm import:run -- --remote` | The same import against the hosted database | yes |
 | `pnpm typecheck` | `tsc -b tsconfig.build.json` | **no — `tsconfig.build.json` does not exist** |
 | `pnpm lint` | `eslint .` | **no — no ESLint flat config in the repo** |
 | `pnpm db:seed` | `scripts/maintenance/seed.ts` | **no — file does not exist** |

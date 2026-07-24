@@ -48,25 +48,31 @@ test('flux 1: completar una trucada crea historial i surt del tauler', async ({ 
 
 test('classificació: NO POTENCIAL exigeix motiu; ACTIU SEGUR es confirma amb signatura', async ({ page }) => {
   await signInAs(page, 'Admin Vitalpe');
-  await page.goto('/clients?q=CAN%20QUETU');
-  await page.getByRole('link', { name: /CAN QUETU/ }).first().click();
+  // Take whichever company is still unconfirmed rather than naming one: a
+  // previous run of this very test confirms its subject, and a test that only
+  // passes on a virgin database is a test that passes once.
+  await page.goto('/clients?vista=pendents');
+  await page.locator('tbody tr').first().getByRole('link').first().click();
   await page.waitForURL('**/clients/**');
 
   const block = page.locator('section, div').filter({ hasText: 'CLASSIFICACIÓ A CONFIRMAR' }).last();
+  // Same action, two labels: a company that has never been classified offers
+  // CONFIRMAR, one that already is offers TORNAR A CONFIRMAR.
+  const confirmar = block.getByRole('button', { name: /CONFIRMAR$/ }).first();
 
   // Choosing NO POTENCIAL reveals a REQUIRED reason field: the form cannot even
   // be submitted without one (and the database enforces the same rule again).
   await block.getByRole('combobox').first().selectOption('NO POTENCIAL');
   const motiu = block.locator('textarea[name="reason"]');
   await expect(motiu).toBeVisible();
-  await block.getByRole('button', { name: 'CONFIRMAR', exact: true }).click();
+  await confirmar.click();
   const blockedByBrowser = await motiu.evaluate(
     (el) => !(el as HTMLTextAreaElement).checkValidity(),
   );
   expect(blockedByBrowser).toBe(true);
 
   await block.getByRole('combobox').first().selectOption('ACTIU SEGUR');
-  await block.getByRole('button', { name: 'CONFIRMAR', exact: true }).click();
+  await confirmar.click();
   await expect(block.getByText('ACTIU SEGUR').first()).toBeVisible();
   // Signed: confirmation records who and when.
   await expect(page.getByText(/Admin Vitalpe/).first()).toBeVisible();
@@ -124,25 +130,36 @@ test('visites: crear des del calendari dona d\'alta visita i tasca vinculada', a
   await page.goto('/calendari');
   await page.getByRole('button', { name: 'NOVA VISITA' }).click();
 
-  // The company picker is the search combobox, not a select.
-  const picker = page.getByRole('combobox').first();
-  await picker.fill('CAN QUETU');
-  await page.getByRole('option').first().click();
+  // The company field is a search box, not a <select>: 800 companies do not go
+  // into the DOM. Address it by its accessible name — `getByRole('combobox')`
+  // would match the disabled UBICACIÓ select, which is what a <select> is.
+  const dialog = page.locator('form').filter({ hasText: 'NOVA VISITA' }).last();
+  await dialog.getByLabel('Cercar empresa').fill('CAN QUETU');
+  await dialog.getByRole('button', { name: /CAN QUETU/ }).first().click();
 
   // Tomorrow 10:00–11:00, so the visit is unmistakably upcoming.
   const tomorrow = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
-  const starts = page.locator('input[type="datetime-local"]').first();
-  const ends = page.locator('input[type="datetime-local"]').nth(1);
-  await starts.fill(`${tomorrow}T10:00`);
-  await ends.fill(`${tomorrow}T11:00`);
+  await dialog.locator('input[name="startsAt"]').fill(`${tomorrow}T10:00`);
+  await dialog.locator('input[name="endsAt"]').fill(`${tomorrow}T11:00`);
 
-  await page.getByRole('button', { name: /CREAR|DESAR/ }).last().click();
+  await dialog.getByRole('button', { name: 'CREAR VISITA' }).click();
 
-  // Visible in the calendar…
+  // The form closing is the only honest proof it saved. Asserting on the text
+  // "CAN QUETU" alone would pass on a form that never submitted: the chosen
+  // company is displayed inside the form itself.
+  await expect(dialog).toBeHidden({ timeout: 20_000 });
+
+  // The calendar opens on DIA anchored on today, and the visit is tomorrow.
+  // Anchor the day view on the visit's own date rather than widening the view:
+  // a week or month view would still miss it whenever "tomorrow" crosses the
+  // period boundary, which is a flake waiting for a Sunday.
+  await page.goto(`/calendari?vista=dia&data=${tomorrow}`);
   await expect(page.getByText(/CAN QUETU/).first()).toBeVisible({ timeout: 20_000 });
 
   // …and its twin task exists — visit and task are born in one transaction.
-  await page.goto('/tasques');
+  // Filtered by company: the dated list is capped at 400 rows in date order, so
+  // an unfiltered assertion would be about the cap as much as about the task.
+  await page.goto('/tasques?empresa=CAN+QUETU');
   const visitTask = page.locator('tr').filter({ hasText: 'CAN QUETU' }).filter({ hasText: 'VISITA' });
   await expect(visitTask.first()).toBeVisible();
 });

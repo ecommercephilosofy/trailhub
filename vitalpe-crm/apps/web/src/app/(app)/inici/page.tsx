@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { isManager, query, requireSession } from '@/lib/auth';
 import { formatDate, formatTime, formatWeekday, relativeDays, TASK_TONE } from '@/lib/format';
 import { TaskRowActions } from '@/components/task-row-actions';
@@ -65,6 +66,10 @@ export default async function IniciPage({
   searchParams: Promise<{ comercial?: string; error?: string }>;
 }) {
   const session = await requireSession();
+  // INICI is the commercial's working board — today's visits, what to complete,
+  // what is overdue. The supervisor has no work here; send her to the view
+  // built for her instead of showing an empty desk.
+  if (session.role === 'GERENT') redirect('/supervisio');
   const params = await searchParams;
   const manager = isManager(session.role);
   // A manager may look at the whole team; a commercial only ever sees their own.

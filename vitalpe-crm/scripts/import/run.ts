@@ -80,16 +80,58 @@ async function ensureLocalUsers(db: SqlRunner, workspaceId: string): Promise<voi
   }
 }
 
+/**
+ * Which database this run will write to, and whether the operator said so.
+ *
+ * `.env.local` exists so credentials never travel through a command line, but
+ * it has a side effect: merely having it makes DATABASE_URL set, so a plain
+ * `pnpm import:run` silently targets the hosted instance. Worse, `--fresh`
+ * reads as "start from scratch" while only ever deleting the *local* data
+ * directory — against a remote database it means something else entirely.
+ *
+ * So writing to a remote database now needs `--remote` in the command. There is
+ * no prompt: a script that asks is a script that gets answered by habit.
+ */
+function resolveTarget(): { remote: boolean } {
+  if (flag('local')) return { remote: false };
+
+  const url = process.env.DATABASE_URL;
+  if (!url) return { remote: false };
+
+  const local = /^postgres(ql)?:\/\/[^/]*(localhost|127\.0\.0\.1|\[::1\])/i.test(url);
+  if (local || flag('remote')) return { remote: !local };
+
+  console.error(
+    '\n✗ DATABASE_URL apunta a una base de dades remota i no has escrit --remote.' +
+      '\n\n  Aquesta importació escriuria a producció. Si és el que vols:' +
+      '\n    pnpm import:run -- --remote' +
+      '\n\n  Si el que vols és reconstruir la còpia local per treballar i provar:' +
+      '\n    pnpm import:local -- --fresh' +
+      '\n\n  Nota: --fresh només esborra .data/crm. No buida mai una base remota.\n',
+  );
+  process.exit(1);
+}
+
 async function main(): Promise<void> {
-  if (!process.env.DATABASE_URL) {
+  const { remote } = resolveTarget();
+
+  if (!remote) {
+    // Local runs own .data/crm outright, so --fresh can throw it away.
     if (flag('fresh')) await rm(DATA_DIR, { recursive: true, force: true });
     await mkdir(DATA_DIR, { recursive: true });
+  } else if (flag('fresh')) {
+    console.error(
+      '\n✗ --fresh no té sentit contra una base remota: només esborra .data/crm.' +
+        '\n  Treu-lo de la comanda.\n',
+    );
+    process.exit(1);
   }
 
-  const db = await openDatabase(
-    process.env.DATABASE_URL ? {} : { dataDir: DATA_DIR },
+  const db = await openDatabase(remote ? {} : { dataDir: DATA_DIR, local: true });
+  console.log(
+    `Base de dades: ${db.kind}${remote ? ' REMOTA' : ' local (.data/crm)'}` +
+      `${DRY_RUN ? ' (dry-run)' : ''}`,
   );
-  console.log(`Base de dades: ${db.kind}${DRY_RUN ? ' (dry-run)' : ''}`);
 
   const workspaceId = await scalar<string>(db, `select id from public.workspaces where slug = 'vitalpe'`);
   if (!workspaceId) throw new Error('No existeix l\'espai de treball VITALPE. Executa el seed primer.');

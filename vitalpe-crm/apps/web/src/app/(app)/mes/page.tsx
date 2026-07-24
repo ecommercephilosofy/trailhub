@@ -29,12 +29,29 @@ export default async function MesPage() {
     redirect('/entrar');
   }
 
-  const work: Entry[] = [
-    { href: '/tasques', label: 'TASQUES', hint: 'Tot el que tens pendent, amb data i sense.' },
-    { href: '/registre', label: 'REGISTRE', hint: 'Historial comercial de totes les empreses.' },
-    { href: '/calendari', label: 'CALENDARI', hint: 'Visites de la setmana.' },
-    { href: '/clients', label: 'CLIENTS', hint: 'Fitxes d’empresa, contactes i classificació.' },
-  ];
+  // The supervisor has no pending tasks of her own and cannot record activity;
+  // listing TASQUES or REGISTRE would offer her tools the database refuses.
+  const work: Entry[] =
+    session.role === 'GERENT'
+      ? [
+          {
+            href: '/supervisio',
+            label: 'SUPERVISIÓ',
+            hint: 'Activitat del comercial: visites, tancaments i observacions.',
+          },
+          { href: '/clients', label: 'CLIENTS', hint: 'Fitxes d’empresa, contactes i compres.' },
+          { href: '/calendari', label: 'CALENDARI', hint: 'Visites de la setmana.' },
+        ]
+      : [
+          { href: '/tasques', label: 'TASQUES', hint: 'Tot el que tens pendent, amb data i sense.' },
+          {
+            href: '/registre',
+            label: 'REGISTRE',
+            hint: 'Historial comercial de totes les empreses.',
+          },
+          { href: '/calendari', label: 'CALENDARI', hint: 'Visites de la setmana.' },
+          { href: '/clients', label: 'CLIENTS', hint: 'Fitxes d’empresa, contactes i classificació.' },
+        ];
 
   const administration: (Entry & { visible: boolean })[] = [
     {

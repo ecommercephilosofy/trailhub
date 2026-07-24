@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { formatDate } from '@/lib/format';
+import { toCivilDate } from '@/components/calendar/dates';
 import { addCorrection, createActivity, updateActivity } from '@/lib/actions/activities';
 import { AccioForm, Camp, Panell } from './accio-form';
 
@@ -196,7 +197,9 @@ function CampsAccio({
           className="camp"
           type="date"
           name="occurredOn"
-          defaultValue={initial ? String(initial.occurred_on).slice(0, 10) : ''}
+          // `String(new Date())` is "Tue Jul 24 2026 …", so slicing it fed the
+          // date input garbage. toCivilDate() takes either shape.
+          defaultValue={initial ? toCivilDate(initial.occurred_on) : ''}
         />
       </Camp>
       <Camp label="TIPUS D'ACCIÓ">

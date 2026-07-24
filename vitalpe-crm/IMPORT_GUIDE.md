@@ -4,9 +4,10 @@ Cómo funciona la importación, cómo añadir una fuente nueva y cómo resolver 
 que queda pendiente.
 
 ```bash
-pnpm import:run -- --fresh     # recrea la base local y carga las 8 fuentes
-pnpm import:run -- --dry-run   # ejecuta todo y hace rollback
-pnpm import:run -- --owner=carlos.escobar@vitalpe.local
+pnpm import:local -- --fresh   # recrea la base local y carga las 8 fuentes
+pnpm import:local -- --dry-run # ejecuta todo y hace rollback
+pnpm import:local -- --owner=carlos.escobar@vitalpe.local
+pnpm import:run  -- --remote   # la MISMA importación contra la base alojada
 ```
 
 > **Un solo proceso.** Mientras el servidor de desarrollo esté levantado, es el
@@ -240,4 +241,4 @@ purga. Se hace desde `ADMINISTRACIÓ → IMPORTACIONS`, y solo cuando es seguro:
 si una entidad importada ya ha sido editada por una persona, esa edición manda.
 
 La vía más limpia mientras el sistema no está en producción sigue siendo
-`pnpm import:run -- --fresh`, que recrea la base local desde cero.
+`pnpm import:local -- --fresh`, que recrea la base local desde cero.

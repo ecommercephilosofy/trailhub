@@ -2,5 +2,8 @@ import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 
 export default async function RootPage() {
-  redirect((await getSession()) ? '/inici' : '/entrar');
+  const session = await getSession();
+  if (!session) redirect('/entrar');
+  // Each role lands where its work is: the supervisor watches, everyone else works.
+  redirect(session.role === 'GERENT' ? '/supervisio' : '/inici');
 }

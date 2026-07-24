@@ -44,7 +44,7 @@ select c.relname
 7. **Importar los datos reales** (una vez, con la base ya migrada):
 
 ```bash
-DATABASE_URL="postgresql://…" pnpm import:run
+pnpm import:run -- --remote
 ```
 
 Revisar `docs/imports/<fecha>/IMPORT_REPORT.md` y comprobar que la identidad de

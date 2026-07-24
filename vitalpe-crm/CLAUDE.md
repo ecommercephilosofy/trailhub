@@ -50,19 +50,30 @@ workspace aliases (no build step):
 ```bash
 pnpm install
 pnpm db:local              # migrations + seed on throwaway PGlite; asserts RLS everywhere
-pnpm import:run -- --fresh # full import of data/sources into .data/crm
-pnpm import:run -- --dry-run
+pnpm import:local -- --fresh   # full import of data/sources into .data/crm
+pnpm import:local -- --dry-run
+pnpm import:run -- --remote    # the SAME import against the hosted database
 pnpm dev                   # web app on http://localhost:3004
 pnpm build                 # next build — this is also the type check today
-pnpm test                  # 636 tests: unit + SQL RLS + SQL domain + SQL↔TS parity
+pnpm test                  # 647 tests: unit + SQL RLS + SQL domain + SQL↔TS parity
 pnpm test -- supabase/tests/rls.test.ts
 ```
 
-Do **not** trust these scripts — they are declared but not backed by files or
-configuration: `typecheck` (no `tsconfig.build.json`), `lint` (no ESLint flat
-config), `db:seed`, `import:inspect`, `import:verify`, `export:data`, `test:e2e`.
-If you need one of them, create the missing file; do not silently swap it for
-something else.
+`pnpm lint` and `pnpm typecheck` are real now (`eslint.config.mjs`,
+`tsconfig.build.json`). `typecheck` covers `packages`, `scripts` and the SQL
+suites but **not** `apps/web` — only `next build` understands the App Router's
+generated types, so `pnpm build` is the type check for the web app. Skipping it
+is how three Vercel builds were broken.
+
+Still declared with nothing behind them: `db:seed`, `import:inspect`,
+`import:verify`, `export:data`. If you need one, create the missing file; do not
+silently swap it for something else.
+
+**The importer writes wherever `DATABASE_URL` points.** `.env.local` sets it, so
+a bare `pnpm import:run` would target the hosted database — it now refuses
+without `--remote`. Use `pnpm import:local` for the throwaway copy. And never
+run two processes against `.data/crm` at once: PGlite is one embedded writer, and
+a second one corrupts the directory.
 
 ---
 
@@ -186,7 +197,7 @@ case to both suites at once.
 
 ## 8. Before you finish
 
-- [ ] `pnpm test` passes (636 tests today; the number should go up, not down).
+- [ ] `pnpm test` passes (647 tests today; the number should go up, not down).
 - [ ] `pnpm db:local` passes if you touched SQL.
 - [ ] New tables have RLS and policies, and a line in `DATA_MODEL.md`.
 - [ ] New rules exist once, in SQL or in `packages/domain` — not in a component.

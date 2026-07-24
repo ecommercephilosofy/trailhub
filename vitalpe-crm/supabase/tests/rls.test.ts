@@ -81,9 +81,9 @@ describe('rols com a conjunts de permisos', () => {
     expect(blocked.rows).toHaveLength(0);
   });
 
-  it('un GERENT pot editar qualsevol empresa de l\'espai', async () => {
+  it('un ADMIN pot editar qualsevol empresa de l\'espai', async () => {
     const theirs = await makeClient(f, 'EMPRESA DEL COMERCIAL B', { owner: f.comercialB });
-    const rows = await asUser(f.db, f.gerent, () =>
+    const rows = await asUser(f.db, f.admin, () =>
       f.db.query(`update public.clients set municipality = 'Lavern' where id = $1 returning id`, [theirs]),
     );
     expect(rows.rows).toHaveLength(1);
@@ -165,7 +165,7 @@ describe('historial comercial', () => {
     expect(still.rows).toHaveLength(1);
   });
 
-  it('un COMERCIAL no pot modificar una acció ja registrada; un GERENT sí, i queda auditat', async () => {
+  it('un COMERCIAL no pot modificar una acció ja registrada; el propietari del CRM sí, i queda auditat', async () => {
     const client = await makeClient(f, 'EMPRESA HISTORIAL 2', { owner: f.comercial });
     const created = await asUser(f.db, f.comercial, () =>
       f.db.query<{ id: string }>(
@@ -181,8 +181,8 @@ describe('historial comercial', () => {
     );
     expect(blocked.rows).toHaveLength(0);
 
-    const allowed = await asUser(f.db, f.gerent, () =>
-      f.db.query(`update public.activities set notes = 'Correcció del gerent' where id = $1 returning id`, [activityId]),
+    const allowed = await asUser(f.db, f.admin, () =>
+      f.db.query(`update public.activities set notes = 'Correcció del propietari' where id = $1 returning id`, [activityId]),
     );
     expect(allowed.rows).toHaveLength(1);
 
@@ -195,7 +195,7 @@ describe('historial comercial', () => {
     );
     expect(audit.rows).toHaveLength(1);
     expect(audit.rows[0]?.before_value.notes).toBe('Text original');
-    expect(audit.rows[0]?.after_value.notes).toBe('Correcció del gerent');
+    expect(audit.rows[0]?.after_value.notes).toBe('Correcció del propietari');
   });
 });
 
@@ -317,6 +317,106 @@ describe('importacions i fusions', () => {
   });
 });
 
+describe('el supervisor només mira', () => {
+  it('un GERENT no pot editar cap empresa', async () => {
+    const client = await makeClient(f, 'EMPRESA SUPERVISADA', { owner: f.comercial });
+    const blocked = await asUser(f.db, f.gerent, () =>
+      f.db.query(`update public.clients set municipality = 'Canviat' where id = $1 returning id`, [client]),
+    );
+    expect(blocked.rows).toHaveLength(0);
+  });
+
+  it('un GERENT no pot crear empreses ni reassignar cartera', async () => {
+    await expectRejected(() =>
+      asUser(f.db, f.gerent, () =>
+        f.db.query(`insert into public.clients (workspace_id, name) values ($1, 'CREADA PEL GERENT')`, [f.ws]),
+      ),
+    );
+    const client = await makeClient(f, 'EMPRESA REASSIGNABLE', { owner: f.comercial });
+    await expectRejected(() =>
+      asUser(f.db, f.gerent, () =>
+        f.db.query(
+          `insert into public.client_assignments (workspace_id, client_id, user_id, is_owner)
+           values ($1, $2, $3, true)`,
+          [f.ws, client, f.comercialB],
+        ),
+      ),
+    );
+  });
+
+  it('un GERENT no pot esmenar l\'historial comercial', async () => {
+    const client = await makeClient(f, 'EMPRESA HISTORIAL SUPERVISAT', { owner: f.comercial });
+    const created = await asUser(f.db, f.comercial, () =>
+      f.db.query<{ id: string }>(
+        `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+         values ($1, $2, 'VISITA', 'INTERES CONCRET', 'El que va dir el comercial', $3) returning id`,
+        [f.ws, client, f.comercial],
+      ),
+    );
+    const activityId = created.rows[0]!.id;
+
+    const blocked = await asUser(f.db, f.gerent, () =>
+      f.db.query(`update public.activities set notes = 'Reescrit pel gerent' where id = $1 returning id`, [activityId]),
+    );
+    expect(blocked.rows).toHaveLength(0);
+
+    const still = await asService(f.db, () =>
+      f.db.query<{ notes: string }>(`select notes from public.activities where id = $1`, [activityId]),
+    );
+    expect(still.rows[0]?.notes).toBe('El que va dir el comercial');
+  });
+
+  it('un GERENT no pot crear ni tocar tasques ni visites', async () => {
+    const client = await makeClient(f, 'EMPRESA TASQUES SUPERVISADES', { owner: f.comercial });
+    await expectRejected(() =>
+      asUser(f.db, f.gerent, () =>
+        f.db.query(
+          `insert into public.tasks (workspace_id, kind, action, client_id, assigned_to, created_by)
+           values ($1, 'TASCA', 'TRUCAR', $2, $3, $3)`,
+          [f.ws, client, f.comercial],
+        ),
+      ),
+    );
+    const task = await makeTask(f, client, { assignee: f.comercial, due: '2026-09-01T09:00:00Z' });
+    const blocked = await asUser(f.db, f.gerent, () =>
+      f.db.query(`update public.tasks set priority = 'BAIXA' where id = $1 returning id`, [task]),
+    );
+    expect(blocked.rows).toHaveLength(0);
+  });
+
+  it('però SÍ que ho veu tot: empreses, historial, tasques i visites', async () => {
+    const client = await makeClient(f, 'EMPRESA VISIBLE AL GERENT', { owner: f.comercial });
+    await asUser(f.db, f.comercial, () =>
+      f.db.query(
+        `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+         values ($1, $2, 'VISITA', 'DEMANA MOSTRES', 'Observacions de la visita', $3)`,
+        [f.ws, client, f.comercial],
+      ),
+    );
+    await makeTask(f, client, { assignee: f.comercial, due: '2026-09-02T09:00:00Z' });
+
+    const seen = await asUser(f.db, f.gerent, () =>
+      f.db.query<{ notes: string }>(
+        `select a.notes from public.activities a where a.client_id = $1`, [client],
+      ),
+    );
+    expect(seen.rows[0]?.notes).toBe('Observacions de la visita');
+
+    const tasks = await asUser(f.db, f.gerent, () =>
+      f.db.query(`select id from public.tasks where client_id = $1`, [client]),
+    );
+    expect(tasks.rows.length).toBeGreaterThan(0);
+  });
+
+  it('l\'ADMIN (el comercial propietari del seu CRM) sí que pot amb tot', async () => {
+    const client = await makeClient(f, 'EMPRESA DE L\'ADMIN');
+    const updated = await asUser(f.db, f.admin, () =>
+      f.db.query(`update public.clients set municipality = 'Subirats' where id = $1 returning id`, [client]),
+    );
+    expect(updated.rows).toHaveLength(1);
+  });
+});
+
 describe('catàlegs mestres', () => {
   it('un ADMIN pot escriure al catàleg de productes; un COMERCIAL no', async () => {
     const created = await asUser(f.db, f.admin, () =>
@@ -375,12 +475,12 @@ describe('signatura de l\'historial', () => {
     );
   });
 
-  it('un GERENT sí que pot registrar en nom d\'un comercial (tancar la seva tasca)', async () => {
+  it('el propietari del CRM sí que pot registrar en nom del comercial (tancar la seva tasca)', async () => {
     const client = await makeClient(f, 'EMPRESA SIGNATURA GERENT', { owner: f.comercial });
-    const rows = await asUser(f.db, f.gerent, () =>
+    const rows = await asUser(f.db, f.admin, () =>
       f.db.query<{ id: string }>(
         `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
-         values ($1, $2, 'TRUCADA', 'NO DETERMINAT', 'registrat pel gerent', $3) returning id`,
+         values ($1, $2, 'TRUCADA', 'NO DETERMINAT', 'registrat pel propietari', $3) returning id`,
         [f.ws, client, f.comercial],
       ),
     );

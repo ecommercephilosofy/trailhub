@@ -91,11 +91,16 @@ export interface OpenDbOptions {
   dataDir?: string;
   /** Apply migrations + seed before returning (PGlite only). */
   fresh?: boolean;
+  /** Work on the local PGlite copy even if DATABASE_URL is set. */
+  local?: boolean;
 }
 
 export async function openDatabase(options: OpenDbOptions = {}): Promise<SqlRunner> {
   const url = process.env.DATABASE_URL;
-  if (url) {
+  // `local: true` is an instruction, not a hint: the caller has decided this run
+  // works on the throwaway copy, and a DATABASE_URL sitting in .env.local must
+  // not quietly redirect it at the hosted database.
+  if (url && !options.local) {
     return PostgresRunner.connect(url);
   }
   const { createDatabase } = await import('../maintenance/pglite');
