@@ -1,6 +1,6 @@
 # IMPORT_REPORT
 
-Importació `16cc91de-eb5b-4c2e-a9d9-15b8177309a7`
+Importació `19a430af-61ba-4a7b-9802-815828da8a5c`
 
 ## Reconciliació de files
 
@@ -21,20 +21,20 @@ per això el nombre d'entitats creades és superior al nombre de files.
 
 | Entitat | Total |
 | --- | ---: |
-| Empreses canòniques | 802 |
+| Empreses canòniques | 801 |
 | Àlies | 836 |
-| Contactes | 479 |
+| Contactes | 478 |
 | Ubicacions | 461 |
 | Oportunitats | 177 |
 | Albarans / guies | 443 |
 | Activitats | 36 |
 | Tasques | 76 |
-| Verificacions | 97 |
+| Verificacions | 99 |
 | Registres de procedència | 0 |
 
 ## Duplicats i exclusions
 
-- Candidats a duplicat pendents de revisió: **174**
+- Candidats a duplicat pendents de revisió: **172**
 - Fusions automàtiques executades: **0** (cap parella complia el criteri determinista)
 - Files excloses i conservades a `excluded_records`: **66**
   - `SUBPRODUCTE`: 40
@@ -49,7 +49,7 @@ ha estat confirmada: la confirmació és sempre humana.
 
 | Classificació proposada | Empreses |
 | --- | ---: |
-| SENSE PROPOSTA | 621 |
+| SENSE PROPOSTA | 620 |
 | ACTIU SEGUR | 48 |
 | POTENCIAL AMB UN ALTRE PROVEIDOR | 133 |
 

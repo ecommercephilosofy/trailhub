@@ -3,6 +3,28 @@
 Inventari immutable de les fonts comercials. Els originals es conserven sense
 modificar a `data/sources/`; el hash permet detectar qualsevol canvi posterior.
 
+## cellers_DO_Penedes_ordenats_CORREGIT.xlsx
+
+- **Mida**: 10.719 bytes
+- **SHA-256**: `084373dcc1bb30c133c68257ee7022f920f5e1da5d81119447f96000335ad72f`
+- **Descripció**: The same DO Penedès wineries, manually ordered by commercial potential.
+- **Confiança**: 3 (1 = màxima)
+
+| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
+| --- | ---: | ---: | ---: | --- | --- |
+| ORDENAT PER POTENCIAL | — | 123 | 0 | PRIORITY_ORDER | importat |
+
+## cellers_dopenedes.xlsx
+
+- **Mida**: 21.415 bytes
+- **SHA-256**: `15d9d5725d6c0d7c48d82af69c3cefa9588864b7b377fb21440ee86f46b6d6e5`
+- **Descripció**: Public DO Penedès winery directory: address, postcode, town, phone, web, e-mail.
+- **Confiança**: 3 (1 = màxima)
+
+| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
+| --- | ---: | ---: | ---: | --- | --- |
+| cellers_dopenedes | 1 | 135 | 134 | PUBLIC_DIRECTORY | importat |
+
 ## CLIENTS_ACTIUS.pdf
 
 - **Mida**: 0 bytes
@@ -38,6 +60,17 @@ modificar a `data/sources/`; el hash permet detectar qualsevol canvi posterior.
 | --- | ---: | ---: | ---: | --- | --- |
 | CRM contactos | 1 | 999 | 36 | CONTACTS_EXPORT | importat |
 
+## Listado_de_Bodegas_Elaboradoras_de_Cava_Certificadas.pdf
+
+- **Mida**: 0 bytes
+- **SHA-256**: `35086d1dbf67ec3bcc37bdb4f2920bfc1264faee06e225a2f698bca0656dd59c`
+- **Descripció**: Official register of certified cava-producing wineries. Parsed to JSON.
+- **Confiança**: 3 (1 = màxima)
+
+| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
+| --- | ---: | ---: | ---: | --- | --- |
+| companies | — | 159 | 159 | PUBLIC_DIRECTORY | importat |
+
 ## LLISTAT CLIENTS VITALPE + POTENCIALS DO_S.xlsx
 
 - **Mida**: 175.928 bytes
@@ -54,17 +87,6 @@ modificar a `data/sources/`; el hash permet detectar qualsevol canvi posterior.
 | Potencials_DO_Cava_CAT | 1 | 1000 | 46 | CLIENTS | importat |
 | Potencials_DO_Cava_Fora_CAT | 1 | 1000 | 17 | CLIENTS | importat |
 | Potencials_DO_Penedes | 1 | 1000 | 99 | CLIENTS | importat |
-
-## Listado_de_Bodegas_Elaboradoras_de_Cava_Certificadas.pdf
-
-- **Mida**: 0 bytes
-- **SHA-256**: `35086d1dbf67ec3bcc37bdb4f2920bfc1264faee06e225a2f698bca0656dd59c`
-- **Descripció**: Official register of certified cava-producing wineries. Parsed to JSON.
-- **Confiança**: 3 (1 = màxima)
-
-| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
-| --- | ---: | ---: | ---: | --- | --- |
-| companies | — | 159 | 159 | PUBLIC_DIRECTORY | importat |
 
 ## VENTES CAVA G I GS.xlsx
 
@@ -83,25 +105,3 @@ modificar a `data/sources/`; el hash permet detectar qualsevol canvi posterior.
 | VENDES BASE CAVA GUARDA SUPERIO | 1 | 998 | 46 | SALES | importat |
 | VENDES VI DO CATALUNYA 25-26 | 1 | 1000 | 11 | SALES | importat |
 | VENDES VI DO PENEDES 25-26 | 1 | 1001 | 16 | SALES | importat |
-
-## cellers_DO_Penedes_ordenats_CORREGIT.xlsx
-
-- **Mida**: 10.719 bytes
-- **SHA-256**: `084373dcc1bb30c133c68257ee7022f920f5e1da5d81119447f96000335ad72f`
-- **Descripció**: The same DO Penedès wineries, manually ordered by commercial potential.
-- **Confiança**: 3 (1 = màxima)
-
-| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
-| --- | ---: | ---: | ---: | --- | --- |
-| ORDENAT PER POTENCIAL | — | 123 | 0 | PRIORITY_ORDER | importat |
-
-## cellers_dopenedes.xlsx
-
-- **Mida**: 21.415 bytes
-- **SHA-256**: `15d9d5725d6c0d7c48d82af69c3cefa9588864b7b377fb21440ee86f46b6d6e5`
-- **Descripció**: Public DO Penedès winery directory: address, postcode, town, phone, web, e-mail.
-- **Confiança**: 3 (1 = màxima)
-
-| Full | Fila de capçalera | Files totals | Files llegides | Tipus | Estat |
-| --- | ---: | ---: | ---: | --- | --- |
-| cellers_dopenedes | 1 | 135 | 134 | PUBLIC_DIRECTORY | importat |

@@ -42,8 +42,22 @@ const d = (v: unknown): string => formatDate(v as string | null);
 const dt = (v: unknown): string => formatDateTime(v as string | null);
 const n = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
 
-function sheet(name: string, headers: string[], rows: (string | number | null)[][]): SheetPayload {
-  return { name: name.slice(0, 31), headers, rows };
+/** A cell as the dataset builders produce it, before normalisation. */
+type RawCell = string | number | null | undefined;
+
+/**
+ * Rows come from `q.many<Record<string, string | null>>`, and under
+ * `noUncheckedIndexedAccess` every lookup on a Record is `| undefined`. Rather
+ * than sprinkle `?? null` across ~200 cells, the boundary accepts `undefined`
+ * and normalises it once: an absent column and a null column mean the same
+ * thing in a spreadsheet — an empty cell.
+ */
+function sheet(name: string, headers: string[], rows: RawCell[][]): SheetPayload {
+  return {
+    name: name.slice(0, 31),
+    headers,
+    rows: rows.map((row) => row.map((cell) => (cell === undefined ? null : cell))),
+  };
 }
 
 // ---------------------------------------------------------------------------

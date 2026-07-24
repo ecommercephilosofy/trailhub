@@ -313,7 +313,7 @@ export async function interpretAudio(formData: FormData): Promise<ProposalResult
     data: bytes,
     format: format as 'webm' | 'm4a' | 'mp3' | 'wav',
     ...(duration ? { durationSeconds: duration } : {}),
-    languageHint: 'ca',
+    language: 'ca',
   });
 
   if (result.status !== 'OK') {

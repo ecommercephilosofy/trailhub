@@ -54,7 +54,12 @@ export async function GET(request: Request): Promise<Response> {
 
   try {
     const tokens = await exchangeAuthorizationCode(config, code);
-    if (!tokens.refreshToken) {
+
+    // Pulled into a const so the narrowing survives into the closure below:
+    // TypeScript cannot prove a property check still holds inside a callback,
+    // because the callback could in principle run later.
+    const refreshToken = tokens.refreshToken;
+    if (!refreshToken) {
       // Without a refresh token the connection dies in an hour. Say so rather
       // than storing something that will fail silently later.
       return back(request, { error: 'sense-refresh' });
@@ -84,7 +89,7 @@ export async function GET(request: Request): Promise<Response> {
           session.email,
           `{${(tokens.scopes ?? GOOGLE_CALENDAR_SCOPES).join(',')}}`,
           encryptSecret(tokens.accessToken),
-          encryptSecret(tokens.refreshToken),
+          encryptSecret(refreshToken),
           tokens.expiresAt ?? null,
         ],
       ),
