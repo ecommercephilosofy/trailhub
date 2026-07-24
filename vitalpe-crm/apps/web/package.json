@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.16",
+    "@supabase/supabase-js": "^2.110.8",
     "@vitalpe/config": "workspace:*",
     "@vitalpe/domain": "workspace:*",
     "@vitalpe/integrations": "workspace:*",

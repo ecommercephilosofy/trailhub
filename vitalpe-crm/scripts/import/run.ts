@@ -12,7 +12,12 @@
 import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadEnv } from '../load-env.js';
 import { openDatabase, one, scalar, type SqlRunner } from './db.js';
+
+// Before anything reads process.env: credentials live in .env.local, never on
+// the command line and never in a chat.
+loadEnv();
 import { SOURCES } from './sources.js';
 import { emptyStats, flushProvenance, type ImportContext } from './pipeline.js';
 import {

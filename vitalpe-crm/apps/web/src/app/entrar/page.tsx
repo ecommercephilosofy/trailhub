@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getSession, setSessionCookie } from '@/lib/auth';
 import { backendKind, withServiceRole } from '@/lib/db';
+import { EntrarAmbCorreu } from '@/components/entrar-correu';
 
 /**
  * Sign in.
@@ -13,13 +14,26 @@ import { backendKind, withServiceRole } from '@/lib/db';
  */
 export const dynamic = 'force-dynamic';
 
+// Supabase renamed the browser key from `anon` to `publishable`; both spellings
+// are accepted so an older or newer project dashboard both work.
 const SUPABASE_CONFIGURED = Boolean(
-  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
 );
+
+/**
+ * The user picker is a development convenience: it opens a session with no
+ * password. It must never be reachable from a deployed environment, whether or
+ * not Supabase happens to be configured — otherwise anybody with the URL could
+ * sign in as ADMIN.
+ */
+const LOCAL_PICKER_ALLOWED = process.env.NODE_ENV !== 'production';
 
 async function signInLocally(formData: FormData): Promise<void> {
   'use server';
-  if (process.env.NODE_ENV === 'production' && SUPABASE_CONFIGURED) {
+  // Checked on the server too: hiding the buttons is not what stops this.
+  if (!LOCAL_PICKER_ALLOWED) {
     throw new Error('L\'accés local està desactivat en producció.');
   }
   const userId = String(formData.get('userId') ?? '');
@@ -67,18 +81,17 @@ export default async function EntrarPage() {
         {SUPABASE_CONFIGURED ? (
           <section className="targeta p-5">
             <h2 className="etiqueta m-0 mb-3">ACCÉS</h2>
-            <p className="text-[13px] text-[var(--color-ink-soft)]">
-              Introdueix el teu correu per rebre l&apos;enllaç d&apos;accés.
+            <EntrarAmbCorreu />
+          </section>
+        ) : !LOCAL_PICKER_ALLOWED ? (
+          <section className="targeta p-5">
+            <h2 className="etiqueta m-0 mb-1">ACCÉS NO CONFIGURAT</h2>
+            <p className="text-[13px] text-[var(--color-ink-soft)] mb-0">
+              Aquest desplegament no té Supabase Auth configurat, i l&apos;accés local
+              només funciona en desenvolupament. Cal definir{' '}
+              <code>NEXT_PUBLIC_SUPABASE_URL</code> i{' '}
+              <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> a les variables d&apos;entorn.
             </p>
-            <form action="/api/auth/magic-link" method="post" className="grid gap-3 mt-3">
-              <label className="grid gap-1">
-                <span className="etiqueta">CORREU</span>
-                <input className="camp" type="email" name="email" required autoComplete="email" />
-              </label>
-              <button className="boto boto-principal" type="submit">
-                ENVIAR ENLLAÇ D&apos;ACCÉS
-              </button>
-            </form>
           </section>
         ) : (
           <section className="targeta p-5">
