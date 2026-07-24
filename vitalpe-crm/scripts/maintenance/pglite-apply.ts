@@ -3,7 +3,7 @@
  * in-memory Postgres and prints what was created. Fast smoke test that the SQL
  * is valid before it ever reaches a real Supabase project.
  */
-import { createDatabase, listMigrations } from './pglite.js';
+import { createDatabase, listMigrations } from './pglite';
 
 const db = await createDatabase({ seed: true });
 

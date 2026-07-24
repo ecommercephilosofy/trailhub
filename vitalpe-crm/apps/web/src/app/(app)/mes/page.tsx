@@ -52,7 +52,7 @@ export default async function MesPage() {
     {
       href: '/administracio/importacions',
       label: 'IMPORTACIONS',
-      hint: 'Informes d’importació i importador de fitxers.',
+      hint: 'Informes d’importació, reconciliació i desfer.',
       visible: manager,
     },
     {

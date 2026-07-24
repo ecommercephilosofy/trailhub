@@ -287,7 +287,13 @@ export default async function IniciPage({
             ))}
           </ul>
           <p className="text-[12px] text-[var(--color-ink-faint)] mt-2 mb-0">
-            Revisa la connexió a <Link href="/administracio/integracions">INTEGRACIONS</Link>.
+            {session.role === 'ADMIN' ? (
+              <>
+                Revisa la connexió a <Link href="/administracio/integracions">INTEGRACIONS</Link>.
+              </>
+            ) : (
+              'Avisa un administrador perquè revisi la connexió.'
+            )}
           </p>
         </Section>
       )}

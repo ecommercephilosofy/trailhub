@@ -11,10 +11,10 @@
  */
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import type { SqlRunner } from './db.js';
-import { one, scalar } from './db.js';
-import { readWorkbook, type SheetData } from './xlsx.js';
+import { repoRoot } from '../repo-root';
+import type { SqlRunner } from './sql-helpers';
+import { one, scalar } from './sql-helpers';
+import { readWorkbook, type SheetData } from './xlsx';
 import {
   SOURCES,
   NON_CUSTOMER_ACCOUNTS,
@@ -22,18 +22,20 @@ import {
   isBagInBox,
   type SheetSpec,
   type SourceSpec,
-} from './sources.js';
-import * as N from './normalize.js';
+} from './sources';
+import * as N from './normalize';
 import {
   buildCatalogueIndex,
   matchProduct,
   parseProduct,
   type CatalogueEntry,
   type MatchResult,
-} from './products.js';
+} from './products';
 
-const ROOT = fileURLToPath(new URL('../../', import.meta.url));
-export const SOURCE_DIR = path.join(ROOT, 'data', 'sources');
+// Resolved from cwd via the workspace marker, not from import.meta.url: this
+// module also runs inside the web bundle, where import.meta.url points into
+// .next output. See scripts/repo-root.ts.
+export const SOURCE_DIR = path.join(repoRoot(), 'data', 'sources');
 const PARSED_DIR = path.join(SOURCE_DIR, 'parsed');
 
 export interface ImportContext {

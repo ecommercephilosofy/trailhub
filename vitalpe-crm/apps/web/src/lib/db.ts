@@ -183,6 +183,7 @@ const DOMAIN_MESSAGES: Record<string, string> = {
   HORA_FI_ANTERIOR_A_INICI: "L'hora de fi ha de ser posterior a la d'inici.",
   MOTIU_NO_POTENCIAL_OBLIGATORI: 'Cal indicar el motiu per classificar com a NO POTENCIAL.',
   EMPRESA_NO_TROBADA: 'No hem trobat aquesta empresa.',
+  VISITA_NO_TROBADA: 'La visita ja no existeix.',
   FUSIO_MATEIXA_EMPRESA: 'No es pot fusionar una empresa amb ella mateixa.',
   CONFIRMACIO_REQUEREIX_USUARI: 'Cal iniciar sessió per confirmar una classificació.',
 };

@@ -44,7 +44,7 @@ export default async function AdministracioPage() {
     {
       href: '/administracio/importacions',
       label: 'IMPORTACIONS',
-      hint: 'Informes, reconciliació i importador de fitxers.',
+      hint: 'Informes, reconciliació i desfer. Els fitxers nous entren per pnpm import:run.',
       value: `${counts?.imports ?? '0'} importacions`,
       visible: true,
     },

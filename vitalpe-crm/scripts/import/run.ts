@@ -12,14 +12,14 @@
 import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadEnv } from '../load-env.js';
-import { openDatabase, one, scalar, type SqlRunner } from './db.js';
+import { loadEnv } from '../load-env';
+import { openDatabase, one, scalar, type SqlRunner } from './db';
 
 // Before anything reads process.env: credentials live in .env.local, never on
 // the command line and never in a chat.
 loadEnv();
-import { SOURCES } from './sources.js';
-import { emptyStats, flushProvenance, type ImportContext } from './pipeline.js';
+import { SOURCES } from './sources';
+import { emptyStats, flushProvenance, type ImportContext } from './pipeline';
 import {
   importCavaRegister,
   importClientSheet,
@@ -29,14 +29,14 @@ import {
   importPublicDirectory,
   importSalesSheet,
   stageWorkbook,
-} from './passes.js';
+} from './passes';
 import {
   ensureDocsDir,
   writeColumnMapping,
   writeImportReport,
   writeNormalizationDecisions,
   writeSourceInventory,
-} from './report.js';
+} from './report';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const DATA_DIR = path.join(ROOT, '.data', 'crm');

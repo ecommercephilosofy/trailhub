@@ -98,7 +98,7 @@ export async function openDatabase(options: OpenDbOptions = {}): Promise<SqlRunn
   if (url) {
     return PostgresRunner.connect(url);
   }
-  const { createDatabase } = await import('../maintenance/pglite.js');
+  const { createDatabase } = await import('../maintenance/pglite');
   const db = await createDatabase({
     seed: true,
     ...(options.dataDir ? { dataDir: options.dataDir } : {}),

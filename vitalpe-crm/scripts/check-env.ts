@@ -3,7 +3,7 @@
  * database they point at is reachable. Prints NO secret values, only lengths,
  * so the output is safe to paste anywhere.
  */
-import { describeEnv, loadEnv } from './load-env.js';
+import { describeEnv, loadEnv } from './load-env';
 
 const { loaded, missing } = loadEnv();
 

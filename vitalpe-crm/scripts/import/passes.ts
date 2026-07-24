@@ -8,11 +8,11 @@
  */
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { one, scalar } from './db.js';
-import { readWorkbook, type RawRow, type SheetData } from './xlsx.js';
-import { findHeader, isBagInBox, NON_CUSTOMER_ACCOUNTS, type SheetSpec, type SourceSpec } from './sources.js';
-import * as N from './normalize.js';
-import { isByProduct } from './products.js';
+import { one, scalar } from './sql-helpers';
+import { readWorkbook, type RawRow, type SheetData } from './xlsx';
+import { findHeader, isBagInBox, NON_CUSTOMER_ACCOUNTS, type SheetSpec, type SourceSpec } from './sources';
+import * as N from './normalize';
+import { isByProduct } from './products';
 import {
   type ImportContext,
   addAlias,
@@ -24,7 +24,7 @@ import {
   upsertContact,
   upsertLocation,
   SOURCE_DIR,
-} from './pipeline.js';
+} from './pipeline';
 
 interface StagedRow extends RawRow {
   id: string;

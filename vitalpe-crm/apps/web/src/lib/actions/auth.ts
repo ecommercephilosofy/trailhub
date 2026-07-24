@@ -60,6 +60,17 @@ export async function requestCode(formData: FormData): Promise<AuthResult> {
     // false. Do not echo it: telling a stranger which addresses exist is an
     // account-enumeration gift. The next screen asks for the code either way.
     if (error && !/not found|signups not allowed|invalid/i.test(error.message)) {
+      // The built-in mailer allows a handful of e-mails per hour. Rate-limited
+      // is not failed: a code sent minutes ago still works, so the UI must let
+      // the person proceed to typing it instead of locking them out here.
+      if (error.status === 429 || /rate limit/i.test(error.message)) {
+        return {
+          ok: false,
+          codeSent: true,
+          error:
+            'Massa correus en poca estona: Supabase limita els enviaments. Si ja tens un codi recent, fes-lo servir; si no, espera uns minuts.',
+        };
+      }
       console.error('[auth] signInWithOtp', error.message);
       return { ok: false, error: 'No s\'ha pogut enviar el codi. Torna-ho a provar.' };
     }

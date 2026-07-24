@@ -168,7 +168,7 @@ export async function updateVisit(formData: FormData): Promise<ActionResult> {
         `select client_id, task_id, user_id from public.visits where id = $1 and deleted_at is null`,
         [visitId],
       );
-      if (!visit) throw new Error('La visita ja no existeix.');
+      if (!visit) throw new Error('VISITA_NO_TROBADA');
       const nextOwner =
         isManager(session.role) && requestedUser ? requestedUser : visit.user_id ?? session.userId;
       await q.run(
@@ -248,7 +248,7 @@ export async function rescheduleVisit(formData: FormData): Promise<ActionResult>
            from public.visits where id = $1 and deleted_at is null for update`,
         [visitId],
       );
-      if (!visit) throw new Error('La visita ja no existeix.');
+      if (!visit) throw new Error('VISITA_NO_TROBADA');
       if (visit.status === 'CANCEL·LADA') {
         throw new Error('No es pot reprogramar una visita cancel·lada.');
       }
@@ -313,7 +313,7 @@ export async function cancelVisit(formData: FormData): Promise<ActionResult> {
         `select client_id, user_id from public.visits where id = $1 and deleted_at is null`,
         [visitId],
       );
-      if (!visit) throw new Error('La visita ja no existeix.');
+      if (!visit) throw new Error('VISITA_NO_TROBADA');
       // Marks CANCEL·LADA + task CANCEL·LAT. Never deletes: the history stays.
       await q.run(`select app.cancel_visit($1, $2, 'CRM'::app.change_origin)`, [visitId, reason]);
       return { clientId: visit.client_id, owner: visit.user_id ?? session.userId };
@@ -357,7 +357,7 @@ export async function completeVisit(formData: FormData): Promise<ActionResult> {
         `select client_id, task_id, user_id from public.visits where id = $1 and deleted_at is null`,
         [visitId],
       );
-      if (!visit) throw new Error('La visita ja no existeix.');
+      if (!visit) throw new Error('VISITA_NO_TROBADA');
       if (visit.task_id) {
         await q.run(`select app.complete_task($1, $2::app.activity_result, $3)`, [
           visit.task_id,

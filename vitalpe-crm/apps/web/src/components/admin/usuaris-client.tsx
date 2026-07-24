@@ -10,6 +10,7 @@ import {
   type InviteData,
 } from '@/lib/actions/users';
 import { AccioBoto } from './accions';
+import { formatDate } from '@/lib/format';
 
 const ROLES = ['ADMIN', 'GERENT', 'COMERCIAL'] as const;
 
@@ -44,7 +45,7 @@ function Enllac({ data }: { data: InviteData }) {
           {copiat ? 'COPIAT' : 'COPIAR ENLLAÇ'}
         </button>
         <span className="text-[12px] text-[var(--color-ink-faint)]">
-          Caduca el {new Date(data.expiresAt).toLocaleDateString('ca-ES')}
+          Caduca el {formatDate(data.expiresAt)}
         </span>
       </div>
     </div>

@@ -144,11 +144,12 @@ describe('rols com a conjunts de permisos', () => {
 describe('historial comercial', () => {
   it('un COMERCIAL pot afegir una acció però no esborrar-ne cap', async () => {
     const client = await makeClient(f, 'EMPRESA AMB HISTORIAL', { owner: f.comercial });
+    // History is signed: the app always writes user_id = auth.uid().
     await asUser(f.db, f.comercial, () =>
       f.db.query(
-        `insert into public.activities (workspace_id, client_id, activity_type, result, notes)
-         values ($1, $2, 'TRUCADA', 'DEMANA PREUS', 'Primera trucada')`,
-        [f.ws, client],
+        `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+         values ($1, $2, 'TRUCADA', 'DEMANA PREUS', 'Primera trucada', $3)`,
+        [f.ws, client, f.comercial],
       ),
     );
 
@@ -168,9 +169,9 @@ describe('historial comercial', () => {
     const client = await makeClient(f, 'EMPRESA HISTORIAL 2', { owner: f.comercial });
     const created = await asUser(f.db, f.comercial, () =>
       f.db.query<{ id: string }>(
-        `insert into public.activities (workspace_id, client_id, activity_type, result, notes)
-         values ($1, $2, 'VISITA', 'INTERES CONCRET', 'Text original') returning id`,
-        [f.ws, client],
+        `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+         values ($1, $2, 'VISITA', 'INTERES CONCRET', 'Text original', $3) returning id`,
+        [f.ws, client, f.comercial],
       ),
     );
     const activityId = created.rows[0]!.id;
@@ -313,6 +314,77 @@ describe('importacions i fusions', () => {
       ),
     );
     expect(error.message).toMatch(/permission denied|no permission/i);
+  });
+});
+
+describe('catàlegs mestres', () => {
+  it('un ADMIN pot escriure al catàleg de productes; un COMERCIAL no', async () => {
+    const created = await asUser(f.db, f.admin, () =>
+      f.db.query<{ id: string }>(
+        `insert into public.products (name, category) values ('PRODUCTE DE PROVA RLS', 'ALTRES / SENSE DO') returning id`,
+      ),
+    );
+    expect(created.rows).toHaveLength(1);
+
+    await expectRejected(() =>
+      asUser(f.db, f.comercial, () =>
+        f.db.query(
+          `insert into public.products (name, category) values ('INTRUS', 'ALTRES / SENSE DO')`,
+        ),
+      ),
+    );
+  });
+
+  it('un ADMIN pot mapar un àlies de producte i crear campanyes', async () => {
+    const alias = await asUser(f.db, f.admin, () =>
+      f.db.query<{ id: string }>(
+        `insert into public.product_aliases (product_id, alias)
+         select id, 'ALIES DE PROVA RLS' from public.products limit 1 returning id`,
+      ),
+    );
+    expect(alias.rows).toHaveLength(1);
+
+    const campaign = await asUser(f.db, f.admin, () =>
+      f.db.query<{ id: string }>(
+        `insert into public.campaigns (name, year_start) values ('2098-2099', 2098) returning id`,
+      ),
+    );
+    expect(campaign.rows).toHaveLength(1);
+  });
+
+  it('un GERENT no toca els catàlegs mestres', async () => {
+    await expectRejected(() =>
+      asUser(f.db, f.gerent, () =>
+        f.db.query(`insert into public.campaigns (name, year_start) values ('2097-2098', 2097)`),
+      ),
+    );
+  });
+});
+
+describe('signatura de l\'historial', () => {
+  it('un COMERCIAL no pot inserir una acció atribuïda a un altre usuari', async () => {
+    const client = await makeClient(f, 'EMPRESA SIGNATURA', { owner: f.comercial });
+    await expectRejected(() =>
+      asUser(f.db, f.comercial, () =>
+        f.db.query(
+          `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+           values ($1, $2, 'TRUCADA', 'NO DETERMINAT', 'suplantacio', $3)`,
+          [f.ws, client, f.comercialB],
+        ),
+      ),
+    );
+  });
+
+  it('un GERENT sí que pot registrar en nom d\'un comercial (tancar la seva tasca)', async () => {
+    const client = await makeClient(f, 'EMPRESA SIGNATURA GERENT', { owner: f.comercial });
+    const rows = await asUser(f.db, f.gerent, () =>
+      f.db.query<{ id: string }>(
+        `insert into public.activities (workspace_id, client_id, activity_type, result, notes, user_id)
+         values ($1, $2, 'TRUCADA', 'NO DETERMINAT', 'registrat pel gerent', $3) returning id`,
+        [f.ws, client, f.comercial],
+      ),
+    );
+    expect(rows.rows).toHaveLength(1);
   });
 });
 

@@ -8,9 +8,9 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { SqlRunner } from './db.js';
-import { SOURCES } from './sources.js';
-import type { Stats } from './pipeline.js';
+import type { SqlRunner } from './db';
+import { SOURCES } from './sources';
+import type { Stats } from './pipeline';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 

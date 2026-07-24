@@ -20,9 +20,13 @@ export function EntrarAmbCorreu() {
     setError(null);
     startTransition(async () => {
       const result = await requestCode(formData);
-      if (result.ok) {
+      // codeSent can arrive with ok:false — rate-limited — and the person may
+      // hold a perfectly valid code from minutes ago: never lock them out of
+      // the code box, just surface the explanation alongside it.
+      if (result.ok || result.codeSent) {
         setEmail(String(formData.get('email') ?? '').trim().toLowerCase());
         setStep('code');
+        if (!result.ok) setError(result.error ?? null);
       } else {
         setError(result.error ?? 'No s\'ha pogut enviar el codi.');
       }

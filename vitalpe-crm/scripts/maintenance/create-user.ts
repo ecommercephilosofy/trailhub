@@ -9,7 +9,7 @@
  * it) and the workspace membership that authorises it. Both are required:
  * authenticating is not the same as being allowed in.
  */
-import { loadEnv } from '../load-env.js';
+import { loadEnv } from '../load-env';
 
 loadEnv();
 

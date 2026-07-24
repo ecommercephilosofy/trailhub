@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { query, requireSession, type Session } from '@/lib/auth';
 import { backendKind, friendlyError } from '@/lib/db';
 import { elevated, field, ONLY_ADMIN, type ActionResult } from '@/components/admin/service';
-import type { SqlRunner } from '../../../../../scripts/import/db';
+import type { SqlRunner } from '../../../../../scripts/import/sql-helpers';
 import { readWorkbook } from '../../../../../scripts/import/xlsx';
 import { SOURCES, findHeader, type SheetKind, type SheetSpec, type SourceSpec }
   from '../../../../../scripts/import/sources';
@@ -635,7 +635,7 @@ export async function runImport(formData: FormData): Promise<ActionResult<RunOut
     if (error instanceof Error && error.message === ONLY_ADMIN) {
       return { ok: false, error: 'Només un ADMIN pot executar una importació.' };
     }
-    return { ok: false, error: `Importació aturada: ${(error as Error).message}` };
+    return { ok: false, error: `Importació aturada: ${friendlyError(error)}` };
   }
 }
 

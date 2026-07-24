@@ -62,6 +62,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   const filters = parseFilters(search);
   const where = buildWhere(filters, session.workspaceId);
 
+  try {
   const rows = await query(session, (q) =>
     q.many<ExportRow>(
       `select c.name, c.municipality, c.comarca, c.province,
@@ -133,4 +134,13 @@ export async function GET(request: Request): Promise<NextResponse> {
       'cache-control': 'no-store',
     },
   });
+  } catch (error) {
+    // A failed export must come back as a controlled message, not a raw 500:
+    // the person clicked a download button, not an API.
+    console.error('[exportacio]', (error as Error).message);
+    return NextResponse.json(
+      { error: "No s'ha pogut generar l'exportació. Torna-ho a provar." },
+      { status: 500 },
+    );
+  }
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { requireSession } from '@/lib/auth';
+import { query, requireSession } from '@/lib/auth';
 import { withServiceRole } from '@/lib/db';
 import { formatDate, formatTime } from '@/lib/format';
 import { GooglePanel } from '@/components/calendar/google-panel';
@@ -67,22 +67,36 @@ export default async function GoogleCalendarPage({
       )
     : [];
 
-  const recent = await withServiceRole((q) =>
-    q.many<{
-      id: string;
-      channel_id: string | null;
-      message_number: string | null;
-      received_at: string;
-      processed_at: string | null;
-      outcome: string | null;
-      error: string | null;
-    }>(
-      `select id::text as id, channel_id, message_number::text, received_at, processed_at, outcome, error
-         from public.calendar_sync_events order by id desc limit 12`,
-    ),
-  );
+  // calendar_sync_events is server-only bookkeeping with no RLS policy, so the
+  // service role is unavoidable here — which is exactly why the query must be
+  // scoped BY HAND to this user's own channels. Unscoped, it showed the last
+  // 12 webhook hits of every workspace in the deployment (audit 24/07/2026).
+  const recent = connection
+    ? await withServiceRole((q) =>
+        q.many<{
+          id: string;
+          channel_id: string | null;
+          message_number: string | null;
+          received_at: string;
+          processed_at: string | null;
+          outcome: string | null;
+          error: string | null;
+        }>(
+          `select e.id::text as id, e.channel_id, e.message_number::text, e.received_at,
+                  e.processed_at, e.outcome, e.error
+             from public.calendar_sync_events e
+            where e.channel_id in (
+                    select w.channel_id from public.calendar_watch_channels w
+                     where w.connection_id = $1)
+            order by e.id desc limit 12`,
+          [connection.id],
+        ),
+      )
+    : [];
 
-  const links = await withServiceRole((q) =>
+  // Aggregate sync state is workspace data with a real RLS policy: read it as
+  // the user, not as the service role.
+  const links = await query(session, (q) =>
     q.many<{ status: string; n: string }>(
       `select status::text as status, count(*)::text as n
          from public.calendar_event_links where workspace_id = $1 group by status`,
