@@ -914,3 +914,35 @@ the page looked fine until a visit existed — and it would have crashed in
 production the same way. Fixed with `toCivilDate()`, which also stops a 23:30
 Madrid visit from linking to the previous day, and the interface now says
 `Date | string | null` — what actually arrives.
+
+## 39. Sign-in is a password, not an e-mailed code
+
+The first build signed in with a six-digit code by e-mail — passwordless, nothing
+to store or forget. In production that ran straight into the wall it depends on:
+Supabase's built-in mailer sends whatever the default template renders (a magic
+**link**, not a code), the template cannot be edited without configuring a custom
+SMTP provider, and the mailer is rate-limited to a few messages an hour. So the
+one commercial who signs in every day would depend on an unconfigurable,
+throttled mail path — and the emails that did arrive pointed at `localhost:3000`.
+
+Switched to `signInWithPassword`. The e-mail is out of the login path entirely:
+no template to edit, no SMTP to stand up, no rate limit, no redirect URL to get
+right. The security model is unchanged — authentication still only proves the
+credentials, and the session cookie is opened only after the same active-
+membership check as before.
+
+- Accounts are created by `pnpm user:add`; the password is set by
+  `pnpm user:password -- <email> --generate`, which mints a strong password from
+  the CSPRNG (rejection-sampled, no modulo bias, no look-alike characters) and
+  prints it exactly once. It is never written to a file or a log.
+- The accounts were created with `email_confirm: true`, so a password works
+  immediately — a project that required e-mail confirmation would otherwise
+  block the very login this enables, using the mailer this approach avoids.
+- Changing one's own password (EL MEU COMPTE) verifies the current password with
+  `signInWithPassword` before the service role sets the new one: a valid session
+  cookie is not proof of knowing the password, and a borrowed unlocked screen
+  must not lock the owner out.
+
+The trade this accepts: a forgotten password needs an administrator to set a new
+one (`pnpm user:password`), because self-service reset is the one thing that
+does need the mailer. For a two-person tool that is the right amount of process.

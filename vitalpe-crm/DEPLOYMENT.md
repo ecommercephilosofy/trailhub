@@ -50,6 +50,21 @@ pnpm import:run -- --remote
 Revisar `docs/imports/<fecha>/IMPORT_REPORT.md` y comprobar que la identidad de
 reconciliación cuadra antes de dar por buena la carga.
 
+8. **Crear los usuarios y darles contraseña.** El acceso es con correo y
+   contraseña (`signInWithPassword`), no con código por email: la app no depende
+   del correo de Supabase, que solo se puede personalizar tras configurar un SMTP
+   propio y está limitado a unos pocos envíos por hora.
+
+```bash
+pnpm user:add      -- carlos.espiells@gmail.com ADMIN Carlos Espiells
+pnpm user:password -- carlos.espiells@gmail.com --generate
+```
+
+`user:password --generate` imprime una contraseña fuerte **una sola vez**; se le
+pasa a la persona por un canal seguro y la cambia al entrar, desde
+**EL MEU COMPTE · CONTRASENYA**. Para fijar una contraseña concreta:
+`--password=LaQueSea`. No hace falta tocar plantillas de email ni el SMTP.
+
 ---
 
 ## 2. Vercel

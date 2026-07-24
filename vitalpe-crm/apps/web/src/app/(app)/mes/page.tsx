@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { clearSessionCookie, isManager, requireSession } from '@/lib/auth';
+import { CanviContrasenya } from '@/components/canvi-contrasenya';
 
 export const dynamic = 'force-dynamic';
 
@@ -132,6 +133,7 @@ export default async function MesPage() {
             El rol el canvia un ADMIN des d’USUARIS. Ni aquesta pantalla ni cap altra et permet
             pujar-te el rol: ho impedeix la base de dades.
           </p>
+          <CanviContrasenya />
         </li>
       </Section>
 

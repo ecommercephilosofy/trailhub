@@ -96,8 +96,9 @@ try {
   `;
   console.log(`  ✓ Membre de «${ws.name}» amb rol ${role}`);
 
-  console.log(`\n✓ ${email} ja pot entrar.`);
-  console.log('  A la pantalla d\'accés, escriu el correu i rebràs un codi de sis xifres.\n');
+  console.log(`\n✓ ${email} ja té perfil i membresia.`);
+  console.log('  Encara li cal una contrasenya per entrar:');
+  console.log(`    pnpm user:password -- ${email} --generate\n`);
 } catch (error) {
   const message = (error as Error).message.split(databaseUrl).join('[DATABASE_URL]');
   console.error(`\n✗ ${message}\n`);

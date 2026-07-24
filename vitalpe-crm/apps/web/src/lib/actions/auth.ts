@@ -2,20 +2,25 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
-import { setSessionCookie } from '@/lib/auth';
+import { requireSession, setSessionCookie } from '@/lib/auth';
 import { withServiceRole } from '@/lib/db';
 
+const SERVICE_KEY_ENV = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 /**
- * Sign-in with Supabase Auth, one-time code by e-mail.
+ * Sign-in with Supabase Auth, e-mail and password.
  *
- * A six-digit code rather than a magic link, deliberately: the link flow needs
- * PKCE state carried across a redirect, which is easy to get subtly wrong and
- * fails silently. `verifyOtp` is a single server-side call with no state to
- * lose, and it works when the mail client rewrites links.
+ * Password, not a one-time code: the OTP flow depends on Supabase sending mail,
+ * and the built-in mailer can only be customised behind a custom SMTP provider
+ * and is rate-limited to a handful of messages an hour. For a tool one person
+ * signs into every day that is the wrong dependency. A password is verified in
+ * a single server-side call with nothing to deliver.
  *
- * `shouldCreateUser: false` is the access control: only somebody who already
- * has a profile AND an active membership can get in. Signing in never creates
- * an account — that is what the invitation flow is for.
+ * Authentication is not authorisation. `signInWithPassword` only proves control
+ * of the credentials; the session is opened only if the account also has an
+ * active membership in a workspace. Accounts and passwords are created by an
+ * administrator (scripts/maintenance/create-user.ts and set-password.ts) — this
+ * screen never creates one, which is what keeps sign-in from being sign-up.
  */
 
 const URL_ENV = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -26,8 +31,6 @@ const KEY_ENV =
 export interface AuthResult {
   ok: boolean;
   error?: string;
-  /** Set when the code was sent and the UI should ask for it. */
-  codeSent?: boolean;
 }
 
 function client() {
@@ -43,70 +46,34 @@ function normaliseEmail(raw: FormDataEntryValue | null): string {
   return String(raw ?? '').trim().toLowerCase();
 }
 
-/** Step 1 — e-mail the code. */
-export async function requestCode(formData: FormData): Promise<AuthResult> {
+/** Verify the credentials and open the session. */
+export async function signIn(formData: FormData): Promise<AuthResult> {
   const email = normaliseEmail(formData.get('email'));
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return { ok: false, error: 'Escriu una adreça de correu vàlida.' };
-  }
+  const password = String(formData.get('password') ?? '');
 
-  try {
-    const { error } = await client().auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: false },
-    });
-
-    // Supabase returns an error for an unknown address when shouldCreateUser is
-    // false. Do not echo it: telling a stranger which addresses exist is an
-    // account-enumeration gift. The next screen asks for the code either way.
-    if (error && !/not found|signups not allowed|invalid/i.test(error.message)) {
-      // The built-in mailer allows a handful of e-mails per hour. Rate-limited
-      // is not failed: a code sent minutes ago still works, so the UI must let
-      // the person proceed to typing it instead of locking them out here.
-      if (error.status === 429 || /rate limit/i.test(error.message)) {
-        return {
-          ok: false,
-          codeSent: true,
-          error:
-            'Massa correus en poca estona: Supabase limita els enviaments. Si ja tens un codi recent, fes-lo servir; si no, espera uns minuts.',
-        };
-      }
-      console.error('[auth] signInWithOtp', error.message);
-      return { ok: false, error: 'No s\'ha pogut enviar el codi. Torna-ho a provar.' };
-    }
-  } catch (error) {
-    if ((error as Error).message === 'SUPABASE_NO_CONFIGURAT') {
-      return { ok: false, error: 'L\'accés amb correu no està configurat en aquest entorn.' };
-    }
-    console.error('[auth]', (error as Error).message);
-    return { ok: false, error: 'No s\'ha pogut enviar el codi. Torna-ho a provar.' };
-  }
-
-  return { ok: true, codeSent: true };
-}
-
-/** Step 2 — verify the code and open the session. */
-export async function verifyCode(formData: FormData): Promise<AuthResult> {
-  const email = normaliseEmail(formData.get('email'));
-  const token = String(formData.get('code') ?? '').replace(/\D/g, '');
-
-  if (token.length < 6) {
-    return { ok: false, error: 'El codi té sis xifres.' };
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || password.length === 0) {
+    return { ok: false, error: 'Escriu el correu i la contrasenya.' };
   }
 
   let userId: string;
   try {
-    const { data, error } = await client().auth.verifyOtp({ email, token, type: 'email' });
+    const { data, error } = await client().auth.signInWithPassword({ email, password });
     if (error || !data.user) {
-      return { ok: false, error: 'El codi no és vàlid o ha caducat. Demana\'n un de nou.' };
+      // One message for both "no such account" and "wrong password": telling a
+      // stranger which addresses exist is an account-enumeration gift, and a
+      // password prompt that distinguishes the two is where that leak lives.
+      if (error?.status === 429 || /rate limit/i.test(error?.message ?? '')) {
+        return { ok: false, error: 'Massa intents. Espera un minut i torna-ho a provar.' };
+      }
+      return { ok: false, error: 'Correu o contrasenya incorrectes.' };
     }
     userId = data.user.id;
   } catch (error) {
     if ((error as Error).message === 'SUPABASE_NO_CONFIGURAT') {
-      return { ok: false, error: 'L\'accés amb correu no està configurat en aquest entorn.' };
+      return { ok: false, error: 'L\'accés no està configurat en aquest entorn.' };
     }
     console.error('[auth]', (error as Error).message);
-    return { ok: false, error: 'No s\'ha pogut verificar el codi.' };
+    return { ok: false, error: 'No s\'ha pogut iniciar la sessió. Torna-ho a provar.' };
   }
 
   // Authenticated with Supabase is not the same as authorised here: the user
@@ -126,10 +93,56 @@ export async function verifyCode(formData: FormData): Promise<AuthResult> {
     return {
       ok: false,
       error:
-        'Aquest compte encara no té accés a cap espai de treball. Demana a un administrador que t\'hi convidi.',
+        'Aquest compte encara no té accés a cap espai de treball. Demana a un administrador que t\'hi doni d\'alta.',
     };
   }
 
   await setSessionCookie(userId);
   redirect('/inici');
+}
+
+/**
+ * Change one's own password.
+ *
+ * The current password is checked first, with `signInWithPassword`: possession
+ * of a valid session cookie is not the same as knowing the password, and a
+ * borrowed unlocked screen must not be enough to lock the real owner out. Only
+ * once the current one verifies does the service role set the new one.
+ */
+export async function changePassword(formData: FormData): Promise<AuthResult> {
+  const session = await requireSession();
+  const current = String(formData.get('current') ?? '');
+  const next = String(formData.get('next') ?? '');
+
+  if (next.length < 8) {
+    return { ok: false, error: 'La nova contrasenya ha de tenir com a mínim 8 caràcters.' };
+  }
+  if (next === current) {
+    return { ok: false, error: 'La nova contrasenya ha de ser diferent de l\'actual.' };
+  }
+  if (!SERVICE_KEY_ENV || !URL_ENV) {
+    return { ok: false, error: 'El canvi de contrasenya no està configurat en aquest entorn.' };
+  }
+
+  // Verify the current password before changing anything.
+  const check = await client().auth.signInWithPassword({
+    email: session.email,
+    password: current,
+  });
+  if (check.error || !check.data.user) {
+    return { ok: false, error: 'La contrasenya actual no és correcta.' };
+  }
+
+  // Setting a password is an admin operation: the app holds its own session
+  // cookie, not a live Supabase session the user could update themselves.
+  const admin = createClient(URL_ENV, SERVICE_KEY_ENV, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const updated = await admin.auth.admin.updateUserById(session.userId, { password: next });
+  if (updated.error) {
+    console.error('[auth] updateUserById', updated.error.message);
+    return { ok: false, error: 'No s\'ha pogut desar la contrasenya. Torna-ho a provar.' };
+  }
+
+  return { ok: true };
 }

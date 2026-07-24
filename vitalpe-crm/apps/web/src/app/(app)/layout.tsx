@@ -94,6 +94,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </button>
             </form>
           </div>
+          <Link
+            href="/mes"
+            className="block mt-2 text-[11px] text-[var(--color-ink-faint)] no-underline hover:underline"
+          >
+            EL MEU COMPTE · CONTRASENYA
+          </Link>
         </div>
       </aside>
 
