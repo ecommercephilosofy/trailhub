@@ -25,4 +25,30 @@ config.resolver.nodeModulesPaths = [
 ];
 config.resolver.disableHierarchicalLookup = true;
 
+/**
+ * The shared packages are ESM TypeScript: they import siblings as `./foo.js`
+ * while the file on disk is `./foo.ts`. That is required by NodeNext and is
+ * what the web build already understands, but Metro resolves the specifier
+ * literally and fails.
+ *
+ * So a relative `.js` specifier that does not exist is retried as `.ts`/`.tsx`
+ * before giving up. Scoped to relative paths inside the repo, so nothing in
+ * node_modules changes behaviour.
+ */
+const defaultResolveRequest = config.resolver.resolveRequest;
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  const resolve = defaultResolveRequest ?? context.resolveRequest;
+  if (moduleName.startsWith('.') && moduleName.endsWith('.js')) {
+    const withoutExtension = moduleName.slice(0, -'.js'.length);
+    for (const candidate of [`${withoutExtension}.ts`, `${withoutExtension}.tsx`]) {
+      try {
+        return resolve(context, candidate, platform);
+      } catch {
+        // Fall through to the original specifier below.
+      }
+    }
+  }
+  return resolve(context, moduleName, platform);
+};
+
 module.exports = config;

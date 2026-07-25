@@ -21,14 +21,56 @@
 | `src/core/cache.ts`, `localData.ts` | Caché de visitas, clientes y tareas; borrado al cerrar sesión | ✅ |
 | `src/core/voiceNotes.ts` | Grabación pendiente de subida | ✅ |
 | `src/core/theme.ts` | Los mismos tokens que la web (papel, borgoña, carbón) | — |
+| `src/runtime/geofencing.ts` | Tarea de fondo (`TaskManager.defineTask` en ámbito de módulo), registro y retirada de regiones, permisos | — |
+| `src/runtime/notifications.ts` | Permiso, canal Android y presentación del aviso | — |
+| `src/runtime/storage.ts` | Caché, regiones y *cooldowns* en disco, para que la tarea de fondo pueda decidir sin sesión | — |
+| `src/runtime/session.tsx` | Sesión Supabase en el enclave seguro; al cerrar sesión **primero** desarma las geovallas | — |
+| `src/runtime/api.ts` | Lee el conjunto de trabajo con el JWT del usuario (RLS aplica; nunca hay clave de servicio) | — |
+| `app/*` | 9 pantallas expo-router (ver abajo) | — |
 
-La lógica de negocio que consumirán las pantallas **ya existe y está probada**
-en `packages/domain/src/geofence.ts` (29 pruebas): selección dinámica de
-regiones con el tope de 20 de iOS, prioridad por agenda, `arrivalConfidence()` y
-`isInCooldown()`. No hay que reinventarla.
+La lógica de negocio **ya existía y está probada** en
+`packages/domain/src/geofence.ts` (29 pruebas) y `src/core/` (24 pruebas):
+selección dinámica con el tope de 20 de iOS, prioridad por agenda,
+`arrivalConfidence()` y `isInCooldown()`. Las pantallas no deciden nada: piden
+la decisión y la ejecutan.
 
-**Falta:** las pantallas (INICI, CLIENTS, CALENDARI, REGISTRE, MÉS), el registro
-real de regiones en el dispositivo y el cableado de la cola offline.
+### Las pantallas
+
+| Ruta | Pantalla |
+| --- | --- |
+| `/entrar` | Acceso con correo y contraseña |
+| `/` | AVUI: visitas de hoy, vencidas, estado de la vigilancia |
+| `/clients/[id]` | **La ficha — lo que abre la notificación de llegada** |
+| `/clients/[id]/visits/[visitId]` | Visita (destino del enlace de Google Calendar) |
+| `/arribada` | Elegir empresa cuando la llegada es ambigua |
+| `/clients` | CLIENTS PROPERS, ordenados por distancia real |
+| `/permisos-ubicacio` | Explicación antes de pedir «Sempre» |
+| `/registre` | Nota de voz o texto → previsualización → confirmar |
+
+### Estado real
+
+Compila y empaqueta en las dos plataformas (iOS 3,4 MB, Android 3,7 MB de
+*bytecode* Hermes) — evidencia en
+`test-artifacts/critical-features/mobile-build.log`.
+
+**Nada se ha probado todavía en un teléfono físico.** Un *bundle* demuestra que
+el código carga, no que iOS entregue una entrada de geovalla una hora después
+dentro de una bodega. El listado de lo que hay que comprobar a mano está al
+final de este documento.
+
+### Arrancar
+
+```bash
+pnpm --filter @vitalpe/mobile install
+# Variables que la app necesita (van al bundle: solo claves públicas)
+export EXPO_PUBLIC_SUPABASE_URL="https://<proyecto>.supabase.co"
+export EXPO_PUBLIC_SUPABASE_ANON_KEY="<anon key>"
+export EXPO_PUBLIC_API_URL="https://vitalpe-crm-web-tau.vercel.app"
+pnpm --filter @vitalpe/mobile build:dev:ios     # o build:dev:android
+```
+
+Nunca pongas aquí `SUPABASE_SERVICE_ROLE_KEY`: cualquier cosa que entre en el
+*bundle* es legible por quien tenga el `.ipa`.
 
 ---
 
@@ -205,7 +247,9 @@ y restricciones del fabricante. Ver `MANUAL_TEST_CHECKLIST.md`, secciones A y B.
 ## Pruebas
 
 ```bash
-cd apps/mobile && pnpm exec vitest run --pool=forks   # 18 pruebas
+pnpm --filter @vitalpe/mobile test        # 24 pruebas
+pnpm --filter @vitalpe/mobile typecheck
+npx expo export --platform ios            # prueba de que empaqueta
 ```
 
 Cubren el análisis de deep links (incluido el rechazo de `http` y de hosts
@@ -218,3 +262,33 @@ ajenos), la carga de la notificación, la cola offline y el borrado local.
 
 La lógica de geovallas se prueba en `packages/domain/src/geofence.test.ts`
 (29 pruebas), junto al resto del dominio.
+
+
+---
+
+## Lo que solo se puede comprobar en un teléfono
+
+Ninguna de estas casillas se puede marcar con una prueba automática, un
+simulador ni un *bundle*. Hasta que estén hechas, la detección de llegada es
+**implementada pero no probada**.
+
+| # | Comprobación | Cómo | ✓ |
+| --- | --- | --- | :---: |
+| 1 | El permiso «Sempre» se concede tras la pantalla explicativa | Instalar la *dev build*, abrir `/permisos-ubicacio` | ☐ |
+| 2 | Se arman las regiones | AVUI muestra «N clients vigilats» > 0 | ☐ |
+| 3 | Llegada con la app **abierta** | Ir a un cliente con coordenadas; llega el aviso | ☐ |
+| 4 | Llegada con la app **en segundo plano** | Enviar al fondo, entrar en la geovalla | ☐ |
+| 5 | Llegada con la app **cerrada (arranque en frío)** | Cerrar la app (no forzar), entrar; el aviso debe abrir la ficha correcta | ☐ |
+| 6 | Tras **forzar el cierre** | iOS reanuda las regiones; Android puede no hacerlo hasta reabrir. Documentar lo observado | ☐ |
+| 7 | Reinicio del teléfono | Comprobar si sigue vigilando | ☐ |
+| 8 | Dos empresas juntas | Debe abrir el **selector**, nunca una ficha al azar | ☐ |
+| 9 | *Cooldown* | Entrar y salir varias veces: un solo aviso | ☐ |
+| 10 | Pantalla bloqueada con el nombre oculto | El aviso no debe nombrar la empresa | ☐ |
+| 11 | Permiso denegado | El CRM sigue funcionando; solo se pierden los avisos | ☐ |
+| 12 | Batería | Un día de uso normal sin consumo anómalo | ☐ |
+
+**Precisión honesta:** una geovalla de iOS puede tardar minutos en dispararse y
+tiene un margen de decenas de metros; Android varía mucho según el fabricante y
+sus optimizaciones de batería. El geofencing **no es infalible** y no debe
+venderse como tal: es una ayuda, y el comercial siempre puede abrir la ficha a
+mano desde CLIENTS PROPERS.

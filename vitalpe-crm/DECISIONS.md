@@ -946,3 +946,57 @@ membership check as before.
 The trade this accepts: a forgotten password needs an administrator to set a new
 one (`pnpm user:password`), because self-service reset is the one thing that
 does need the mailer. For a two-person tool that is the right amount of process.
+
+## 37. The phone speaks HTTP, so the voice pipeline left the actions file
+
+React Native cannot call a Next.js server action: that is a browser/RSC wire
+protocol, not an API. The mobile app therefore needs real endpoints, and the
+obvious shortcut — export the session-taking functions from
+`lib/actions/voice.ts` and call them from a route handler — is a hole. **Every
+export of a `'use server'` file is a callable server action**, so exporting
+`applyProposalFor(session, formData)` there would have let any browser post a
+session of its choosing and act as another user.
+
+So the pipeline moved to `lib/voice/pipeline.ts`, a plain server-only module.
+`lib/actions/voice.ts` is now four thin wrappers that resolve the session from
+the cookie, and `app/api/veu/{interpretar,aplicar}` are two route handlers that
+resolve it from an `Authorization: Bearer` token. Both call the same functions,
+so the phone cannot drift from the web on what an action is allowed to do.
+
+`sessionFromBearer()` verifies the token by asking Supabase who it belongs to,
+never by decoding it locally — a locally-decoded JWT is trusted input. It then
+runs the same active-membership check as the cookie path, sharing
+`sessionForUser()` so the two definitions of "authorised" cannot diverge.
+
+## 38. The mobile app had never been built, and it showed
+
+The arrival logic was complete and well tested, but `apps/mobile` had no `app/`
+directory and its dependencies had never been installed. Building it for the
+first time surfaced four defects that no unit test could have caught, because
+they all live in configuration and module resolution:
+
+- `ios.deploymentTarget: '15.1'` is below this SDK's minimum of 16.4, which made
+  **every** config resolution throw — the app could not even be described, let
+  alone compiled.
+- `newArchEnabled` and `android.edgeToEdgeEnabled` no longer exist in the config
+  types (both are now the platform default).
+- `@expo/metro-runtime`, a peer dependency of `expo-router`, was missing —
+  pnpm's strict linker does not hoist it.
+- Metro could not resolve the workspace packages, which are ESM TypeScript and
+  import siblings as `./foo.js` while the file on disk is `./foo.ts`. The web
+  bundler understands this; Metro needed an explicit `resolveRequest` that
+  retries a failed relative `.js` as `.ts`/`.tsx`.
+
+Two structural decisions came out of it. `TaskManager.defineTask` is called at
+**module scope** in `src/runtime/geofencing.ts` and imported for its side effect
+by the root layout: when the OS cold-boots the app for a region crossing it
+looks the task up immediately, so a task defined inside a component or a lazy
+import simply would not exist — the classic "works in development, never fires
+in production". And the code is split into `src/core/` (pure, tested, no device
+API) and `src/runtime/` (device only), which is what lets the entire decision
+path be verified in Node before any build exists.
+
+The honest limit is recorded in `docs/MOBILE_SETUP.md`: bundling proves the code
+loads, not that a phone in a cellar receives a geofence event. Twelve checks
+need a real device, and until they are done the feature is *implemented but not
+proven*.

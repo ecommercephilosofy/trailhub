@@ -1,7 +1,9 @@
 import { defineConfig } from 'vitest/config';
 import { fileURLToPath } from 'node:url';
 
-const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+// `.href` keeps this working under both lib.dom and @types/node: the two
+// declare incompatible URL types, and fileURLToPath also accepts the string.
+const r = (p: string) => fileURLToPath(new URL(p, import.meta.url).href);
 
 /**
  * The root vitest config deliberately EXCLUDES apps/mobile, so this package

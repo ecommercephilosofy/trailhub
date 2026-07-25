@@ -35,8 +35,9 @@ None of these crashes the app: each degrades to a working local implementation.
 | `pnpm typecheck` | pass (repo) |
 | `pnpm lint` | 1 pre-existing warning (`scripts/import/db.ts:61`) |
 | `pnpm build` | pass (web) |
-| `apps/mobile` typecheck/build | **cannot run** — Expo dependencies not installed (`node_modules` empty) |
-| `apps/mobile` logic tests | 18 pass (deep links) |
+| `apps/mobile` typecheck | pass |
+| `apps/mobile` bundle | pass — iOS 3.4 MB, Android 3.7 MB |
+| `apps/mobile` logic tests | 24 pass (deep links + arrival flow) |
 
 A real fix was made here: `tsconfig.json` was missing the bare
 `@vitalpe/integrations` path mapping (every other package had one), which broke
@@ -83,25 +84,54 @@ visita…" in one utterance yields one action, not three. This is documented, no
 hidden: the free-language multi-action path is `ANTHROPIC_API_KEY`'s job. The
 apply pipeline itself handles all action types (proven by VOZ-04).
 
+**Mobile:** the phone records with `expo-audio` and posts to two new route
+handlers, `POST /api/veu/interpretar` and `POST /api/veu/aplicar`. They exist
+because a server action is a browser/RSC protocol that React Native cannot
+speak; they authenticate with a Supabase bearer token and then run the **same**
+pipeline as the web. To make that sharing safe the pipeline moved to
+`lib/voice/pipeline.ts`, which is deliberately **not** a `'use server'` file:
+every export of such a file is callable by a browser, and these functions take a
+`Session` as their first argument — exporting them there would have let a client
+hand in any session it liked.
+
 **Not exercised end-to-end here:** the browser MediaRecorder capture and the
-mobile recorder (no device; mobile app has no runnable UI — see Feature 2).
+on-device recorder (no phone).
 
 ---
 
 ## Feature 2 — Arrival detection at a client
 
-**Status: FUNCIONA PARCIALMENTE (logic) / BLOQUEADO POR LIMITACIÓN DE PLATAFORMA
-(real device).**
+**Status: FUNCIONA PARCIALMENTE — the logic is complete and tested and the app
+now builds for both platforms, but nothing has been verified on a real phone.**
 
-**Architecture (real but incomplete):** `apps/mobile` is a configured Expo
+**Architecture (real, and now runnable):** `apps/mobile` is a configured Expo
 project — `expo-location`, `expo-task-manager` (background geofencing),
 `expo-notifications`, deep links declared three ways (custom scheme + iOS
 associated domains + Android App Links), background modes in `app.config.ts`.
-The hard logic exists and is unit-tested in `apps/mobile/src/core/` and
-`packages/domain/src/geofence.ts`. **But there is no `app/` directory** (no
-expo-router screens) and the Expo dependencies are not installed, so the mobile
-app **cannot be built or run** as-is. Real on-device background geofencing is
-therefore not deployable from this repository today.
+The hard logic is unit-tested in `apps/mobile/src/core/` and
+`packages/domain/src/geofence.ts`.
+
+At first audit the app had **no `app/` directory and no installed dependencies**,
+so it could not be built at all. That gap has since been closed (see
+[`mobile-build.log`](test-artifacts/critical-features/mobile-build.log)):
+
+- Nine expo-router screens exist: sign-in, AVUI, the company card (the
+  notification target), the visit, the arrival chooser, nearby clients, the
+  permission explainer and the voice capture.
+- A `src/runtime/` layer supplies the device facts: Supabase session in the
+  secure enclave, the offline cache, notifications, and the background geofence
+  task — `TaskManager.defineTask` at **module scope**, which is the only way the
+  task exists when the OS cold-boots the app for a crossing.
+- **Both platforms bundle**: iOS 3.4 MB and Android 3.7 MB Hermes bytecode.
+
+Four real defects were found only by trying to build it, none of which any test
+would have caught: `ios.deploymentTarget: 15.1` was below this SDK's minimum
+(every config resolution failed), `newArchEnabled` and `edgeToEdgeEnabled` no
+longer exist in the config types, `@expo/metro-runtime` was missing, and Metro
+could not resolve the workspace packages' ESM `./foo.js` specifiers.
+
+Still true: **nothing has run on a physical phone.** A bundle proves the code
+loads, not that iOS delivers a region crossing an hour later in a cellar.
 
 **Tested (evidence: `harness-results.json`) — the domain + mobile core:**
 
@@ -125,10 +155,10 @@ therefore not deployable from this repository today.
 continuous track is stored (only discrete arrival events).
 
 **Blocked / needs a device:** foreground/background/cold-start behaviour with the
-app closed, real OS geofence delivery, permission prompts. Checklist in
-[`docs/MOBILE_SETUP.md`](docs/MOBILE_SETUP.md). To make this runnable: add the
-`app/` expo-router screens, `pnpm --filter @vitalpe/mobile install`, then an EAS
-development build on a physical phone.
+app closed, real OS geofence delivery, permission prompts. These cannot be
+simulated honestly — see the device checklist in
+[`docs/MOBILE_SETUP.md`](docs/MOBILE_SETUP.md). Next step is an EAS development
+build (`pnpm --filter @vitalpe/mobile build:dev:ios`) installed on a phone.
 
 ---
 
@@ -198,7 +228,7 @@ both follow) is exercised in CAL-04.
 | GEO-02 | Notificación | Real (lógica) | — | Harness GEO-02 | `harness-results.json` | FUNCIONA COMPLETAMENTE (lógica) |
 | GEO-03 | Deep link a cliente | Real | — | Harness GEO-03 + 18 tests deepLinks | `harness-results.json` | FUNCIONA COMPLETAMENTE (lógica) |
 | GEO-04 | Varios clientes cercanos | Real | — | Harness GEO-04 | `harness-results.json` | FUNCIONA COMPLETAMENTE (lógica) |
-| GEO-05 | Funcionamiento en segundo plano | Sin app ejecutable | — | No ejecutable (sin `app/`, sin device) | `apps/mobile/` | BLOQUEADO POR LIMITACIÓN DE PLATAFORMA |
+| GEO-05 | Funcionamiento en segundo plano | Sin app ejecutable | 9 pantallas expo-router + capa `src/runtime/` (tarea de fondo en ámbito de módulo); 4 defectos de build corregidos | Bundle iOS 3.4 MB y Android 3.7 MB; 24 tests de lógica | [`mobile-build.log`](test-artifacts/critical-features/mobile-build.log) | IMPLEMENTADO PERO NO PROBADO (falta dispositivo) |
 | CAL-01 | Calendario interno | Real | — | Harness CAL-01 | `harness-results.json` | FUNCIONA COMPLETAMENTE |
 | CAL-02 | CRM → Google | Real (engine) | — | Harness CAL-02 | `harness-results.json` | FUNCIONA COMPLETAMENTE (engine); Google real bloqueado |
 | CAL-03 | Google → CRM | Real (engine) | — | Harness CAL-03 | `harness-results.json` | FUNCIONA COMPLETAMENTE (engine); Google real bloqueado |
@@ -223,10 +253,11 @@ both follow) is exercised in CAL-04.
 
 ## Real risks (not hidden)
 
-1. **Mobile app is not runnable.** The geofencing/deep-link/arrival *logic* is
-   complete and tested, but without `app/` screens, installed Expo deps and a
-   device, on-device background arrival cannot be claimed to work. This is the
-   single biggest gap.
+1. **Nothing has run on a physical phone.** The app now builds for both
+   platforms and its decision path is tested, but a bundle is not a device: OS
+   region delivery, the "Always" permission prompt, cold-start wake-ups and
+   battery behaviour are unverified. Do not claim on-device arrival works until
+   the checklist in `docs/MOBILE_SETUP.md` has been run on a real phone.
 2. **Real transcription and real Google sync are unproven** for lack of
    credentials. The code paths that consume them are proven with local
    providers; the cloud transports are not.
@@ -243,4 +274,4 @@ both follow) is exercised in CAL-04.
 | Real transcription | `TRANSCRIPTION_PROVIDER=openai`, `OPENAI_API_KEY` | Vercel env |
 | Multi-action / free-language voice | `ANTHROPIC_API_KEY` | Vercel env |
 | Real Google Calendar | `GOOGLE_CLIENT_ID/SECRET/REDIRECT_URI` (+ `GOOGLE_CALENDAR_WEBHOOK_URL`) | Vercel env + Google Cloud |
-| Runnable mobile app | add `app/` expo-router screens, install Expo deps, EAS dev build | `apps/mobile` |
+| On-device arrival testing | EAS dev build on a real phone + `EXPO_PUBLIC_SUPABASE_*` | `apps/mobile`, EAS |

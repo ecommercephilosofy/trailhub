@@ -26,7 +26,6 @@ const config: ExpoConfig = {
   orientation: 'portrait',
   scheme: 'vitalpe',
   userInterfaceStyle: 'light',
-  newArchEnabled: true,
   backgroundColor: '#faf7f2',
   primaryColor: '#6b1230',
   assetBundlePatterns: ['**/*'],
@@ -70,7 +69,8 @@ const config: ExpoConfig = {
 
   android: {
     package: BUNDLE_ID,
-    edgeToEdgeEnabled: true,
+    // Edge-to-edge is the platform default from SDK 54 on; the old opt-in flag
+    // was removed from the config type, so setting it fails the type check.
     adaptiveIcon: {
       backgroundColor: '#faf7f2',
     },
@@ -130,7 +130,9 @@ const config: ExpoConfig = {
     [
       'expo-build-properties',
       {
-        ios: { deploymentTarget: '15.1' },
+        // This SDK refuses anything below 16.4; the old 15.1 made every config
+        // resolution fail, which is why it never got as far as a build.
+        ios: { deploymentTarget: '16.4' },
         android: { minSdkVersion: 24, compileSdkVersion: 35, targetSdkVersion: 35 },
       },
     ],

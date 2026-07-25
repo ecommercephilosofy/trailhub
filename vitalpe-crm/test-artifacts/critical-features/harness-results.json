@@ -1,6 +1,6 @@
 {
-  "runId": "E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z",
-  "at": "2026-07-25T09:20:31.045Z",
+  "runId": "E2E-CRITICAL-AUDIT-2026-07-25T10-32-11-241Z",
+  "at": "2026-07-25T10:32:11.931Z",
   "passed": 20,
   "failed": 0,
   "results": [
@@ -104,7 +104,7 @@
       "id": "GEO-03",
       "requirement": "Deep link a client",
       "status": "PASS",
-      "detail": "notificació → ruta \"/clients/b9f0ac7a-4c04-43d4-aa7d-e7ff13141829\" (només IDs, sense PII); parse deep link → client correcte"
+      "detail": "notificació → ruta \"/clients/6cdf2444-19b2-45e6-bb81-f4ef93b5fcbb\" (només IDs, sense PII); parse deep link → client correcte"
     },
     {
       "id": "GEO-04",

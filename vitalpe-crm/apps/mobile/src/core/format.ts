@@ -174,3 +174,16 @@ export function formatDuration(seconds: number | null | undefined): string {
   const rest = total % 60;
   return minutes === 0 ? `${rest} s` : `${minutes} min ${pad2(rest)} s`;
 }
+
+/**
+ * Same calendar day in Europe/Madrid — the comparator `visitsOn()` asks for.
+ *
+ * Comparing local dates would put a 00:30 visit on the previous day in winter
+ * and the right one in summer, which is exactly the kind of bug that only shows
+ * up twice a year.
+ */
+export function isSameDay(a: Date, b: Date): boolean {
+  const left = zonedParts(a, TZ);
+  const right = zonedParts(b, TZ);
+  return left.year === right.year && left.month === right.month && left.day === right.day;
+}

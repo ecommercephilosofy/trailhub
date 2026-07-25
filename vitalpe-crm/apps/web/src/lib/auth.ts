@@ -86,6 +86,15 @@ export async function getSession(): Promise<Session | null> {
 
   // Membership is read with the service role because the user's own RLS
   // context cannot be established before we know which workspace they are in.
+  return sessionForUser(userId);
+}
+
+/**
+ * Turns a verified user id into a Session, or null when they have no active
+ * membership. Shared by the cookie path and the bearer-token path so the two
+ * cannot drift on what "authorised" means.
+ */
+async function sessionForUser(userId: string): Promise<Session | null> {
   const row = await withServiceRole((q) =>
     q.one<{
       user_id: string; workspace_id: string; role: Role; email: string;
@@ -101,7 +110,6 @@ export async function getSession(): Promise<Session | null> {
     ),
   );
   if (!row) return null;
-
   return {
     userId: row.user_id,
     workspaceId: row.workspace_id,
@@ -109,6 +117,38 @@ export async function getSession(): Promise<Session | null> {
     email: row.email,
     fullName: [row.first_name, row.last_name].filter(Boolean).join(' ') || row.email,
   };
+}
+
+/**
+ * Session from an `Authorization: Bearer <supabase access token>` header.
+ *
+ * This is how the phone authenticates: it holds a Supabase session, not the
+ * web's cookie. The token is verified by asking Supabase who it belongs to —
+ * never by decoding it locally, which would accept anything shaped like a JWT.
+ *
+ * Authentication is still not authorisation: the membership check below is the
+ * same one the cookie path runs, and every query afterwards goes through RLS as
+ * that user.
+ */
+export async function sessionFromBearer(request: Request): Promise<Session | null> {
+  const header = request.headers.get('authorization') ?? '';
+  const match = /^Bearer\s+(.+)$/i.exec(header.trim());
+  const token = match?.[1]?.trim();
+  if (!token) return null;
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return null;
+
+  const { createClient } = await import('@supabase/supabase-js');
+  const client = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { data, error } = await client.auth.getUser(token);
+  if (error || !data.user) return null;
+
+  return sessionForUser(data.user.id);
 }
 
 /** Session or redirect to the sign-in page. Use in every protected page. */
