@@ -1,0 +1,890 @@
+{
+  "source": "DO Catalunya — registre públic de cellers",
+  "sourceUrl": "https://docat.cat/es/las-bodegas/",
+  "consultedOn": "2026-07-25",
+  "note": "Llista publicada pel Consell Regulador de la DO Catalunya (hi surt la mateixa Vitalpe, SAT, cosa que confirma que és el registre correcte). Nom tal com el publica la font; el municipi no hi consta i NO s'ha inventat. Cal confirmar un a un.",
+  "candidates": [
+    {
+      "name": "Aceites Escoda, CB",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Adernats – Vinícola de Nulles",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola Casa Sala, SA – Masia La Freixeneda",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola d'Ulldemolins Sant Jaume, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola de Corbera d'Ebre, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola de la Conca i SC, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola de Vallmoll, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola i SC d'Albinyana, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola i SC de Sant Isidre de Vilabella, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola i Secció de Crèdit de Salomó, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola i Secció de Crèdit La Ginesta, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrícola Sant Vicenç, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agropecuària i SC d'Artesa de Segre, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agrupació de Viticultors Artesanals, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Albet i Noya, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Alta Alella, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Amants dels Vins de Taller, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Aymar Vitivinícoles, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Barcelona Mediterranean Wine, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bardinet Wines, SAU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Batevins, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Batiste Miró, Xavier",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Blancher Capdevila Pujol, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas 1898, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Bellod, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Concavins",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Costers del Sió, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Manzanos, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Muviedro, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Pedro Masana, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Pinord, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Trobat, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegues Visendra, SCP",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Dez Mas, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Car Vinícolas Reunidas, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castell d'Or, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castell de Pujades, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castelo de Pedregosa, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cavas del Castillo de Perelada, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cavas J. Hill, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Cal Costas, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Can Pagès, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Cooperatiu de Moja, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Cooperatiu Gandesa, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler de Capçanes i SC, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler de les Aus, SCP",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler de Viticultors SAT CAT 22",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Del Pescador, SLU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Josep Piñol, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler La Vinyeta, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Masroig i SC SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Serra, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Vins Algars, SAT",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cellers Mariol, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cellers Most Doré, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cetro Bodegas, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Clos Tredos, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Codorniu, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola de Barberà, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola de l'Argilaga, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola i CA Llorenç del Penedès, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola i SC Terra Alta, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola Sant Jaume de Benissanet, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Agrícola Sant Josep, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cooperativa Vinícola del Penedès, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Covica Empordà, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Covilalba, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Dalmau Hermanos y Cía. Suc., SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Díaz Soriano, Miguel Angel",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Ecovitres, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Eikon Estate, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "El Mas Pujó, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Empordàlia, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Enric Nadal, SLU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Espelt Viticultors, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Exporústic Empordà, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Familia Torres",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Favevins, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Fermí Bohigas, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Ferré i Catasús, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Freixenet, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Garcia Carrion 1890, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Global Vinícola, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Gonzalez Byass, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Josep Masachs, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "L'Olivera, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "La Vinícola de Gandesa, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Les Vinyes del Convent, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Llopart Vilarós Pere, HJ",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Lluch Molinari, Pere",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Maieutike Winery, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Fuertes Products, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Gil, SLU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Llunes, Vinyes i Cellers, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Olivares & Pago Diana, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Masia Can Mayol, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Masia Puigmolto, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Masia Vallformosa, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mercè Sangüesa Millan",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Miguel Torres, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Octer, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Oliveda, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Parxet, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pere Guardiola, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pérez Roura, Juan Antonio",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pons Tradició, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Productes Frescos de Lleida, SLU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "SAT 4768 Masies d'Avinyó, Ltda.",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Segura Viudas, SAU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Soler Jove, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Terra Cellars, SLU",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Torrens Moliner, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "U mes u fan tres, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Unió Fruits, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Unió Origen, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vidal Morgades, Ramón",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vilanova Valén, Antonio",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vinícola de Sarral i Secció de Crèdit, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins Font, SA",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins Grau, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins Pravi, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vinyes del Terrer, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vinyes Janine",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Viticultors Bateans, SCCL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vitimundo, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Wineintube, SL",
+      "municipality": null,
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO CATALUNYA / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Catalunya: elabora vi de la DO i per tant pot comprar vi base o most a granel."
+    }
+  ]
+}

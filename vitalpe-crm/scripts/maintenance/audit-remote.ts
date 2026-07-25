@@ -199,10 +199,29 @@ try {
       (select count(*) from public.opportunities o where not exists
          (select 1 from public.products p where p.id = o.product_id))::int as oport_sense_producte,
       (select count(*) from public.import_rows where outcome = 'PENDENT')::int as staging_pendent,
+      (select count(*) from public.clients where deleted_at is null and in_working_list)::int as llista_treball,
+      (select count(*) from public.clients c
+         where c.deleted_at is null and not c.in_working_list
+           and exists (select 1 from public.opportunities o where o.client_id = c.id))::int as fora_amb_compres,
       (select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace
         where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity)::int as taules_sense_rls
   `;
-  ok('empreses = 801', integrity!.empreses === 801, String(integrity!.empreses));
+  // The company count only ever grows: nothing is deleted, and Carlos's cleaned
+  // list moves companies OUT OF the working list rather than out of existence.
+  // Asserting a fixed 801 would have turned a correct sync into a red light.
+  ok('empreses ≥ 801 (mai s\'esborra res)', integrity!.empreses! >= 801, String(integrity!.empreses));
+  ok(
+    'llista de treball entre 300 i 400',
+    integrity!.llista_treball! >= 300 && integrity!.llista_treball! <= 400,
+    String(integrity!.llista_treball),
+  );
+  // The whole point of the flag: companies dropped from the working list keep
+  // their purchase history. If this ever hits zero, something deleted it.
+  ok(
+    'les empreses fora de la llista conserven compres',
+    integrity!.fora_amb_compres! > 0,
+    `${integrity!.fora_amb_compres} amb historial de compres`,
+  );
   ok('propostes de classificació calculades', integrity!.amb_proposta! > 100, String(integrity!.amb_proposta));
   ok('cap contacte orfe', integrity!.contactes_orfes === 0);
   ok('cap oportunitat sense producte', integrity!.oport_sense_producte === 0);

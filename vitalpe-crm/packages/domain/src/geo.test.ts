@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { boundingBox, EARTH_RADIUS_M, haversineMeters, isWithinRadius } from './geo.js';
+import { boundingBox, EARTH_RADIUS_M, haversineMeters, isWithinRadius } from './geo';
 
 const VILAFRANCA = { latitude: 41.3451, longitude: 1.6989 };
 const BARCELONA = { latitude: 41.3851, longitude: 2.1734 };

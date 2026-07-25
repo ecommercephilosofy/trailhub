@@ -5,7 +5,7 @@ import {
   isInCooldown,
   selectRegions,
   type GeofenceCandidate,
-} from './geofence.js';
+} from './geofence';
 
 /** 2026-07-23 is a Thursday; 12:00 Europe/Madrid = 10:00 UTC. */
 const NOW = new Date('2026-07-23T10:00:00Z');

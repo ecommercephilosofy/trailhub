@@ -1,0 +1,946 @@
+{
+  "source": "DO Penedès — registre públic de cellers",
+  "sourceUrl": "https://www.dopenedes.cat/cellers/",
+  "consultedOn": "2026-07-25",
+  "note": "Llista publicada pel Consell Regulador de la DO Penedès. Cap dada s'ha inventat: nom i municipi són els que publica la font. Cal confirmar un a un abans de donar-los d'alta.",
+  "candidates": [
+    {
+      "name": "Agricola de Llorenç",
+      "municipality": "Llorenç del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Agustí Torelló Mata",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Albet i Noya",
+      "municipality": "Sant Pau d'Ordal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Alsina & Sardà",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Anima Mundi",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Aymar",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bertha",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Blancher",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Ca n'Estella",
+      "municipality": "Sant Esteve Sesrovires",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bodegas Capità Vidal",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Bolet",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Bas Domini Vinícola",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Casals",
+      "municipality": "Sant Esteve Sesrovires",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Descregut",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Feixes",
+      "municipality": "Cabrera d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Lleó de Vilanoveta",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Quetu, S.L.",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Ràfols dels Caus",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Sumoi",
+      "municipality": "El Montmell",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Vallès",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Vich",
+      "municipality": "Sant Joan de Mediona",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Can Virgili",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Canals & Munné",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Carles de Lavern",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Casa Ravella",
+      "municipality": "Ordal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castell d'Age",
+      "municipality": "La Beguda Baixa",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castell d'Or",
+      "municipality": "Vila-rodona",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Castellroig",
+      "municipality": "Sant Pere de Riudebitlles",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cavas Hill",
+      "municipality": "Moja - Olèrdola",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cavas Lavernoya",
+      "municipality": "Castellet i la Gornal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Can Marlès",
+      "municipality": "El Montmell",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Can Morral del Molí",
+      "municipality": "Abrera",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Cooperatiu La Granada",
+      "municipality": "La Granada",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Credo",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Domenys",
+      "municipality": "Sant Jaume dels Domenys",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Eudald Massana",
+      "municipality": "Sant Pau d'Ordal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Família Pedregosa Castelo",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Mas del Vidre",
+      "municipality": "Piera",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Parató",
+      "municipality": "El Pla del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Planas Albareda",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Ramon Canals",
+      "municipality": "Castellví de Rosanes",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Celler Viader",
+      "municipality": "Gelida",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cellers Avgvstvs Forvm",
+      "municipality": "El Vendrell",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Cellers Maset",
+      "municipality": "La Granada",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Colet",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Covides",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Emendis",
+      "municipality": "Castellet i la Gornal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Família Torres",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Fèlix Massana Ràfols",
+      "municipality": "Sant Pau d'Ordal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Ferré i Catasús",
+      "municipality": "La Granada",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Finca Espiells",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Finca la Font de Jui",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Finca Viladellops",
+      "municipality": "Viladellops",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Foresta",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Francisco Dominguez Cruces",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Giró del Gorner",
+      "municipality": "Puigdàlber",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Giró Ribot",
+      "municipality": "Santa Fe del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Heretat Baltà de Cela",
+      "municipality": "Guardiola de Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Heretat Can Serra",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Heretat Mestres",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Jané Ventura",
+      "municipality": "El Vendrell",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Jaume Giró i Giró",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Jaume Serra",
+      "municipality": "Vilanova i la Geltrú",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Jean Leon",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Joan Grill",
+      "municipality": "El Pla de Manlleu",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Joan Sardà",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Joan Segura Pujadas",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Josep Maria Rosell Salvó",
+      "municipality": "Santa Oliva",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Josep Masachs",
+      "municipality": "Torrelles de Foix",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Julia Bernet",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "La Xarmada",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Llàgrima d'Or",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Llopart",
+      "municipality": "Els Casots - Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Llopart Güell",
+      "municipality": "Guardiola de Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Loxarel",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Martí Grau Viticultors",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Bertran",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Candí",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Codina",
+      "municipality": "Puigdàlber",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Comtal",
+      "municipality": "Avinyonet del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Escorpí",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Pujadó",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mas Rodó",
+      "municipality": "Mediona",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mascaró",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Masia Ginebreda",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mastinell",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mata i Coloma",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Miquel Jané",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Miquel Pons",
+      "municipality": "La Granada del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Molí Parellada",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mont Marçal",
+      "municipality": "Castellví de la Marca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mont-Rubí",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Montau de Sadurní",
+      "municipality": "Begues",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Montesquius",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "MontPicolis",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Mulet Viticultors",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Nadal",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Naveran",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Oliver Viticultors",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Oriol Rossell",
+      "municipality": "Sant Marçal",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pagès Entrena",
+      "municipality": "Piera",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pardas",
+      "municipality": "Torrelavit",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Parés Baltà",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pere Olivella Galimany",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pere Ventura",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Pinord",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Plana d'en Jan",
+      "municipality": "Pacs del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Puig-Batet",
+      "municipality": "Sant Pere de Ribes",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Raventós Rosell",
+      "municipality": "Masquefa",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Rexach Baqués",
+      "municipality": "Guardiola de Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Romagosa Torné",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Ros Marina Viticultors",
+      "municipality": "Guardiola de Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Rovellats",
+      "municipality": "Sant Martí Sarroca",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Sant Joannes",
+      "municipality": "Sant Llorenç d'Hortons",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Soler Jové",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Sumarroca",
+      "municipality": "Subirats",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Suriol",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Tarrida i Sibil",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Torelló",
+      "municipality": "Gelida",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Torre del Veguer",
+      "municipality": "Sant Pere de Ribes",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Torrens Moliner",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Trias Batlle",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "U MES U",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "VallDolina",
+      "municipality": "Olesa de Bonesvalls",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vallformosa",
+      "municipality": "Vilobí del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Varias",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Ventura Soler",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vilarnau",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Viña Torreblanca",
+      "municipality": "Olèrdola",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vinares 1909",
+      "municipality": "Font-Rubí",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins de Sinèrgia",
+      "municipality": "Vilafranca del Penedès",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins el Cep",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vins per Estimar el Vi",
+      "municipality": "Sant Sadurní d'Anoia",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    },
+    {
+      "name": "Vinya Escudé",
+      "municipality": "Sant Quintí de Mediona",
+      "province": null,
+      "suggestedProduct": "VI BLANC CUPATGE DO PENEDÈS / BASE CAVA",
+      "rationale": "Celler inscrit al registre públic de la DO Penedès. Elabora vi de la DO, per tant pot comprar vi base o most a granel."
+    }
+  ]
+}

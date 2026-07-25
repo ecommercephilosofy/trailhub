@@ -9,7 +9,7 @@ import {
   normalizePhone,
   normalizeText,
   unaccentCa,
-} from './normalize.js';
+} from './normalize';
 
 /**
  * Every expectation in this file was verified against the real SQL functions

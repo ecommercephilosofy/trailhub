@@ -17,6 +17,7 @@ documentation are in English.
 | [`PERMISSIONS.md`](PERMISSIONS.md) | The ADMIN / GERENT / COMERCIAL matrix |
 | [`DECISIONS.md`](DECISIONS.md) | Why the system is built the way it is |
 | [`IMPORT_GUIDE.md`](IMPORT_GUIDE.md) | The import pipeline, end to end |
+| [`ROUTING_AND_PROSPECTING.md`](ROUTING_AND_PROSPECTING.md) | The weekly route suggestion and the prospect queue |
 | [`GOOGLE_CALENDAR_SETUP.md`](GOOGLE_CALENDAR_SETUP.md) | Google Cloud + OAuth + webhook |
 | [`VOICE_AI_SETUP.md`](VOICE_AI_SETUP.md) | Transcription and interpretation providers |
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Supabase, Vercel, EAS, in order |
@@ -190,7 +191,7 @@ state actually observed on 2026-07-23.
 | --- | --- | --- |
 | `pnpm dev` | Web app on port 3004 | yes |
 | `pnpm build` | `next build` of the web app | yes |
-| `pnpm test` | Full vitest run (647 tests) | yes |
+| `pnpm test` | Full vitest run (669 tests) | yes |
 | `pnpm test:watch` | vitest in watch mode | yes |
 | `pnpm db:local` | Migrations + seed on throwaway PGlite, asserts RLS | yes |
 | `pnpm import:local` | Full import of `data/sources/` into `.data/crm` | yes |

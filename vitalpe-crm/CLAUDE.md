@@ -55,7 +55,9 @@ pnpm import:local -- --dry-run
 pnpm import:run -- --remote    # the SAME import against the hosted database
 pnpm dev                   # web app on http://localhost:3004
 pnpm build                 # next build — this is also the type check today
-pnpm test                  # 647 tests: unit + SQL RLS + SQL domain + SQL↔TS parity
+pnpm test                  # 669 tests: unit + SQL RLS + SQL domain + SQL↔TS parity
+pnpm llista:sync -- "<fitxer.xlsx>"   # sync Carlos's operational workbook (dry-run)
+pnpm prospeccio -- <font.json>        # load discovered companies into the review queue
 pnpm test -- supabase/tests/rls.test.ts
 ```
 
@@ -89,6 +91,12 @@ a second one corrupts the directory.
    `access_token_enc`, `refresh_token_enc` and `sync_token` are revoked at column
    level from `authenticated`; do not add them back to a `GRANT`.
 3. **Never invent data.** If a source has no date, there is no dated activity.
+   A prospect with no `source` is unrepresentable — the column is `not null` —
+   and a route is never planned by a coordinate nobody geocoded: zones come from
+   real comarca membership, and an unknown municipality becomes its own zone.
+   `in_working_list = false` means "not being worked", never "deleted": 507
+   companies sit outside Carlos's cleaned list and 29 of them hold 2.6 M litres
+   of purchase history.
    If a product is not in the catalogue, the row is parked in
    `excluded_records`, not attached to an invented product. If an address cannot
    be geocoded, it stays `PENDENT DE GEOLOCALITZAR`. If a duplicate is not
@@ -128,6 +136,8 @@ They already exist in exactly one place. Call it.
 | Which 20 geofences to register, and arrival confidence | `packages/domain/src/geofence.ts` |
 | Date parsing that refuses to guess | `packages/domain/src/dates.ts` |
 | Duplicate scoring and the auto-merge rule | `packages/domain/src/dedupe.ts` |
+| Which comarca a municipality belongs to | `packages/domain/src/zones.ts` |
+| Which companies are due a visit, and the weekly route | `packages/domain/src/routing.ts` |
 
 **If a rule exists in both SQL and TypeScript, changing one without the other is
 a bug.** The classification engine is protected by
@@ -197,7 +207,7 @@ case to both suites at once.
 
 ## 8. Before you finish
 
-- [ ] `pnpm test` passes (647 tests today; the number should go up, not down).
+- [ ] `pnpm test` passes (669 tests today; the number should go up, not down).
 - [ ] `pnpm db:local` passes if you touched SQL.
 - [ ] New tables have RLS and policies, and a line in `DATA_MODEL.md`.
 - [ ] New rules exist once, in SQL or in `packages/domain` — not in a component.

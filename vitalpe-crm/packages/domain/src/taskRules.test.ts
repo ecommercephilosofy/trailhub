@@ -10,7 +10,7 @@ import {
   nextStatusOnComplete,
   sortTasks,
   type TaskLike,
-} from './taskRules.js';
+} from './taskRules';
 
 const NOW = new Date('2026-07-23T10:00:00Z');
 

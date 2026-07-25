@@ -26,6 +26,8 @@
     "import:inspect": "tsx scripts/import/inspect.ts",
     "import:run": "tsx scripts/import/run.ts",
     "import:local": "tsx scripts/import/run.ts --local",
+    "llista:sync": "tsx scripts/import/operatiu.ts",
+    "prospeccio": "tsx scripts/import/prospects.ts",
     "import:verify": "tsx scripts/import/verify.ts",
     "export:data": "tsx scripts/export/export.ts",
     "env:check": "tsx scripts/check-env.ts",

@@ -11,7 +11,7 @@
  * `Intl`, so DST transitions do not shift a due date by an hour.
  */
 
-import { unaccentCa } from './normalize.js';
+import { unaccentCa } from './normalize';
 
 export const DEFAULT_TIMEZONE = 'Europe/Madrid';
 

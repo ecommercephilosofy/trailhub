@@ -39,7 +39,7 @@
  */
 
 import type { Classification } from '@vitalpe/types';
-import type { ClassificationFacts } from './classification.js';
+import type { ClassificationFacts } from './classification';
 
 export interface ClassificationFixture {
   /** Stable identifier, also used as the vitest / pgTAP case name. */

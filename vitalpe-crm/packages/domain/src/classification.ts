@@ -13,7 +13,7 @@
  */
 
 import type { Classification, VerificationStatus } from '@vitalpe/types';
-import { addZonedMonths } from './dates.js';
+import { addZonedMonths } from './dates';
 
 /** `app.recent_purchase_months()` — the recency window for purchases/negatives. */
 export const RECENT_PURCHASE_MONTHS = 18;

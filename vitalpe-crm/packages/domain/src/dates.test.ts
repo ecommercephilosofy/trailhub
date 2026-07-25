@@ -11,7 +11,7 @@ import {
   startOfZonedDay,
   zonedParts,
   zonedWeekday,
-} from './dates.js';
+} from './dates';
 
 /** Reference instant: Thursday 23 July 2026, 12:00 Europe/Madrid (CEST, UTC+2). */
 const NOW = new Date('2026-07-23T10:00:00Z');

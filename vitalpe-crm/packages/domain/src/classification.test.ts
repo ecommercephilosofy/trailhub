@@ -8,8 +8,8 @@ import {
   verificationIsStale,
   VERIFICATION_STALE_MONTHS,
   type ClassificationFacts,
-} from './classification.js';
-import { CLASSIFICATION_FIXTURES, NO_FACTS } from './classification.fixtures.js';
+} from './classification';
+import { CLASSIFICATION_FIXTURES, NO_FACTS } from './classification.fixtures';
 
 const facts = (overrides: Partial<ClassificationFacts>): ClassificationFacts => ({
   ...NO_FACTS,

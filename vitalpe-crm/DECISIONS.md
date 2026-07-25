@@ -1000,3 +1000,60 @@ The honest limit is recorded in `docs/MOBILE_SETUP.md`: bundling proves the code
 loads, not that a phone in a cellar receives a geofence event. Twelve checks
 need a real device, and until they are done the feature is *implemented but not
 proven*.
+
+## 39. The cleaned list is a working list, not a deletion
+
+Carlos cut his operational workbook from 801 companies to 347. The tempting
+reading — "delete the rest" — is wrong, and the data says why: 507 CRM companies
+fall outside the cleaned list and **29 of them have real purchases totalling 2.6
+million litres**. Pinord alone is 615.000 L. Several are the same company under
+a different spelling ("BERRAL Y MIRÓ SL" against the workbook's "VARIAS / BERRAL
+I MIRÓ").
+
+So membership became a flag, `clients.in_working_list`. The default screens and
+the route planner follow Carlos's 347; nothing is deleted, no litre of history
+moves, and a company can come back by appearing in the next workbook. Cleaning a
+prospecting sheet is a statement about what is being worked this season, not
+about who ever bought anything.
+
+Matching is deterministic or it is a question. A row matches by normalised name,
+by alias, by its `VIT-GR-nnnn` id, or by either half of the "RAÓ SOCIAL - MARCA"
+convention the workbook uses — that last rule alone resolved 29 of the 92
+apparent misses. The remaining 63 create a new company **and** queue a duplicate
+candidate when something similar exists, so the existing merge screen decides.
+Nothing is merged silently.
+
+## 40. Routes are grouped by comarca because there are no coordinates
+
+Not one company on the working list is geocoded. So a route planner cannot
+optimise distance, and any "shortest path" it printed would be fiction.
+
+What every company does have is a municipality, and municipalities belong to
+comarques — real, checkable geography. So a zone is a comarca, one zone per
+working day, and the claim is only ever *these companies are due, and these ones
+are near each other*. Order inside a day is by urgency, not by geography, and
+the page says so. A municipality missing from the map becomes its own zone: we
+know where it is, we do not claim to know what it is near.
+
+Every stop carries the reasons it was chosen — overdue tasks, silence, litres at
+stake — because a suggestion the commercial cannot audit is one he stops
+trusting the first time it looks odd, and he is the one who knows which cellar
+shuts on Mondays. The weights live in one exported object so the ranking can be
+argued with rather than reverse-engineered.
+
+## 41. Prospects carry a source or they do not exist
+
+"Find me companies I haven't got" is one instruction away from inventing
+customers, which is the one thing this system must never do. So the
+`prospects` table requires a `source`, keeps a `source_url`, and records the day
+the register was consulted. A prospect has no history, cannot be assigned, and
+becomes a company only when a person presses a button — the conversion writes
+the source into the new company's notes and leaves the classification empty,
+because an unqualified lead is exactly a company nobody has judged yet.
+
+The first two passes were run against the public registers of the DO Penedès and
+the DO Catalunya. The result is worth recording: of 260 published wineries,
+**258 were already in the base**. The portfolio is far more complete than it
+looked, and the useful prospecting ground is elsewhere — bottlers without
+vineyards, other DOs, outside Catalonia. A discovery pass that finds almost
+nothing is a real answer, not a failed run.

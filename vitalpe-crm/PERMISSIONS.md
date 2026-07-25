@@ -91,6 +91,11 @@ cero filas.
 | **Catálogo** | | | |
 | Leer productos y campañas | ✅ | ✅ | ✅ |
 | Resolver valores sin mapear | ✅ | ❌ | ❌ |
+| **Rutas** | | | |
+| Ver la ruta sugerida | ✅ | ✅ | ✅ ⁶ |
+| **Prospección** | | | |
+| Ver la cola de prospectos | ✅ | ✅ | ❌ |
+| Dar de alta o descartar | ✅ | ❌ | ❌ |
 
 ¹ `app.merge_clients` tiene el `EXECUTE` revocado de `authenticated`: se ejecuta
 desde el servidor con el rol de servicio, tras la decisión explícita de un ADMIN.
@@ -106,6 +111,10 @@ lee desde el cliente. Solo el servidor, con el rol de servicio.
 
 ⁴ `audit_log` solo tiene política de `SELECT`. Las filas entran exclusivamente
 por el *trigger* `app.audit_trigger()`, que es `SECURITY DEFINER`.
+
+⁶ `/rutes` se calcula sobre las empresas que el usuario puede leer, así que la
+RLS decide qué entra en la ruta sin ninguna comprobación adicional en la página.
+La sugerencia no escribe nada: es una lectura ordenada.
 
 ⁵ Toda la columna GERENT es **lectura**. La migración
 `20260724150000_supervisor_read_only.sql` movió cada política de escritura de

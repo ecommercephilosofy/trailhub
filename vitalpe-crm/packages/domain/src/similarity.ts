@@ -8,7 +8,7 @@
  * one trailing space, and returns |A ∩ B| / |A ∪ B| over the distinct trigrams.
  */
 
-import { normalizeText } from './normalize.js';
+import { normalizeText } from './normalize';
 
 /** Trigram set of a string, using pg_trgm's padding rules. */
 export function trigrams(input: string | null | undefined): Set<string> {

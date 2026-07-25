@@ -19,9 +19,9 @@ import type {
   VoiceAction,
   VoiceProposal,
 } from '@vitalpe/types';
-import { normalizeCompany, normalizeText, btrimSpaces } from './normalize.js';
-import { parseRelativeDate, DEFAULT_TIMEZONE } from './dates.js';
-import { activityTypeForAction } from './taskRules.js';
+import { normalizeCompany, normalizeText, btrimSpaces } from './normalize';
+import { parseRelativeDate, DEFAULT_TIMEZONE } from './dates';
+import { activityTypeForAction } from './taskRules';
 
 export interface CatalogEntry {
   id: string;

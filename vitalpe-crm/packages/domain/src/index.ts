@@ -12,13 +12,15 @@
  * and inside PostgreSQL without three subtly different answers.
  */
 
-export * from './normalize.js';
-export * from './similarity.js';
-export * from './classification.js';
-export * from './classification.fixtures.js';
-export * from './dedupe.js';
-export * from './taskRules.js';
-export * from './geo.js';
-export * from './geofence.js';
-export * from './dates.js';
-export * from './quickCapture.js';
+export * from './normalize';
+export * from './similarity';
+export * from './classification';
+export * from './classification.fixtures';
+export * from './dedupe';
+export * from './taskRules';
+export * from './geo';
+export * from './geofence';
+export * from './dates';
+export * from './quickCapture';
+export * from './zones';
+export * from './routing';

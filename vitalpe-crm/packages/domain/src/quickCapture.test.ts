@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { AMBIGUITIES, formatDateEs, formatTime24 } from './dates.js';
+import { AMBIGUITIES, formatDateEs, formatTime24 } from './dates';
 import {
   QUICK_CAPTURE_AMBIGUITIES,
   quickCapture,
   type QuickCaptureCatalog,
-} from './quickCapture.js';
+} from './quickCapture';
 
 const NOW = new Date('2026-07-23T10:00:00Z'); // Thursday, 12:00 Europe/Madrid
 

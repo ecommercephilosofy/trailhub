@@ -35,6 +35,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         { href: '/clients', label: 'CLIENTS' },
         { href: '/calendari', label: 'CALENDARI' },
         { href: '/tasques', label: 'TASQUES' },
+        { href: '/rutes', label: 'RUTES' },
         { href: '/registre', label: 'REGISTRE' },
       ];
   const admin = [
@@ -43,6 +44,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     { href: '/administracio/importacions', label: 'IMPORTACIONS', adminOnly: false },
     { href: '/administracio/exportacions', label: 'EXPORTACIONS', adminOnly: false },
     { href: '/administracio/duplicats', label: 'DUPLICATS', adminOnly: false },
+    { href: '/prospeccio', label: 'PROSPECCIÓ', adminOnly: false },
     { href: '/administracio/auditoria', label: 'AUDITORIA', adminOnly: false },
     { href: '/administracio/integracions', label: 'INTEGRACIONS', adminOnly: true },
   ].filter((item) => (item.adminOnly ? session.role === 'ADMIN' : manager));

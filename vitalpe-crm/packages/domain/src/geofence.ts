@@ -14,8 +14,8 @@
  */
 
 import type { ArrivalConfidence } from '@vitalpe/types';
-import { isSameZonedDay, DEFAULT_TIMEZONE } from './dates.js';
-import { haversineMeters, type LatLng } from './geo.js';
+import { isSameZonedDay, DEFAULT_TIMEZONE } from './dates';
+import { haversineMeters, type LatLng } from './geo';
 
 /** The hard iOS limit on simultaneously monitored regions. */
 export const IOS_MAX_MONITORED_REGIONS = 20;

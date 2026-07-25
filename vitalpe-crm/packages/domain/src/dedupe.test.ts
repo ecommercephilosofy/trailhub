@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { duplicateScore, isReviewCandidate, type DedupeCandidate } from './dedupe.js';
-import { levenshtein, levenshteinSimilarity, trigramSimilarity, trigrams } from './similarity.js';
+import { duplicateScore, isReviewCandidate, type DedupeCandidate } from './dedupe';
+import { levenshtein, levenshteinSimilarity, trigramSimilarity, trigrams } from './similarity';
 
 const base: DedupeCandidate = { name: 'Masia Romagosa S.L.' };
 

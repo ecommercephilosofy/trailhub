@@ -24,8 +24,8 @@ import {
   normalizeEmail,
   normalizePhone,
   normalizeText,
-} from './normalize.js';
-import { trigramSimilarity } from './similarity.js';
+} from './normalize';
+import { trigramSimilarity } from './similarity';
 
 export interface DedupeCandidate {
   name: string;
