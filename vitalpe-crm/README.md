@@ -23,6 +23,7 @@ documentation are in English.
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Supabase, Vercel, EAS, in order |
 | [`TESTING.md`](TESTING.md) | What is tested and what is not |
 | [`MANUAL_TEST_CHECKLIST.md`](MANUAL_TEST_CHECKLIST.md) | The things automation cannot prove |
+| [`TRASPAS.md`](TRASPAS.md) | **Posar el CRM al teu ordinador** — guia per a Carlos, i què costa diners |
 | [`CLAUDE.md`](CLAUDE.md) | Standing instructions for AI coding sessions |
 
 ---
