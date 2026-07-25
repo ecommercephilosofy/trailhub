@@ -34,7 +34,9 @@
     "user:password": "tsx scripts/maintenance/set-password.ts",
     "clients:assign": "tsx scripts/maintenance/assign-portfolio.ts",
     "import:abandon": "tsx scripts/maintenance/abandon-import.ts",
-    "audit:remote": "tsx scripts/maintenance/audit-remote.ts"
+    "audit:remote": "tsx scripts/maintenance/audit-remote.ts",
+    "test:critical": "tsx scripts/test-critical-features.ts",
+    "test:critical:cleanup": "tsx scripts/cleanup-critical-feature-tests.ts"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.14",

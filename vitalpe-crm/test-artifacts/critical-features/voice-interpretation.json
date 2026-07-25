@@ -1,0 +1,27 @@
+{
+  "transcript": "He parlat amb BODEGA TEST E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z. Està interessada en Xarel·lo ecològic per al 2027. Afegeix una anotació que ja treballa amb un altre proveïdor, crea una tasca per trucar-li el 5 d'octubre de 2026 a les 10:30 amb prioritat alta, i programa una visita el 12 d'octubre de 2026 a les 11:00.",
+  "proposal": {
+    "actions": [
+      {
+        "type": "REGISTRAR_ACTIVITAT",
+        "client": {
+          "clientId": "b9f0ac7a-4c04-43d4-aa7d-e7ff13141829",
+          "name": "BODEGA TEST E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z"
+        },
+        "activityType": "TRUCADA",
+        "result": "TE UN ALTRE PROVEIDOR",
+        "occurredAt": "2026-07-25T09:00:00.000Z",
+        "summary": "He parlat amb BODEGA TEST E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z. Està interessada en Xarel·lo ecològic per al 2027. Afegeix una anotació que ja treballa amb un altre proveïdor, crea una tasca per trucar-li el 5 d'octubre de 2026 a les 10:30 amb prioritat alta, i programa una visita el 12 d'octubre de 2026 a les 11:00."
+      }
+    ],
+    "ambiguities": [
+      {
+        "field": "dueAt",
+        "question": "La nota esmenta una data que no s’ha pogut concretar. Quin dia és?"
+      }
+    ],
+    "confidence": 0.9,
+    "summary": "Nota sobre BODEGA TEST E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z · acció: TRUCAR · resultat: TE UN ALTRE PROVEIDOR",
+    "provider": "local"
+  }
+}

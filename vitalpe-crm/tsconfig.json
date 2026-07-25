@@ -21,6 +21,7 @@
       "@vitalpe/domain/*": ["packages/domain/src/*"],
       "@vitalpe/types": ["packages/types/src/index.ts"],
       "@vitalpe/validation": ["packages/validation/src/index.ts"],
+      "@vitalpe/integrations": ["packages/integrations/src/index.ts"],
       "@vitalpe/integrations/*": ["packages/integrations/src/*"],
       "@vitalpe/config": ["packages/config/src/index.ts"]
     }

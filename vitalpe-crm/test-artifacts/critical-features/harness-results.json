@@ -1,0 +1,128 @@
+{
+  "runId": "E2E-CRITICAL-AUDIT-2026-07-25T09-20-27-678Z",
+  "at": "2026-07-25T09:20:31.045Z",
+  "passed": 20,
+  "failed": 0,
+  "results": [
+    {
+      "id": "VOZ-02",
+      "requirement": "Transcripció",
+      "status": "PASS",
+      "detail": "sense OPENAI_API_KEY el proveïdor local retorna estat \"NOT_CONFIGURED\" amb missatge clar (l'àudio es conserva) → BLOQUEJAT PER CREDENCIALS"
+    },
+    {
+      "id": "VOZ-03",
+      "requirement": "Previsualitzar accions",
+      "status": "PASS",
+      "detail": "l'intèrpret real produeix 1 acció(ns): [REGISTRAR_ACTIVITAT]; confiança 90%"
+    },
+    {
+      "id": "VOZ-04",
+      "requirement": "Crear tasques i notes",
+      "status": "PASS",
+      "detail": "client TEST: 1 activitat, 2 tasques (trucada + bessona de visita), 1 visita — totes al client correcte"
+    },
+    {
+      "id": "VOZ-06",
+      "requirement": "Data/hora/zona correctes",
+      "status": "PASS",
+      "detail": "tasca a 2026-10-05 10:30 Europe/Madrid, prioritat ALTA"
+    },
+    {
+      "id": "VOZ-05",
+      "requirement": "Evitar duplicats",
+      "status": "PASS",
+      "detail": "doble confirmació de la mateixa proposta → 1 fila (clau idempotent única per workspace)"
+    },
+    {
+      "id": "VOZ-AMB",
+      "requirement": "Ambigüitat de data",
+      "status": "PASS",
+      "detail": "\"a principis del mes que ve\" → 1 ambigüitat(s); no inventa data exacta"
+    },
+    {
+      "id": "CAL-02",
+      "requirement": "CRM → Google",
+      "status": "PASS",
+      "detail": "visita nova → decisió CREATE_REMOTE"
+    },
+    {
+      "id": "CAL-05",
+      "requirement": "Evitar bucles i duplicats",
+      "status": "PASS",
+      "detail": "CRM i Google idèntics → NOOP (ALREADY_CONVERGED); cap reenviament"
+    },
+    {
+      "id": "CAL-03",
+      "requirement": "Google → CRM",
+      "status": "PASS",
+      "detail": "Google mou l'hora → APPLY_TO_CRM (ONLY_GOOGLE_CHANGED); camps: startsAt, endsAt"
+    },
+    {
+      "id": "CAL-06",
+      "requirement": "Cancel·lació",
+      "status": "PASS",
+      "detail": "esdeveniment cancel·lat a Google → CANCEL_VISIT_IN_CRM (mai s'esborra)"
+    },
+    {
+      "id": "CAL-IDEM",
+      "requirement": "Idempotència del webhook",
+      "status": "PASS",
+      "detail": "reprocessar la mateixa notificació → NOOP; resultat únic"
+    },
+    {
+      "id": "CAL-04",
+      "requirement": "Actualitzar fitxa i tasca",
+      "status": "PASS",
+      "detail": "pull de Google → visita 12:00, tasca vinculada 12:00 (durada 90 min): totes dues segueixen el canvi"
+    },
+    {
+      "id": "CAL-01",
+      "requirement": "Calendari intern",
+      "status": "PASS",
+      "detail": "2 visites persistides amb client, hora, durada i tasca vinculada"
+    },
+    {
+      "id": "GEO-01",
+      "requirement": "Geofencing real (selecció dinàmica)",
+      "status": "PASS",
+      "detail": "30 candidats → 20 regions (límit iOS 20); prioritat 1 = visita d'avui"
+    },
+    {
+      "id": "GEO-COORDS",
+      "requirement": "Sense coordenades → cap geovalla",
+      "status": "PASS",
+      "detail": "client sense lat/long → 0 regions (PENDENT DE GEOLOCALITZAR)"
+    },
+    {
+      "id": "GEO-02",
+      "requirement": "Notificació",
+      "status": "PASS",
+      "detail": "entrada amb visita programada → acció NOTIFICAR, confiança ALTA"
+    },
+    {
+      "id": "GEO-03",
+      "requirement": "Deep link a client",
+      "status": "PASS",
+      "detail": "notificació → ruta \"/clients/b9f0ac7a-4c04-43d4-aa7d-e7ff13141829\" (només IDs, sense PII); parse deep link → client correcte"
+    },
+    {
+      "id": "GEO-04",
+      "requirement": "Diversos clients propers",
+      "status": "PASS",
+      "detail": "dos clients solapats → acció PREGUNTAR, 2 candidats; el xooser només porta IDs"
+    },
+    {
+      "id": "GEO-COOLDOWN",
+      "requirement": "Cooldown",
+      "status": "PASS",
+      "detail": "segona entrada dins el període de silenci → acció IGNORAR"
+    },
+    {
+      "id": "GEO-NEARBY",
+      "requirement": "Clients propers per distància",
+      "status": "PASS",
+      "detail": "ordre per distància real: b=111m, a=1112m"
+    }
+  ]
+}
