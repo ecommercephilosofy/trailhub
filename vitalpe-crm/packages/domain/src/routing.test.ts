@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { municipalityKey, zoneFor } from './zones';
-import { groupByZone, nextMonday, planWeek, scoreCandidate, type RouteCandidate } from './routing';
+import {
+  groupByZone, nextMonday, orderByProximity, planWeek, scoreCandidate, type RouteCandidate,
+} from './routing';
 
 const NOW = new Date('2026-07-25T09:00:00.000Z'); // Saturday
 
@@ -20,6 +22,8 @@ function candidate(over: Partial<RouteCandidate> = {}): RouteCandidate {
     lastContactAt: over.lastContactAt ?? null,
     volumeLiters: over.volumeLiters ?? null,
     ...(over.hasScheduledVisit === undefined ? {} : { hasScheduledVisit: over.hasScheduledVisit }),
+    ...(over.latitude === undefined ? {} : { latitude: over.latitude }),
+    ...(over.longitude === undefined ? {} : { longitude: over.longitude }),
   };
 }
 
@@ -191,5 +195,56 @@ describe('pla setmanal', () => {
     const zones = groupByZone(stops, 5);
     expect(zones[0]!.zone).toBe('ALT PENEDÈS');
     expect(zones[0]!.dayValue).toBeGreaterThanOrEqual(zones[1]!.dayValue);
+  });
+});
+
+describe('ordre per proximitat, quan hi ha coordenades', () => {
+  // Four real-ish points in the Alt Penedès, deliberately given out of order.
+  const at = (name: string, lat: number, lng: number, score: number): RouteCandidate =>
+    candidate({ name, municipality: 'SUBIRATS', overdueTasks: score, latitude: lat, longitude: lng });
+
+  it('encadena la parada més propera i suma els metres', () => {
+    const stops = [
+      at('A', 41.36, 1.70, 3), // most urgent → anchors the day
+      at('LLUNY', 41.42, 1.78, 1),
+      at('PROP', 41.361, 1.701, 1),
+      at('MITJA', 41.38, 1.72, 1),
+    ].map((c) => scoreCandidate(c, NOW));
+
+    const result = orderByProximity(stops);
+    expect(result.ordered).toBe(true);
+    expect(result.stops.map((s) => s.candidate.name)).toEqual(['A', 'PROP', 'MITJA', 'LLUNY']);
+    expect(result.travelMeters).toBeGreaterThan(0);
+  });
+
+  it('sense coordenades no reordena res i no inventa una distància', () => {
+    const stops = [
+      at('A', 41.36, 1.7, 3),
+      candidate({ name: 'SENSE COORD', municipality: 'SUBIRATS', overdueTasks: 1 }),
+    ].map((c) => scoreCandidate(c, NOW));
+
+    const result = orderByProximity(stops);
+    expect(result.ordered).toBe(false);
+    expect(result.travelMeters).toBeNull();
+    expect(result.stops.map((s) => s.candidate.name)).toEqual(['A', 'SENSE COORD']);
+  });
+
+  it('el pla marca si el dia està ordenat per distància', () => {
+    const geocoded = Array.from({ length: 4 }, (_, i) =>
+      at(`GEO ${i}`, 41.36 + i * 0.004, 1.70 + i * 0.004, 2));
+    const plan = planWeek(geocoded, { now: NOW });
+    expect(plan.days[0]!.orderedByDistance).toBe(true);
+    expect(plan.days[0]!.travelMeters).not.toBeNull();
+  });
+
+  it('un dia amb una parada sense coordenades no reporta quilòmetres', () => {
+    const mixed = [
+      at('GEO 1', 41.36, 1.70, 2),
+      at('GEO 2', 41.37, 1.71, 2),
+      candidate({ name: 'SENSE', municipality: 'SUBIRATS', overdueTasks: 2 }),
+    ];
+    const plan = planWeek(mixed, { now: NOW });
+    expect(plan.days[0]!.orderedByDistance).toBe(false);
+    expect(plan.days[0]!.travelMeters).toBeNull();
   });
 });

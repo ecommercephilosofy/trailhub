@@ -18,6 +18,7 @@
  * Pure module: the clock is an argument, nothing here reads a database.
  */
 import { zoneFor } from './zones';
+import { haversineMeters, type LatLng } from './geo';
 
 export interface RouteCandidate {
   clientId: string;
@@ -39,6 +40,9 @@ export interface RouteCandidate {
   volumeLiters: number | null;
   /** A visit already booked; the planner leaves those alone. */
   hasScheduledVisit?: boolean;
+  /** Set once the address has been geocoded. Absent until then. */
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface ScoredStop {
@@ -209,6 +213,14 @@ export interface RouteDay {
   zoneKnown: boolean;
   stops: ScoredStop[];
   dayValue: number;
+  /**
+   * Metres of driving between the stops, in the order given — null when any
+   * stop in the day is not geocoded, because a partial total would understate
+   * the real trip and read as if it were the whole thing.
+   */
+  travelMeters: number | null;
+  /** True when every stop that day has coordinates and the order is by proximity. */
+  orderedByDistance: boolean;
 }
 
 export interface WeekPlan {
@@ -303,14 +315,19 @@ export function planWeek(
     const zone = zones[zoneIndex];
     if (zone === undefined) break;
     zoneIndex += 1;
-    const stops = zone.stops.slice(0, maxStopsPerDay);
+    const chosen = zone.stops.slice(0, maxStopsPerDay);
+    // Urgency picks WHO to see; geography decides in WHAT ORDER, but only when
+    // every stop is geocoded.
+    const ordered = orderByProximity(chosen);
     days.push({
       date: civilDate(date),
       weekdayIndex: dow,
       zone: zone.zone,
       zoneKnown: zone.zoneKnown,
-      stops,
-      dayValue: Math.round(stops.reduce((sum, s) => sum + s.score, 0) * 10) / 10,
+      stops: ordered.stops,
+      dayValue: Math.round(chosen.reduce((sum, s) => sum + s.score, 0) * 10) / 10,
+      travelMeters: ordered.travelMeters,
+      orderedByDistance: ordered.ordered,
     });
   }
 
@@ -321,6 +338,61 @@ export function planWeek(
     unroutable,
     alreadyScheduled,
   };
+}
+
+function coordsOf(stop: ScoredStop): LatLng | null {
+  const { latitude, longitude } = stop.candidate;
+  if (typeof latitude !== 'number' || typeof longitude !== 'number') return null;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+  return { latitude, longitude };
+}
+
+/**
+ * Orders a day's stops by proximity: nearest-neighbour from the most urgent one.
+ *
+ * Nearest-neighbour is not optimal — the travelling salesman is not solved
+ * here — but on five stops inside one comarca it is within a few minutes of
+ * optimal and it is explainable, which matters more. The most urgent company
+ * anchors the chain so the day still starts where it should.
+ *
+ * Returns the stops unchanged when any of them lacks coordinates: a half-sorted
+ * day would imply a geography that is not known.
+ */
+export function orderByProximity(stops: readonly ScoredStop[]): {
+  stops: ScoredStop[];
+  travelMeters: number | null;
+  ordered: boolean;
+} {
+  if (stops.length <= 1) {
+    return { stops: [...stops], travelMeters: stops.length === 0 ? null : 0, ordered: stops.length === 1 };
+  }
+  const points = stops.map(coordsOf);
+  if (points.some((p) => p === null)) {
+    return { stops: [...stops], travelMeters: null, ordered: false };
+  }
+
+  const remaining = stops.map((stop, index) => ({ stop, point: points[index] as LatLng }));
+  // Highest score first: the day starts at the company that most needs it.
+  remaining.sort((a, b) => b.stop.score - a.stop.score);
+
+  const route = [remaining.shift()!];
+  let metres = 0;
+  while (remaining.length > 0) {
+    const from = route[route.length - 1]!.point;
+    let bestIndex = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    for (const [index, entry] of remaining.entries()) {
+      const distance = haversineMeters(from, entry.point);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    }
+    metres += bestDistance;
+    route.push(remaining.splice(bestIndex, 1)[0]!);
+  }
+
+  return { stops: route.map((r) => r.stop), travelMeters: Math.round(metres), ordered: true };
 }
 
 /** The next Monday on or after `from`, at 00:00 of that civil day. */

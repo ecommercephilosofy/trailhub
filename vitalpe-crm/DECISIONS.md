@@ -1057,3 +1057,26 @@ the DO Catalunya. The result is worth recording: of 260 published wineries,
 looked, and the useful prospecting ground is elsewhere — bottlers without
 vineyards, other DOs, outside Catalonia. A discovery pass that finds almost
 nothing is a real answer, not a failed run.
+
+## 42. A vague coordinate is worse than no coordinate
+
+Geocoding 461 addresses through Google is easy; the interesting decision is what
+to do with a bad answer. Google grades its matches, and `APPROXIMATE` (≈500 m)
+usually means "somewhere in this village" — the town centroid, not the cellar.
+
+Those are rejected. The row keeps `PENDENT DE GEOLOCALITZAR` and records why.
+The reasoning is concrete: a centroid would put the arrival geofence 400 m from
+the actual gate, so the phone would announce arrivals in the village square and
+stay silent at the cellar. A map that looks complete and is wrong costs more
+than a map with holes in it, because the holes are visible and act on nobody.
+
+The same instinct shapes the route ordering. Urgency picks who to visit;
+proximity orders the day — but only when **every** stop that day is geocoded. A
+day with one unknown stop is left in urgency order and reports no distance,
+because a partial kilometre total reads as the whole trip and a half-sorted day
+implies a geography nobody established.
+
+The ordering itself is nearest-neighbour from the most urgent company, and the
+code says plainly that this is not optimal. On five stops inside one comarca it
+is within minutes of the best possible route, and being explainable matters more
+than being optimal for a suggestion the commercial overrules every morning.

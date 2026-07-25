@@ -28,6 +28,8 @@ interface Row {
   last_contact_at: string | null;
   volume_liters: string | null;
   has_visit: boolean;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export default async function RutesPage({
@@ -64,7 +66,13 @@ export default async function RutesPage({
                 where o.client_id = c.id and o.deleted_at is null) as volume_liters,
               exists (select 1 from public.visits v
                        where v.client_id = c.id and v.deleted_at is null
-                         and v.status <> 'CANCEL·LADA' and v.starts_at >= now()) as has_visit
+                         and v.status <> 'CANCEL·LADA' and v.starts_at >= now()) as has_visit,
+              (select l.latitude from public.client_locations l
+                where l.client_id = c.id and l.deleted_at is null and l.latitude is not null
+                order by l.is_primary desc limit 1) as latitude,
+              (select l.longitude from public.client_locations l
+                where l.client_id = c.id and l.deleted_at is null and l.longitude is not null
+                order by l.is_primary desc limit 1) as longitude
          from public.clients c
         where c.workspace_id = $1 and c.deleted_at is null and c.in_working_list`,
       [session.workspaceId],
@@ -88,11 +96,14 @@ export default async function RutesPage({
       lastContactAt: row.last_contact_at,
       volumeLiters: row.volume_liters === null ? null : Number(row.volume_liters),
       hasScheduledVisit: row.has_visit,
+      latitude: row.latitude,
+      longitude: row.longitude,
     };
   });
 
   const plan = planWeek(candidates, { now: new Date(), maxStopsPerDay });
   const planned = plan.days.reduce((n, d) => n + d.stops.length, 0);
+  const geocoded = candidates.filter((c) => c.latitude !== null && c.latitude !== undefined).length;
 
   return (
     <div className="grid gap-6 max-w-[1100px]">
@@ -102,11 +113,17 @@ export default async function RutesPage({
           RUTA DE LA SETMANA DEL {formatDate(plan.weekStart)}
         </h1>
         <p className="text-[13px] text-[var(--color-ink-soft)] mt-1 mb-0 max-w-[70ch]">
-          Un dia, una comarca: així no es fan tres hores de cotxe per veure dos cellers.
-          L&apos;ordre de dins del dia és per urgència, no per distància — aquesta cartera no té
-          coordenades, i per tant això és una proposta, no un itinerari òptim. Canvia-la sense
-          pensar-t&apos;ho: tu saps quin celler tanca els dilluns.
+          Un dia, una comarca: així no es fan tres hores de cotxe per veure dos cellers. La
+          urgència tria <em>a qui</em> veure; quan totes les parades del dia estan geolocalitzades,
+          la distància decideix <em>en quin ordre</em> i es mostren els quilòmetres. Segueix sent
+          una proposta: canvia-la sense pensar-t&apos;ho, tu saps quin celler tanca els dilluns.
         </p>
+        {geocoded < candidates.length && (
+          <p className="text-[12px] text-[var(--color-ink-faint)] mt-1 mb-0">
+            {geocoded} de {candidates.length} empreses tenen coordenades. Les altres s&apos;agrupen
+            per comarca però no s&apos;ordenen per distància — executa <code>pnpm geocodifica</code>.
+          </p>
+        )}
       </header>
 
       <form className="targeta p-3 flex flex-wrap items-end gap-3">
@@ -150,6 +167,9 @@ export default async function RutesPage({
               </div>
               <span className="text-[12px] text-[var(--color-ink-faint)]">
                 {day.stops.length} {day.stops.length === 1 ? 'visita' : 'visites'}
+                {day.travelMeters !== null &&
+                  ` · ${(day.travelMeters / 1000).toFixed(1).replace('.', ',')} km entre parades`}
+                {!day.orderedByDistance && ' · ordre per urgència (falten coordenades)'}
                 {!day.zoneKnown && ' · zona no agrupada (municipi sol)'}
               </span>
             </header>

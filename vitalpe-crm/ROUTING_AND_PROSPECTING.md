@@ -44,11 +44,42 @@ review, 519 moved out of the working list with their history intact.
 *These companies are due, and these ones are near each other.* One comarca per
 working day, so a day's driving stays in one area.
 
-### What it does not claim
+### Urgency picks who, distance picks the order
 
-An optimal itinerary. **Not one company on the working list is geocoded**, so
-there is no distance to optimise; a "shortest path" would be fiction. Order
-inside a day is by urgency, not geography.
+Urgency decides **who** to see. Once every stop in a day is geocoded, proximity
+decides **in what order**, and the day shows its kilometres.
+
+The ordering is nearest-neighbour anchored on the most urgent company: not
+optimal — the travelling salesman is not solved here — but on five stops inside
+one comarca it lands within minutes of optimal and it is explainable, which
+matters more for something a person overrules daily.
+
+A day with even one ungeocoded stop is **not** reordered and reports no
+distance. A half-sorted day would imply a geography that is not known, and a
+partial total would read as if it were the whole trip.
+
+### Geocoding
+
+```bash
+pnpm geocodifica                        # simulació: diu quantes i quant costaria
+pnpm geocodifica -- --remote --apply    # producció
+pnpm geocodifica -- --remote --apply --limit=50
+```
+
+Needs `GOOGLE_MAPS_API_KEY` in `.env.local`. Without it the script **refuses to
+run** rather than degrading: an unconfigured geocoder that invented coordinates
+would be worse than none.
+
+| Rule | Why |
+| --- | --- |
+| `APPROXIMATE` results (≈500 m) are rejected | A village centroid is not an address. It would put a geofence 400 m from the cellar and make every arrival alert wrong. The row stays `PENDENT DE GEOLOCALITZAR` with the reason recorded. |
+| `verified_by_user = true` is never overwritten | Somebody moved that pin by hand. |
+| `geocode_source`, `geocoded_at`, `accuracy_meters` always written | Where each coordinate came from, and how good it is. |
+| Only rows without coordinates are sent | Re-running costs nothing. |
+
+461 addresses are pending, all with street + postal code + municipality —
+about **2,30 USD** at Google's 5 USD/1000, inside the 200 USD monthly free
+credit.
 
 ### How a zone is decided
 

@@ -35,6 +35,7 @@
     "user:add": "tsx scripts/maintenance/create-user.ts",
     "user:password": "tsx scripts/maintenance/set-password.ts",
     "clients:assign": "tsx scripts/maintenance/assign-portfolio.ts",
+    "geocodifica": "tsx scripts/maintenance/geocode.ts",
     "import:abandon": "tsx scripts/maintenance/abandon-import.ts",
     "audit:remote": "tsx scripts/maintenance/audit-remote.ts",
     "test:critical": "tsx scripts/test-critical-features.ts",
