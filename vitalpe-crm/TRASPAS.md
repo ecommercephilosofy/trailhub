@@ -262,9 +262,16 @@ L'àudio no es perd mai.
 | Notes de veu que entenguin diverses ordres | Anthropic | pocs €/mes |
 | Que transcrigui l'àudio sol | OpenAI | cèntims/mes |
 | L'app a l'App Store | Apple Developer | 99 USD/any |
+| **Seguir desenvolupant amb Claude Code** | Pla Claude Pro | ~20 USD/mes |
 
 **El mínim recomanat**: Vercel Pro (per la legalitat) i Google Maps (perquè no
-costa res de fet). La resta, quan et facin falta.
+costa res de fet). Si vols continuar el desenvolupament tu mateix, hi va el pla
+de Claude (secció 9). La resta, quan et facin falta.
+
+> Compte amb no barrejar dues coses: el **pla de Claude** és per a tu, per
+> programar. La **clau d'API d'Anthropic** és per al CRM, perquè entengui les
+> notes de veu. Són dos pagaments diferents i independents; pots tenir l'un
+> sense l'altre.
 
 ---
 
@@ -296,3 +303,81 @@ està configurat i què no, sense haver de tocar cap fitxer.
    desplegaments trencats.
 5. **No obris dos processos contra `.data/crm` alhora** (per exemple `pnpm dev` i
    una importació). La base local és d'un sol escriptor i es corromp.
+
+---
+
+## 9. Treballar-hi amb Claude Code
+
+Aquest CRM s'ha construït amb **Claude Code**, i el repositori ve preparat
+perquè hi puguis continuar igual des del teu ordinador.
+
+### 9.1 Què necessites
+
+| | |
+| --- | --- |
+| **Compte de Claude** | Un pla **Pro (~20 USD/mes)** ja et permet fer servir Claude Code. Per a sessions llargues i seguides, el pla **Max** dona molt més marge. També hi ha l'opció de pagar per ús amb una clau d'API, però per treballar-hi cada dia el pla surt més a compte. |
+| **Claude Code** | S'instal·la una vegada |
+
+### 9.2 Instal·lar-lo
+
+Al Terminal:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+I després, des de la carpeta del projecte:
+
+```bash
+cd ~/Documents/vitalpe-crm
+claude
+```
+
+El primer cop et demanarà que iniciïs sessió amb el teu compte de Claude. Ja
+està: a partir d'aquí li parles en català o castellà i treballa dins d'aquesta
+carpeta.
+
+### 9.3 Per què això ja ve configurat
+
+A l'arrel hi ha un fitxer **`CLAUDE.md`**. No és documentació per a persones: és
+el que Claude llegeix **abans de tocar res**, cada sessió. Hi consten les regles
+que no s'han de tornar a discutir:
+
+- Mai es salta la seguretat de la base de dades (RLS).
+- Mai s'inventa una dada: si una font no porta data, no hi ha activitat amb
+  data; si una adreça no es pot geolocalitzar, es queda pendent.
+- On viu cada regla de negoci, perquè no se'n facin dues còpies que divergeixin.
+- Que cal executar `pnpm test` i `pnpm build` abans de donar res per fet.
+
+Això és el que fa que una sessió nova no comenci de zero ni repeteixi errors ja
+resolts. **Si canvieu una regla important, actualitzeu `CLAUDE.md`**: és la
+memòria del projecte.
+
+També hi ha `.claude/launch.json`, que li diu com engegar el servidor de proves
+(`pnpm dev`, port 3004) perquè pugui obrir l'aplicació i comprovar els canvis
+ell mateix.
+
+### 9.4 Com demanar-li les coses
+
+Va molt millor amb context que amb ordres soltes. Compara:
+
+> ❌ «arregla el calendari»
+
+> ✅ «Al CALENDARI, quan moc una visita a una altra hora, la tasca vinculada no
+> canvia de data. Hauria de seguir la visita. Mira `app.create_visit_with_task`
+> i el motor de sincronització.»
+
+Tres costums que valen la pena:
+
+1. **Deixa-li executar les proves.** Si diu que una cosa funciona, demana-li que
+   ho demostri amb `pnpm test` o obrint la pàgina.
+2. **Revisa el que puja.** `git diff` abans de `git push`. És el teu CRM.
+3. **Si toca dades reals, demana-li una simulació primer.** Els scripts
+   d'importació i geocodificació ja porten mode simulació (sense `--apply`).
+
+### 9.5 El que no li has de donar mai
+
+**Cap clau, ni per xat.** Ni la de Supabase, ni la de Google, ni cap altra. Van
+al fitxer `.env.local`, i Claude les llegeix d'allà sense que ningú les hagi
+d'escriure enlloc. Si algun cop et diu que li facin falta, la resposta correcta
+és posar-les al fitxer, no enganxar-les a la conversa.

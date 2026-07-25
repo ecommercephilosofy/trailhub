@@ -11,4 +11,3 @@ dist/
 # Playwright artefacts — traces and screenshots of a run, not source.
 apps/web/test-results/
 apps/web/playwright-report/
-.claude/launch.json
