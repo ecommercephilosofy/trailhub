@@ -1,6 +1,6 @@
 # 🧠 CreativeOS
 
-Cara del sistema creativo semanal de Quies. El pipeline de `~/creativeos-agent` (repo
+Cara del sistema creativo semanal (white-label: tu marca se configura con el wizard del cerebro). El pipeline de `~/creativeos-agent` (repo
 aparte) analiza y publica cada lunes en Supabase; aquí el equipo ve briefs,
 produce en el kanban, cobra bonuses automáticos y dirección tiene dashboard,
 informe CMO y chat con el cerebro.
