@@ -1,6 +1,6 @@
 # CreativeOS — puesta en marcha (Fase 2, jul-2026)
 
-CreativeOS es ahora la CARA del sistema: el pipeline de `~/ads-agent` piensa y
+CreativeOS es ahora la CARA del sistema: el pipeline de `~/creativeos-agent` piensa y
 publica cada lunes; aquí el equipo ve briefs, produce en el kanban, cobra
 bonuses automáticos y dirección tiene dashboard + chat con el cerebro.
 
@@ -21,7 +21,7 @@ Dashboard → **Authentication → Users → Add user** (tu email + contraseña)
 Luego en SQL Editor:
 ```sql
 insert into profiles (user_id, name, custom_role)
-select id, 'Marc', 'ADMIN' from auth.users where email = 'mdelgadolinde@gmail.com'
+select id, 'Tu Nombre', 'ADMIN' from auth.users where email = 'tu-email@ejemplo.com'
 on conflict (user_id) do update set custom_role = 'ADMIN';
 ```
 
@@ -33,18 +33,18 @@ VITE_SUPABASE_ANON_KEY=<anon public key>
 ```
 (Y las mismas 2 vars en Vercel → Project → Environment Variables para el deploy.)
 
-### 4. Keys — pipeline (repo ads-agent)
+### 4. Keys — pipeline (repo creativeos-agent)
 ```bash
-echo 'https://TU-PROYECTO.supabase.co' > ~/ads-agent/config/.supabase_url
-echo '<service_role key>' > ~/ads-agent/config/.supabase_service_key
+echo 'https://TU-PROYECTO.supabase.co' > ~/creativeos-agent/config/.supabase_url
+echo '<service_role key>' > ~/creativeos-agent/config/.supabase_service_key
 ```
 ⚠️ La service key SOLO ahí (gitignored). Nunca en este repo ni en Vercel.
-Verifica: `cd ~/ads-agent && .venv/bin/python scripts/weekly/pipeline.py doctor`
+Verifica: `cd ~/creativeos-agent && .venv/bin/python scripts/weekly/pipeline.py doctor`
 (check "Supabase (CreativeOS)" debe salir ✅ conectado).
 
 ### 5. Primer publish (datos reales ya, sin esperar al lunes)
 ```bash
-cd ~/ads-agent && .venv/bin/python scripts/weekly/publish.py output/weekly/2026-07-03
+cd ~/creativeos-agent && .venv/bin/python scripts/weekly/publish.py output/weekly/2026-07-03
 ```
 
 ### 6. Chat (Edge Function)
