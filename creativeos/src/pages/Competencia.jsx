@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useEntityList } from '@/hooks/useData'
-import { Mechanisms, Brands, BrandProfiles } from '@/api/entities'
+import { Mechanisms, Brands, BrandProfiles, TtScalingAds, TtBrandSnapshots, TtBrandSuggestions } from '@/api/entities'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { EmptyState, ErrorState } from '@/components/shared/misc'
 import { Switch } from '@/components/ui/switch'
-import { Telescope, ExternalLink, Plus, Trash2, Power, Sparkles } from 'lucide-react'
+import { Telescope, ExternalLink, Plus, Trash2, Power, Sparkles, Radar, Lightbulb, Check, X } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { useBrand } from '@/context/BrandContext'
@@ -110,6 +110,167 @@ function BrandsPanel({ kind, isAdmin }) {
             </div>
           </DialogContent>
         </Dialog>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ── Radar Trendtrack ─────────────────────────────────────────────────────────
+// Señales de la API de trendtrack.io publicadas cada lunes por el pipeline.
+// `duplicates` = nº de copias activas del MISMO creativo = la marca lo está
+// financiando ahora (señal de scaling válida en US, donde no hay reach DSA).
+
+function RadarPanel({ kind }) {
+  const { data: ads } = useEntityList(TtScalingAds, { sort: '-week_date', limit: 300 })
+  const { data: snaps } = useEntityList(TtBrandSnapshots, { sort: '-week_date', limit: 60 })
+  const [expandedBrand, setExpandedBrand] = useState(null)
+
+  const week = ads?.[0]?.week_date
+  const weekAds = (ads || []).filter((a) => a.week_date === week && (a.kind || 'competitor') === kind)
+  const weekSnaps = (snaps || []).filter((s) => s.week_date === week && (s.kind || 'competitor') === kind)
+  const snapByBrand = Object.fromEntries(weekSnaps.map((s) => [s.brand, s]))
+
+  const byBrand = useMemo(() => {
+    const g = {}
+    for (const a of weekAds) (g[a.brand] ||= []).push(a)
+    for (const b of Object.keys(g)) g[b].sort((x, y) => (y.duplicates || 0) - (x.duplicates || 0))
+    // marcas con más scaling primero (max duplicates)
+    return Object.entries(g).sort((x, y) =>
+      (y[1][0]?.duplicates || 0) - (x[1][0]?.duplicates || 0))
+  }, [weekAds])
+
+  if (!weekAds.length) return null
+  return (
+    <Card>
+      <CardContent className="pt-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1.5">
+            <Radar className="h-3.5 w-3.5 text-indigo-500" /> Radar Trendtrack — qué están escalando
+          </p>
+          <span className="text-[11px] text-slate-400">semana {week}</span>
+        </div>
+        <p className="text-[11px] text-slate-400">
+          <b>Duplicados</b> = copias activas del mismo creativo: la marca lo está financiando AHORA.
+          Duplicados + días = su winner confirmado → candidato #1 a extraer mecanismo.
+        </p>
+        <div className="space-y-2">
+          {byBrand.map(([b, list]) => {
+            const snap = snapByBrand[b]
+            const open = expandedBrand === b
+            return (
+              <div key={b} className="rounded-lg border border-slate-100">
+                <button onClick={() => setExpandedBrand(open ? null : b)}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-slate-50">
+                  <span className="font-medium text-sm text-slate-800">{b}</span>
+                  <Badge variant="outline" className="text-[10px]">{list.length} ads top</Badge>
+                  {list[0]?.duplicates != null && (
+                    <Badge className="bg-amber-100 text-amber-800 text-[10px] hover:bg-amber-100">
+                      máx {list[0].duplicates} duplicados
+                    </Badge>
+                  )}
+                  {snap?.testing?.length > 0 && (
+                    <Badge className="bg-indigo-100 text-indigo-700 text-[10px] hover:bg-indigo-100">
+                      {snap.testing.length} batches testing
+                    </Badge>
+                  )}
+                  <span className="ml-auto text-xs text-slate-400">{open ? '▾' : '▸'}</span>
+                </button>
+                {open && (
+                  <div className="border-t border-slate-100 px-3 py-2 space-y-2">
+                    {list.slice(0, 6).map((a) => (
+                      <div key={a.library_id} className="flex items-start gap-2 text-xs">
+                        <span className="shrink-0 rounded bg-amber-50 border border-amber-100 px-1.5 py-0.5 text-amber-800 font-medium">
+                          ×{a.duplicates ?? '?'}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-slate-700 truncate">
+                            {a.headline || a.body || '(sin copy)'}
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            {a.days_running != null && `${a.days_running}d rodando`}
+                            {a.current_rank != null && ` · rank #${a.current_rank}`}
+                            {a.library_id && !/^\D/.test(a.library_id) && (
+                              <> · <a target="_blank" rel="noreferrer" className="text-indigo-500 hover:underline"
+                                      href={`https://www.facebook.com/ads/library/?id=${a.library_id}`}>ver ad ↗</a></>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                    {snap?.hooks?.length > 0 && (
+                      <div className="pt-1 border-t border-slate-50">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Hooks que más repiten</p>
+                        <div className="flex flex-wrap gap-1">
+                          {snap.hooks.slice(0, 5).map((h, i) => (
+                            <span key={i} className="rounded bg-slate-100 px-2 py-0.5 text-[11px] text-slate-700">
+                              «{h.hook}»{h.usage_count > 1 && <span className="text-[9px] text-slate-400"> ×{h.usage_count}</span>}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Sugerencias del descubrimiento mensual (similar shops + rising-star).
+// El ADMIN acepta (→ alta en brands, entra el próximo lunes) o descarta.
+function SuggestionsPanel({ isAdmin }) {
+  const { data: suggestions, refetch } = useEntityList(TtBrandSuggestions,
+    { filter: { status: 'pending' }, sort: '-suggested_at' })
+  if (!suggestions?.length) return null
+
+  const resolve = async (s, accept) => {
+    try {
+      if (accept) {
+        await Brands.create({ domain: s.domain, name: s.name || s.domain,
+                              kind: s.suggested_kind || 'inspiration', priority: 3,
+                              notes: `sugerida por Trendtrack (${s.source})`, is_active: true })
+      }
+      await TtBrandSuggestions.update(s.domain,
+        { status: accept ? 'accepted' : 'dismissed', resolved_at: new Date().toISOString() })
+      toast.success(accept ? `${s.domain} añadida — entra el próximo lunes` : `${s.domain} descartada`)
+      refetch()
+    } catch (e) {
+      toast.error(e.message.includes('duplicate') ? 'Ya existe esa marca' : e.message)
+    }
+  }
+
+  return (
+    <Card>
+      <CardContent className="pt-4 space-y-2">
+        <p className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1.5">
+          <Lightbulb className="h-3.5 w-3.5 text-amber-500" /> Marcas sugeridas ({suggestions.length})
+        </p>
+        {suggestions.map((s) => (
+          <div key={s.domain} className="flex items-center gap-2 text-sm border border-slate-100 rounded-lg px-3 py-2">
+            <div className="min-w-0">
+              <p className="font-medium text-slate-800">{s.name || s.domain}
+                <span className="ml-2 text-[10px] text-slate-400">{s.domain}</span></p>
+              <p className="text-[11px] text-slate-500">
+                {s.source === 'similar_shops' ? 'tienda similar a las monitorizadas' : 'anunciante en crecimiento del nicho'}
+                {s.evidence?.reason && ` — ${s.evidence.reason}`}
+              </p>
+            </div>
+            {isAdmin && (
+              <div className="ml-auto flex gap-1.5 shrink-0">
+                <Button size="sm" variant="outline" onClick={() => resolve(s, true)}>
+                  <Check className="h-3.5 w-3.5" /> Añadir
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => resolve(s, false)}>
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
       </CardContent>
     </Card>
   )
@@ -259,6 +420,8 @@ export default function Competencia() {
       </div>
       <p className="text-xs text-slate-400">{activeTab?.hint}</p>
       <BrandsPanel kind={kind} isAdmin={isAdmin} />
+      <SuggestionsPanel isAdmin={isAdmin} />
+      <RadarPanel kind={kind} />
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-sm text-slate-500">Marca:</span>
         <Select value={brand} onValueChange={setBrand}>

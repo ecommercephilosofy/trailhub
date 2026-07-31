@@ -17,6 +17,9 @@ export const CreativeReviews = createEntity('creative_reviews')
 export const AdThumbs = createEntity('ad_thumbs', { pk: 'ad_code' }) // vista sin dinero: ad_code/qb/thumb_path (todos los roles)
 export const Brands = createEntity('brands')
 export const BrandProfiles = createEntity('brand_profiles', { pk: 'brand' })
+export const TtScalingAds = createEntity('tt_scaling_ads')             // PK compuesta; solo list/filter
+export const TtBrandSnapshots = createEntity('tt_brand_snapshots')     // PK compuesta; solo list/filter
+export const TtBrandSuggestions = createEntity('tt_brand_suggestions', { pk: 'domain' })
 export const RunRequests = createEntity('run_requests')
 export const LearnedPatterns = createEntity('learned_patterns', { pk: 'signature' })
 
